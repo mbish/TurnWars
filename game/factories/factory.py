@@ -21,6 +21,9 @@ class Factory(Serializable):
         raise NotImplementedError(
                 "Factory class must implement create(self, name)")
 
+    def can_make(self, name):
+        return (name in self.factory_data)
+
     def get_data(self, name):
         if(not name in self.factory_data):
             raise BadFactoryRequest(
