@@ -4,7 +4,7 @@ from game.serializable import Serializable
 
 class TransportFactory(Factory):
     def __init__(self, factory_data, transport_class=Transport):
-        Factory.__init__(self, factory_data, tile_class)
+        Factory.__init__(self, factory_data, transport_class)
         return
 
     def validate_data(self, data):

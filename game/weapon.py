@@ -6,7 +6,7 @@ class Weapon(Serializable):
     attack_strength = 0
     non_targetables = {}
 
-    def __init__(self, name, uses, attack_strength, non_targetables):
+    def __init__(self, name, uses, attack_strength, non_targetables={}):
         if(attack_strength < 0 or uses < 0):
             raise BadWeaponCreation("Cannot create weapon with \
                     uses {} and attack_strength {}".format(
