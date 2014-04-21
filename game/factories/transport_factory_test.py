@@ -2,6 +2,7 @@ from transport_factory import TransportFactory
 from factory import BadFactoryData
 from nose.tools import assert_raises
 
+
 class MockClass:
     spaces_per_turn = 0
     starting_fuel = 0
@@ -13,9 +14,10 @@ class MockClass:
         self.name = name
 
     def get_value(self):
-        return "{} {} {}".format(self.name, 
-                                 self.spaces_per_turn, 
+        return "{} {} {}".format(self.name,
+                                 self.spaces_per_turn,
                                  self.starting_fuel)
+
 
 def validation_test():
     factory_data = {
@@ -27,8 +29,9 @@ def validation_test():
         }
     }
     factory = TransportFactory({}, MockClass)
-    assert factory.validate_data(factory_data['foot']) == True
-    assert factory.validate_data(factory_data['fake']) == False
+    assert factory.validate_data(factory_data['foot'])
+    assert not factory.validate_data(factory_data['fake'])
+
 
 def creation_test():
     factory_data = {

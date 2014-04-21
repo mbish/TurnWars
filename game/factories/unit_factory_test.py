@@ -1,5 +1,6 @@
 from unit_factory import UnitFactory
 
+
 class MockUnit:
     name = ''
     transport = ''
@@ -18,32 +19,39 @@ class MockUnit:
 
     def get_value(self):
         return "{} {} {} {} {} {}".format(
-                self.name,
-                self.weapon,
-                self.transport,
-                self.armor,
-                self.coordinate,
-                self.army,
+            self.name,
+            self.weapon,
+            self.transport,
+            self.armor,
+            self.coordinate,
+            self.army,
         )
-        
+
 
 class MockFactory:
+
     def create(self, name):
         return name
+
     def can_make(self):
         return False
 
+
 class MockTransportFactory(MockFactory):
+
     def can_make(self, name):
-       return name == 'foot' 
+        return name == 'foot'
+
 
 class MockWeaponFactory(MockFactory):
     def can_make(self, name):
-       return name == 'sword' 
+        return name == 'sword'
+
 
 class MockArmorFactory(MockFactory):
     def can_make(self, name):
-       return name == 'cloth' 
+        return name == 'cloth'
+
 
 def validate_test():
     factory_data = {
@@ -71,10 +79,11 @@ def validate_test():
     factory = UnitFactory({}, MockTransportFactory(),
                           MockWeaponFactory(), MockArmorFactory(),
                           'dragon', MockUnit)
-    assert factory.validate_data(factory_data['footman']) == True
-    assert factory.validate_data(factory_data['snowman']) == False
-    assert factory.validate_data(factory_data['goman']) == False
-    assert factory.validate_data(factory_data['toeman']) == False
+    assert factory.validate_data(factory_data['footman'])
+    assert not factory.validate_data(factory_data['snowman'])
+    assert not factory.validate_data(factory_data['goman'])
+    assert not factory.validate_data(factory_data['toeman'])
+
 
 def create_test():
     factory_data = {

@@ -2,6 +2,7 @@ from game.transport import Transport
 from factory import Factory
 from game.serializable import Serializable
 
+
 class TransportFactory(Factory):
     def __init__(self, factory_data, transport_class=Transport):
         Factory.__init__(self, factory_data, transport_class)
@@ -9,7 +10,7 @@ class TransportFactory(Factory):
 
     def validate_data(self, data):
         if('spaces_per_turn' not in data):
-           return False
+            return False
         else:
             return True
 

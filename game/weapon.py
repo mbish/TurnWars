@@ -1,5 +1,6 @@
 from serializable import Serializable
 
+
 class Weapon(Serializable):
     name = ''
     uses = 0
@@ -9,8 +10,8 @@ class Weapon(Serializable):
     def __init__(self, name, uses, attack_strength, non_targetables={}):
         if(attack_strength < 0 or uses < 0):
             raise BadWeaponCreation("Cannot create weapon with \
-                    uses {} and attack_strength {}".format(
-                            uses, attack_strength))
+                uses {} and attack_strength {}".format(
+                uses, attack_strength))
         self.name = name
         self.uses = uses
         self.attack_strength = attack_strength
@@ -34,10 +35,12 @@ class Weapon(Serializable):
     def can_target(self, unit_type):
         return not (unit_type in self.non_targetables)
 
+
 class BadWeaponRequest(Exception):
     def __init__(self, message):
-        Exception.__init__(self,message)
+        Exception.__init__(self, message)
+
 
 class BadWeaponCreation(Exception):
     def __init__(self, message):
-        Exception.__init__(self,message)
+        Exception.__init__(self, message)

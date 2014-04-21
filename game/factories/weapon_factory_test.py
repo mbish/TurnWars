@@ -1,11 +1,13 @@
 from weapon_factory import WeaponFactory
 from nose.tools import assert_raises
 
+
 class MockClass:
     uses = 0
     attack_strength = 0
     name = ''
     non_targetables = {}
+
     def __init__(self, name, uses, attack_strength, non_targetables={}):
         self.name = name
         self.uses = uses
@@ -13,9 +15,10 @@ class MockClass:
         self.non_targetables = non_targetables
 
     def get_value(self):
-        return "{} {} {} {}".format(self.name, self.uses, 
-                                    self.attack_strength, 
+        return "{} {} {} {}".format(self.name, self.uses,
+                                    self.attack_strength,
                                     len(self.non_targetables))
+
 
 def validation_test():
     factory_data = {
@@ -38,10 +41,11 @@ def validation_test():
         },
     }
     factory = WeaponFactory({}, MockClass)
-    assert factory.validate_data(factory_data['cannon']) == True
-    assert factory.validate_data(factory_data['no_uses']) == False
-    assert factory.validate_data(factory_data['no_strength']) == False
-    assert factory.validate_data(factory_data['no_list']) == True
+    assert factory.validate_data(factory_data['cannon'])
+    assert not factory.validate_data(factory_data['no_uses'])
+    assert not factory.validate_data(factory_data['no_strength'])
+    assert factory.validate_data(factory_data['no_list'])
+
 
 def create_test():
     factory_data = {

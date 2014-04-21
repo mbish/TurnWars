@@ -1,4 +1,6 @@
 from serializable import Serializable
+
+
 class Tile(Serializable):
     tile_type = ''
     cover = 0

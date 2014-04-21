@@ -1,6 +1,7 @@
 from armor_factory import ArmorFactory
 from nose.tools import assert_raises
 
+
 class MockClass:
     health = 0
     name = ''
@@ -12,6 +13,7 @@ class MockClass:
     def get_value(self):
         return "{} {}".format(self.name, self.health)
 
+
 def validate_test():
     factory_data = {
         'plate': {
@@ -22,9 +24,10 @@ def validate_test():
         },
     }
     factory = ArmorFactory({}, MockClass)
-    assert factory.validate_data(factory_data['plate']) == True
-    assert factory.validate_data(factory_data['fake']) == False
-    assert factory.validate_data([]) == False
+    assert factory.validate_data(factory_data['plate'])
+    assert not factory.validate_data(factory_data['fake'])
+    assert not factory.validate_data([])
+
 
 def create_test():
     factory_data = {

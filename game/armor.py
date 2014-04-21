@@ -1,5 +1,6 @@
 from serializable import Serializable
 
+
 class Armor(Serializable):
     name = ''
     health = 0
@@ -23,8 +24,9 @@ class Armor(Serializable):
     def flat(self):
         return {
             'name': self.name,
-            'health' : self.health,
+            'health': self.health,
         }
+
 
 class BadArmorCreation(Exception):
     def __init__(self, message):

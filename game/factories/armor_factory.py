@@ -2,6 +2,7 @@ from game.serializable import Serializable
 from factory import Factory
 from game.armor import Armor
 
+
 class ArmorFactory(Factory):
     def __init__(self, factory_data, armor_class=Armor):
         Factory.__init__(self, factory_data, armor_class)

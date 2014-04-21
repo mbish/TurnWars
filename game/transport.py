@@ -1,4 +1,6 @@
 from serializable import Serializable
+
+
 class Transport(Serializable):
     name = ''
     spaces_left = 0
@@ -21,13 +23,14 @@ class Transport(Serializable):
 
     def move(self, distance):
         if(distance > self.spaces_left):
-            raise BadTransportRequest("Cant move {} with spaces {} left".format(
-                                          distance, self.spaces_left))
+            raise BadTransportRequest(
+                "Cant move {} with spaces {} left".format(distance,
+                                                          self.spaces_left))
         if(self.uses_fuel()):
             if(self.fuel < distance):
                 raise BadTransportRequest(
-                        "Cannot move {} with fuel {} left".format(distance,
-                                                                  self.fuel))
+                    "Cannot move {} with fuel {} left".format(distance,
+                                                              self.fuel))
             self.use_fuel(distance)
 
         self.spaces_left -= distance
@@ -57,13 +60,14 @@ class Transport(Serializable):
             return
         if(amount > self.fuel):
             raise BadTransportRequest("Cannot use {} fuel only have {}".format(
-                                        amount, self.fuel))
+                amount, self.fuel))
         self.fuel -= amount
 
 
 class BadTransportRequest(Exception):
     def __init__(self, message):
         Exception.__init__(self, message)
+
 
 class BadTransportCreation(Exception):
     def __init__(self, message):

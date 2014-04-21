@@ -1,5 +1,6 @@
 from game.serializable import Serializable
 
+
 class Factory(Serializable):
     creation_class = ''
     factory_data = {}
@@ -7,7 +8,7 @@ class Factory(Serializable):
     def __init__(self, factory_data, creation_class):
         for data in factory_data:
             if(not self.validate_data(factory_data[data])):
-              raise BadFactoryData("Data for {} is malformed".format(data))
+                raise BadFactoryData("Data for {} is malformed".format(data))
 
         self.creation_class = creation_class
         self.factory_data = factory_data
@@ -15,11 +16,11 @@ class Factory(Serializable):
 
     def validate_data(self, key):
         raise NotImplementedError(
-                "Factory class must implement validate_data(self, data)")
+            "Factory class must implement validate_data(self, data)")
 
     def create(self, name):
         raise NotImplementedError(
-                "Factory class must implement create(self, name)")
+            "Factory class must implement create(self, name)")
 
     def can_make(self, name):
         return (name in self.factory_data)
@@ -33,9 +34,11 @@ class Factory(Serializable):
     def flat(self):
         return self.factory_data
 
+
 class BadFactoryData(Exception):
     def __init__(self, message):
         Exception.__init__(self, message)
+
 
 class BadFactoryRequest(Exception):
     def __init__(self, message):
