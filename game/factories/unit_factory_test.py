@@ -1,13 +1,9 @@
 from unit_factory import UnitFactory
+from factory import BadFactoryRequest
+from nose.tools import assert_raises
 
 
 class MockUnit:
-    name = ''
-    transport = ''
-    weapon = ''
-    armor = ''
-    coordinate = ''
-    army = ''
 
     def __init__(self, name, transport, weapon, armor, coordinate, army):
         self.name = name
@@ -44,11 +40,13 @@ class MockTransportFactory(MockFactory):
 
 
 class MockWeaponFactory(MockFactory):
+
     def can_make(self, name):
         return name == 'sword'
 
 
 class MockArmorFactory(MockFactory):
+
     def can_make(self, name):
         return name == 'cloth'
 
@@ -59,21 +57,25 @@ def validate_test():
             'transport': 'foot',
             'armor': 'cloth',
             'weapon': 'sword',
+            'cost': 10,
         },
         'snowman': {
             'transport': 'ice',
             'armor': 'cloth',
             'weapon': 'sword',
+            'cost': 20,
         },
         'goman': {
             'transport': 'foot',
             'armor': 'paper',
             'weapon': 'sword',
+            'cost': 30,
         },
         'toeman': {
             'transport': 'foot',
             'armor': 'cloth',
             'weapon': 'toe',
+            'cost': 40,
         }
     }
     factory = UnitFactory({}, MockTransportFactory(),
@@ -91,6 +93,7 @@ def create_test():
             'transport': 'foot',
             'armor': 'cloth',
             'weapon': 'sword',
+            'cost': 10,
         },
     }
     factory = UnitFactory(factory_data, MockTransportFactory(),
@@ -101,3 +104,21 @@ def create_test():
     unit = factory.create('footman')
     assert unit.coordinate.x == 0
     assert unit.coordinate.y == 0
+
+
+def unit_cost_test():
+    factory_data = {
+        'footman': {
+            'transport': 'foot',
+            'armor': 'cloth',
+            'weapon': 'sword',
+            'cost': 20,
+        },
+    }
+    factory = UnitFactory(factory_data, MockTransportFactory(),
+                          MockWeaponFactory(), MockArmorFactory(),
+                          'dragon', MockUnit)
+
+    cost = factory.get_unit_cost('footman')
+    assert cost == 20
+    assert_raises(BadFactoryRequest, factory.get_unit_cost, 'other')

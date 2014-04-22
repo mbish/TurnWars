@@ -4,7 +4,6 @@ from factory import Factory, BadFactoryData, BadFactoryRequest
 
 
 class TileFactory(Factory):
-    factory_data = {}
 
     def __init__(self, factory_data, tile_class=Tile):
         Factory.__init__(self, factory_data, tile_class)

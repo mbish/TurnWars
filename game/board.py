@@ -3,7 +3,6 @@ from serializable import Serializable
 
 
 class Board(Serializable):
-    tiles = [[]]
 
     def __init__(self, tiles):
         if(len(tiles) == 0):

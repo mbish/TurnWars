@@ -2,9 +2,6 @@ from serializable import Serializable
 
 
 class Armor(Serializable):
-    name = ''
-    health = 0
-    starting_health = 0
 
     def __init__(self, name, starting_health):
         if(starting_health <= 0):

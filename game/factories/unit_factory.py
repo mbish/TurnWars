@@ -4,10 +4,6 @@ from factory import Factory
 
 
 class UnitFactory(Factory):
-    transport_factory = 0
-    weapon_factory = 0
-    armor_factory = 0
-    army = ''
 
     def __init__(self, factory_data,
                  transport_factory, weapon_factory,
@@ -21,7 +17,8 @@ class UnitFactory(Factory):
     def validate_data(self, data):
         if(self.transport_factory.can_make(data['transport']) and
            self.weapon_factory.can_make(data['weapon']) and
-           self.armor_factory.can_make(data['armor'])):
+           self.armor_factory.can_make(data['armor']) and
+           'cost' in data):
             return True
         else:
             return False
@@ -35,3 +32,7 @@ class UnitFactory(Factory):
             self.armor_factory.create(data['armor']),
             coordinate,
             self.army)
+
+    def get_unit_cost(self, name):
+        data = self.get_data(name)
+        return data['cost']

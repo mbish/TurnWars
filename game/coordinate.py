@@ -2,8 +2,6 @@ from serializable import Serializable
 
 
 class Coordinate(Serializable):
-    x = 0
-    y = 0
 
     def __init__(self, x, y):
         if(x < 0 or y < 0):

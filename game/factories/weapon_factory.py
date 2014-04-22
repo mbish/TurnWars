@@ -4,6 +4,7 @@ from game.weapon import Weapon
 
 
 class WeaponFactory(Factory):
+
     def __init__(self, factory_data, weapon_class=Weapon):
         Factory.__init__(self, factory_data, weapon_class)
         return

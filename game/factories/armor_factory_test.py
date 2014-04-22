@@ -3,8 +3,6 @@ from nose.tools import assert_raises
 
 
 class MockClass:
-    health = 0
-    name = ''
 
     def __init__(self, name, starting_health):
         self.health = starting_health

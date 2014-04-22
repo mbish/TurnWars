@@ -4,6 +4,7 @@ from game.armor import Armor
 
 
 class ArmorFactory(Factory):
+
     def __init__(self, factory_data, armor_class=Armor):
         Factory.__init__(self, factory_data, armor_class)
 

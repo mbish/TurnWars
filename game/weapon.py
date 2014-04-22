@@ -2,13 +2,9 @@ from serializable import Serializable
 
 
 class Weapon(Serializable):
-    name = ''
-    uses = 0
-    attack_strength = 0
-    non_targetables = {}
 
-    def __init__(self, name, uses, attack_strength, non_targetables={}):
-        Serializable.__init__()
+    def __init__(self, name, uses, attack_strength, non_targetables=''):
+        Serializable.__init__(self)
         if(attack_strength < 0 or uses < 0):
             raise BadWeaponCreation("Cannot create weapon with \
                 uses {} and attack_strength {}".format(
@@ -38,10 +34,12 @@ class Weapon(Serializable):
 
 
 class BadWeaponRequest(Exception):
+
     def __init__(self, message):
         Exception.__init__(self, message)
 
 
 class BadWeaponCreation(Exception):
+
     def __init__(self, message):
         Exception.__init__(self, message)

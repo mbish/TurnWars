@@ -4,8 +4,10 @@ from nose import with_setup
 
 
 class MockArmor:
-    health = 0
-    name = ''
+
+    def __init__(self, name, health):
+        self.name = name
+        self.health = health
 
     def do_damage(self, damage):
         self.health -= damage
@@ -13,19 +15,11 @@ class MockArmor:
     def get_health(self):
         return self.health
 
-    def __init__(self, name, health):
-        self.name = name
-        self.health = health
-
     def flat(self):
         return self.name
 
 
 class MockTransport:
-    name = ''
-    spaces_left = 0
-    spaces_per_turn = 0
-    fuel = 0
 
     def __init__(self, name, spaces_per_turn, fuel):
         self.spaces_left = spaces_per_turn
@@ -44,16 +38,14 @@ class MockTransport:
 
 
 class MockWeapon:
-    name = ''
-    attack_strength = 0
-    cannot_target = {}
-
-    def get_attack_strength(self):
-        return self.attack_strength
 
     def __init__(self, name, attack_strength):
         self.name = name
         self.attack_strength = attack_strength
+        self.cannot_target = {}
+
+    def get_attack_strength(self):
+        return self.attack_strength
 
     def flat(self):
         return self.name

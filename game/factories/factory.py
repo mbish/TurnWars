@@ -2,8 +2,6 @@ from game.serializable import Serializable
 
 
 class Factory(Serializable):
-    creation_class = ''
-    factory_data = {}
 
     def __init__(self, factory_data, creation_class):
         for data in factory_data:
@@ -36,10 +34,12 @@ class Factory(Serializable):
 
 
 class BadFactoryData(Exception):
+
     def __init__(self, message):
         Exception.__init__(self, message)
 
 
 class BadFactoryRequest(Exception):
+
     def __init__(self, message):
         Exception.__init__(self, message)

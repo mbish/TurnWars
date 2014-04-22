@@ -2,13 +2,6 @@ from serializable import Serializable
 
 
 class Unit(Serializable):
-    dead = False
-    name = ''
-    transport = ''
-    weapon = ''
-    armor = ''
-    coordinate = ''
-    army = ''
 
     def __init__(self, name, transport, weapon, armor, coordinate, army):
         self.name = name
@@ -19,6 +12,8 @@ class Unit(Serializable):
         self.army = army
         if(self.get_health() <= 0):
             self.dead = True
+        else:
+            self.dead = False
 
     def get_coordinate(self):
         return self.coordinate

@@ -3,10 +3,6 @@ from nose.tools import assert_raises
 
 
 class MockClass:
-    uses = 0
-    attack_strength = 0
-    name = ''
-    non_targetables = {}
 
     def __init__(self, name, uses, attack_strength, non_targetables={}):
         self.name = name

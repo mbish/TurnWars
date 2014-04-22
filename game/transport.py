@@ -2,11 +2,6 @@ from serializable import Serializable
 
 
 class Transport(Serializable):
-    name = ''
-    spaces_left = 0
-    spaces_per_turn = 0
-    fuel = -1
-    starting_fuel = -1
 
     def __init__(self, name, spaces_per_turn, starting_fuel=-1):
         if(spaces_per_turn < 0):

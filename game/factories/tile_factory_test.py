@@ -4,10 +4,6 @@ from nose.tools import assert_raises
 
 
 class MockTile:
-    name = ''
-    cover = 0
-    non_passable = {}
-    events = {}
 
     def __init__(self, name, cover, non_passable, events):
         self.name = name

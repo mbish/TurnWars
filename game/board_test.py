@@ -4,9 +4,8 @@ from nose.tools import assert_raises
 
 
 class MockTile:
-    tile_type = "none"
 
-    def __init__(self, new_tile_type):
+    def __init__(self, new_tile_type="none"):
         self.tile_type = new_tile_type
 
     def flat(self):
@@ -63,7 +62,6 @@ def get_tile_test():
 
 
 def json_test():
-    print "serializing"
     tiles = []
     for row in range(0, 2):
         tiles.append([])

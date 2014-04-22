@@ -4,9 +4,6 @@ from nose.tools import assert_raises
 
 
 class MockClass:
-    spaces_per_turn = 0
-    starting_fuel = 0
-    name = ''
 
     def __init__(self, name, spaces_per_turn, starting_fuel=-1):
         self.spaces_per_turn = spaces_per_turn

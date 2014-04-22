@@ -1,7 +1,4 @@
 class TypeType:
-    cover = 0
-    passable_movement_types = {}
-    event_names = {}
 
     def __init__(self, cover, passable_movement_types, event_names):
         self.cover = cover
