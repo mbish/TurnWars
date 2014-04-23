@@ -22,6 +22,9 @@ class Weapon(Serializable):
     def can_use(self):
         return self.uses > 0
 
+    def get_strength(self):
+        return self.attack_strength
+
     def flat(self):
         return {
             'name': self.name,

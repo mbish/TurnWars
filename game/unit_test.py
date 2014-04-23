@@ -47,13 +47,24 @@ class MockWeapon:
     def get_attack_strength(self):
         return self.attack_strength
 
+    def use(self):
+        return
+
+    def can_use(self):
+        return 1
+
+    def get_strength(self):
+        return self.attack_strength
+
     def flat(self):
         return self.name
 
 
 def test_unit():
-    return Unit('tank', MockTransport('tred', 5, 10), MockWeapon('cannon', 10),
+    unit = Unit('tank', MockTransport('tred', 5, 10), MockWeapon('cannon', 10),
                 MockArmor('plate', 30), Coordinate(1, 4), 'dragon')
+    unit.uid = 0
+    return unit
 
 
 def get_coordinate_test():
@@ -81,6 +92,13 @@ def move_test():
     assert coordinate.y == 5
     assert not unit.can_move(5)
     assert unit.can_move(2)
+
+
+def attack_test():
+    unit = test_unit()
+    unit2 = test_unit()
+    unit.attack(unit2)
+    assert unit2.get_health() == 20
 
 
 def damage_test():
@@ -113,6 +131,7 @@ def serialization_test():
     unit = test_unit()
     json_string = (
         '{"name": "tank", "army": "dragon", "armor": "plate", "weapon": '
-        '"cannon", "coordinate": {"y": 4, "x": 1}, "transport": "tred"}'
+        '"cannon", "coordinate": {"y": 4, "x": 1}, '
+        '"id": 0, "transport": "tred"}'
     )
     assert unit.as_json() == json_string

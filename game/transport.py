@@ -30,6 +30,9 @@ class Transport(Serializable):
 
         self.spaces_left -= distance
 
+    def get_name(self):
+        return self.name
+
     def refuel(self):
         if(self.uses_fuel()):
             self.fuel = self.starting_fuel

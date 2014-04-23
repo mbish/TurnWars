@@ -10,6 +10,7 @@ class Unit(Serializable):
         self.armor = armor
         self.coordinate = coordinate
         self.army = army
+        self.uid = id(self)
         if(self.get_health() <= 0):
             self.dead = True
         else:
@@ -39,11 +40,20 @@ class Unit(Serializable):
     def movement_range(self):
         return self.transport.get_spaces_left()
 
+    def get_transport_type(self):
+        return self.transport.get_name()
+
     def can_move(self, distance):
         return self.movement_range() >= distance
 
     def get_attack_strength(self):
         return self.weapon.get_attack_strength()
+
+    def attack(self, target):
+        if(self.weapon.can_use()):
+            damage = self.weapon.get_strength()
+            target.do_damage(damage)
+            self.weapon.use()
 
     def flat(self):
         return {
@@ -52,5 +62,6 @@ class Unit(Serializable):
             'weapon': self.weapon.flat(),
             'armor': self.armor.flat(),
             'coordinate': self.coordinate.flat(),
-            'army': self.army
+            'army': self.army,
+            'id': self.uid
         }
