@@ -32,6 +32,11 @@ class MockFactory:
     def can_make(self):
         return False
 
+    def get_data(self, name):
+        return {
+            'data': "{} data".format(name)
+        }
+
 
 class MockTransportFactory(MockFactory):
 
@@ -122,3 +127,81 @@ def unit_cost_test():
     cost = factory.get_unit_cost('footman')
     assert cost == 20
     assert_raises(BadFactoryRequest, factory.get_unit_cost, 'other')
+
+
+def get_factory_test():
+    factory_data = {
+        'footman': {
+            'transport': 'foot',
+            'armor': 'cloth',
+            'weapon': 'sword',
+            'cost': 20,
+        },
+    }
+    factory = UnitFactory(factory_data, MockTransportFactory(),
+                          MockWeaponFactory(), MockArmorFactory(),
+                          'dragon', MockUnit)
+
+    armor_factory = factory.get_factory('armor')
+    assert armor_factory.can_make('cloth')
+    weapon_factory = factory.get_factory('weapon')
+    assert weapon_factory.can_make('sword')
+    transport_factory = factory.get_factory('transport')
+    assert transport_factory.can_make('foot')
+    assert_raises(BadFactoryRequest, factory.get_factory, 'blahhhrg')
+
+
+def equipment_info_test():
+    factory_data = {
+        'footman': {
+            'transport': 'foot',
+            'armor': 'cloth',
+            'weapon': 'sword',
+            'cost': 20,
+        },
+    }
+    factory = UnitFactory(factory_data, MockTransportFactory(),
+                          MockWeaponFactory(), MockArmorFactory(),
+                          'dragon', MockUnit)
+
+    transport_data = factory.equipment_info('footman', 'transport')
+    assert transport_data == {
+        'name': 'foot',
+        'data': 'foot data'
+    }
+
+    armor_data = factory.equipment_info('footman', 'armor')
+    assert armor_data == {
+        'name': 'cloth',
+        'data': 'cloth data'
+    }
+
+
+def full_unit_info_test():
+    factory_data = {
+        'footman': {
+            'transport': 'foot',
+            'armor': 'cloth',
+            'weapon': 'sword',
+            'cost': 20,
+        },
+    }
+    factory = UnitFactory(factory_data, MockTransportFactory(),
+                          MockWeaponFactory(), MockArmorFactory(),
+                          'dragon', MockUnit)
+    unit_data = factory.full_unit_info('footman')
+    assert unit_data == {
+        'armor': {
+            'data': 'cloth data',
+            'name': 'cloth'
+        },
+        'weapon': {
+            'data': 'sword data',
+            'name': 'sword',
+        },
+        'transport': {
+            'data': 'foot data',
+            'name': 'foot'
+        },
+        'cost': 20,
+    }

@@ -1,6 +1,6 @@
 from game.unit import Unit
 from game.coordinate import Coordinate
-from factory import Factory
+from factory import Factory, BadFactoryRequest
 
 
 class UnitFactory(Factory):
@@ -33,6 +33,35 @@ class UnitFactory(Factory):
             coordinate,
             self.army)
 
+    def get_factory(self, factory):
+        result = self.armor_factory
+        if(factory == "armor"):
+            result = self.armor_factory
+        elif(factory == "weapon"):
+            result = self.weapon_factory
+        elif(factory == "transport"):
+            result = self.transport_factory
+        else:
+            raise BadFactoryRequest("Could not find factory for {}".format(
+                factory))
+
+        return result
+
     def get_unit_cost(self, name):
         data = self.get_data(name)
         return data['cost']
+
+    def equipment_info(self, name, equipment):
+        unit_data = self.get_data(name)
+        equipment_name = unit_data[equipment]
+        equipment_data = (self.get_factory(equipment).
+                          get_data(equipment_name))
+        equipment_data['name'] = equipment_name
+        return equipment_data
+
+    def full_unit_info(self, name):
+        unit_data = self.get_data(name)
+        for equipment in ['transport', 'weapon', 'armor']:
+            unit_data[equipment] = self.equipment_info(name, equipment)
+
+        return unit_data

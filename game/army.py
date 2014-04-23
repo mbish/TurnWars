@@ -25,6 +25,12 @@ class Army(Serializable):
             )
         return new_unit
 
+    def unit_info(self, unit_type):
+        return self.unit_factory.full_unit_info(unit_type)
+
+    def equipment_info(self, unit_type, equipment):
+        return self.unit_factory.equipment_info(unit_type, equipment)
+
     def add_unit(self, unit):
         self.unit_table.append(unit)
 
