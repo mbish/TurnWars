@@ -16,14 +16,14 @@ def get_path(board, cost_table, from_position, to_position):
             [x for x in estimated_score if x in queue],
             key=estimated_score.get))
         current = queue[current_index]
-        if(current.as_json() == to_position.as_json()):
-            return _traceback(path, to_position.as_json())
+        if(current == to_position):
+            return _traceback(path, to_position)
 
         del queue[current_index]
-        evaluated.append(current.as_json())
+        evaluated.append(current)
 
         for neighbor in board.get_neighbors(current):
-            if(neighbor.as_json() in evaluated):
+            if(neighbor in evaluated):
                 continue
 
             cost = 0
@@ -35,8 +35,10 @@ def get_path(board, cost_table, from_position, to_position):
 
             temp_score = score[current] + cost
 
-            if neighbor not in queue or temp_score < score[neighbor]:
-                path[neighbor.as_json()] = current.as_json()
+            if (neighbor not in queue or
+                    neighbor in score and
+                    temp_score < score[neighbor]):
+                path[neighbor] = current
                 score[neighbor] = temp_score
                 estimated_score[neighbor] = (score[neighbor] +
                                              _path_length(neighbor,
@@ -45,7 +47,7 @@ def get_path(board, cost_table, from_position, to_position):
                     queue.append(neighbor)
 
     raise NoPathFound("Cannot find path between {} and {}".format(
-        from_position.as_json(), to_position.as_json()))
+        from_position, to_position))
 
 
 def _traceback(path, coordinate):

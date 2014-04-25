@@ -10,6 +10,16 @@ class Coordinate(Serializable):
         self.x = x
         self.y = y
 
+    # the comparison operators were overriden to assist in path finding
+    def __eq__(self, other):
+        return (self.x == other.x and self.y == other.y)
+
+    def __ne__(self, other):
+        return not (self == other)
+
+    def __hash__(self):
+        return self.x.__hash__()+self.y.__hash__()
+
     def flat(self):
         return {
             'x': self.x,

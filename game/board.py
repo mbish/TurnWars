@@ -21,8 +21,32 @@ class Board(Serializable):
         return Coordinate(len(self.tiles[0]), len(self.tiles))
 
     def get_tile_at_coordinate(self, x, y):
-        print len(self.tiles)
         return self.tiles[y][x]
+
+    def get_neighbors(self, coordinate):
+        neighbors = []
+        if(self.is_on_board(coordinate.x + 1, coordinate.y)):
+            neighbors.append(Coordinate(coordinate.x + 1, coordinate.y))
+        if(self.is_on_board(coordinate.x - 1, coordinate.y)):
+            neighbors.append(Coordinate(coordinate.x - 1, coordinate.y))
+        if(self.is_on_board(coordinate.x, coordinate.y - 1)):
+            neighbors.append(Coordinate(coordinate.x, coordinate.y + 1))
+        if(self.is_on_board(coordinate.x, coordinate.y - 1)):
+            neighbors.append(Coordinate(coordinate.x, coordinate.y - 1))
+
+        return neighbors
+
+    def is_on_board(self, x, y):
+        x_on_board = False
+        y_on_board = False
+        if(x < len(self.tiles[0]) and
+           x >= 0):
+            x_on_board = True
+        if(y < len(self.tiles) and
+           y >= 0):
+            y_on_board = True
+
+        return True
 
     def flat(self):
         serial_tiles = []
