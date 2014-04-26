@@ -1,19 +1,19 @@
-default: test
+default: tests
 
 clean:
 	rm -f $(shell find . -name "*.pyc")
 
 tests:
-	nosetests
+	python -m nose
 
 test_watcher:
-	watch nosetests
+	watch python -m nose
 
 style_check:
-	pep8 $(shell find . -name "*.py")
+	python -m pep8 $(shell find . -name "*.py")
 
 style_watcher:
-	watch pep8 $(shell find . -name "*.py")
+	watch python -m pep8 $(shell find . -name "*.py")
 
 lint_check:
-	pylint --report=n $(shell find . -name "*.py")
+	python -m pylint --report=n $(shell find . -name "*.py")
