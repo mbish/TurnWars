@@ -24,7 +24,7 @@ class Factory(Serializable):
         return (name in self.factory_data)
 
     def get_data(self, name):
-        if(not name in self.factory_data):
+        if(name not in self.factory_data):
             raise BadFactoryRequest(
                 "Cannot find factory data for {}".format(name))
         return self.factory_data[name]
