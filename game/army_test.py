@@ -13,32 +13,45 @@ class MockUnitFactory:
 
 class MockUnit:
 
+    def __init__(self):
+        self.uid = id(self)
+
     def as_hash(self):
         return "Im a unit"
 
 
+class MockBuilding:
+
+    def __init__(self, coordinate):
+        self.coordinate = coordinate
+
+
 def buy_test():
     factory = MockUnitFactory()
-    army = Army('dragon', factory, 20)
-    unit = army.buy_unit("footman", 'ignore')
-    assert unit == "footman ignore"
-    assert army.unit_table == ['footman ignore']
-    unit = army.buy_unit("footman", 'ignore')
-    assert army.unit_table == ['footman ignore', 'footman ignore']
-    assert unit == "footman ignore"
-    assert_raises(InvalidArmyRequest, army.buy_unit, "footman", 'ignore')
+    building = MockBuilding(5)
+    army = Army('dragon', factory, [building], 20)
+    unit = army.buy_unit("footman", 5)
+    assert_raises(InvalidArmyRequest, army.buy_unit,
+                  "footman", 4)
+    assert unit == "footman 5"
+    assert army.unit_table == ['footman 5']
+    unit = army.buy_unit("footman", 5)
+    assert army.unit_table == ['footman 5', 'footman 5']
+    assert unit == "footman 5"
+    assert_raises(InvalidArmyRequest, army.buy_unit,
+                  "footman", 5)
 
 
 def add_unit_test():
     factory = MockUnitFactory()
-    army = Army('dragon', factory, 20)
+    army = Army('dragon', factory, [], 20)
     army.add_unit("footman")
     assert army.unit_table == ['footman']
 
 
 def serializable_test():
     factory = MockUnitFactory()
-    army = Army('dragon', factory, 20)
+    army = Army('dragon', factory, [], 20)
     unit = MockUnit()
     army.add_unit(unit)
     json_string = army.flat()
@@ -47,7 +60,7 @@ def serializable_test():
 
 def find_unit_test():
     factory = MockUnitFactory()
-    army = Army('dragon', factory, 20)
+    army = Army('dragon', factory, [], 20)
     unit = MockUnit()
     army.add_unit(unit)
     unit2 = MockUnit()
@@ -58,3 +71,27 @@ def find_unit_test():
     assert id(found_unit) == id(unit)
     found_unit = army.find_unit(id(unit2))
     assert id(found_unit) == id(unit2)
+
+
+def has_building_at_test():
+    factory = MockUnitFactory()
+    building = MockBuilding(4)
+    building2 = MockBuilding(7)
+    building3 = MockBuilding(9)
+    army = Army('dragon', factory, [building, building2, building3], 20)
+    assert army.has_building_at(4)
+    assert army.has_building_at(7)
+    assert army.has_building_at(9)
+    assert not army.has_building_at(11)
+
+
+def get_building_at_test():
+    factory = MockUnitFactory()
+    building = MockBuilding(4)
+    building2 = MockBuilding(7)
+    building3 = MockBuilding(9)
+    army = Army('dragon', factory, [building, building2, building3], 20)
+    found = army._get_building_at(7)
+    assert found.coordinate == 7
+    found = army._get_building_at(4)
+    assert found.coordinate == 4

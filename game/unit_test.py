@@ -5,6 +5,9 @@ from nose import with_setup
 
 class MockArmor:
 
+    def reset(self):
+        self.health += 10
+
     def __init__(self, name, health):
         self.name = name
         self.health = health
@@ -36,6 +39,9 @@ class MockTransport:
     def flat(self):
         return self.name
 
+    def reset(self):
+        self.spaces_left = self.spaces_per_turn
+
 
 class MockWeapon:
 
@@ -50,7 +56,7 @@ class MockWeapon:
     def use(self):
         return
 
-    def can_use(self):
+    def can_use(self, dist):
         return 1
 
     def get_strength(self):
@@ -58,6 +64,9 @@ class MockWeapon:
 
     def flat(self):
         return self.name
+
+    def reset(self):
+        self.attack_strength += 10
 
 
 def test_unit():
@@ -135,3 +144,14 @@ def serialization_test():
         '"id": 0, "transport": "tred"}'
     )
     assert unit.as_json() == json_string
+
+
+def reset_test():
+    unit = test_unit()
+    unit.transport.spaces_left = 0
+    unit.weapon.attack_strength = 0
+    unit.armor.health = 0
+    unit.reset()
+    assert unit.transport.spaces_left == 5
+    assert unit.weapon.attack_strength == 10
+    assert unit.armor.health == 10

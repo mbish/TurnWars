@@ -1,4 +1,4 @@
-from path_finder import NoPathFound, get_path, tiles_in_range
+from path_finder import NoPathFound, PathFinder
 from coordinate import Coordinate
 from nose.tools import assert_raises
 
@@ -51,8 +51,9 @@ def get_path_test():
     cost_table = {
         'plain': 1,
     }
-    path = get_path(board, cost_table,
-                    Coordinate(0, 0), Coordinate(1, 2))
+    finder = PathFinder(board)
+    path = finder.get_path(cost_table,
+                           Coordinate(0, 0), Coordinate(1, 2))
 
     json_path = [tile.as_json() for tile in path]
     assert cmp(json_path, (['{"y": 0, "x": 0}', '{"y": 0, "x": 1}',
@@ -66,17 +67,17 @@ def get_path_test():
                             '{"y": 4, "x": 0}', '{"y": 3, "x": 0}',
                             '{"y": 2, "x": 0}', '{"y": 2, "x": 1}'])) == 0
 
-    assert_raises(NoPathFound, get_path, board, cost_table,
+    assert_raises(NoPathFound, finder.get_path, cost_table,
                   Coordinate(0, 0), Coordinate(3, 2))
 
-    path = get_path(board, cost_table,
-                    Coordinate(0, 0), Coordinate(2, 0))
+    path = finder.get_path(cost_table,
+                           Coordinate(0, 0), Coordinate(2, 0))
     json_path = [tile.as_json() for tile in path]
     assert cmp(json_path, (['{"y": 0, "x": 0}',
                             '{"y": 0, "x": 1}', '{"y": 0, "x": 2}'])) == 0
 
-    path = get_path(board, cost_table,
-                    Coordinate(0, 0), Coordinate(0, 0))
+    path = finder.get_path(cost_table,
+                           Coordinate(0, 0), Coordinate(0, 0))
     assert path == [Coordinate(0, 0)]
 
 
@@ -85,8 +86,9 @@ def get_range_test():
     cost_table = {
         'plain': 1,
     }
-    path = tiles_in_range(board, cost_table,
-                          Coordinate(0, 0), 3)
+    finder = PathFinder(board)
+    path = finder.tiles_in_range(cost_table,
+                                 Coordinate(0, 0), 3)
 
     json_path = [tile.as_json() for tile in path]
     assert cmp(json_path, (['{"y": 0, "x": 1}', '{"y": 0, "x": 2}',
@@ -95,26 +97,26 @@ def get_range_test():
     cost_table = {
         'plain': 2,
     }
-    path = tiles_in_range(board, cost_table,
-                          Coordinate(0, 0), 4)
+    path = finder.tiles_in_range(cost_table,
+                                 Coordinate(0, 0), 4)
 
     json_path = [tile.as_json() for tile in path]
     assert cmp(json_path, (['{"y": 0, "x": 1}', '{"y": 0, "x": 2}'])) == 0
 
-    path = tiles_in_range(board, cost_table,
-                          Coordinate(0, 6), 2)
+    path = finder.tiles_in_range(cost_table,
+                                 Coordinate(0, 6), 2)
 
     json_path = [tile.as_json() for tile in path]
     assert cmp(json_path, (['{"y": 5, "x": 0}', '{"y": 6, "x": 1}'])) == 0
 
-    path = tiles_in_range(board, cost_table,
-                          Coordinate(0, 6), 4)
+    path = finder.tiles_in_range(cost_table,
+                                 Coordinate(0, 6), 4)
 
     json_path = [tile.as_json() for tile in path]
     assert cmp(json_path, (['{"y": 4, "x": 0}', '{"y": 5, "x": 0}',
                             '{"y": 5, "x": 1}', '{"y": 6, "x": 1}',
                             '{"y": 6, "x": 2}'])) == 0
 
-    path = tiles_in_range(board, cost_table,
-                          Coordinate(0, 0), 0)
+    path = finder.tiles_in_range(cost_table,
+                                 Coordinate(0, 0), 0)
     assert path == []

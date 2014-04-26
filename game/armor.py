@@ -18,6 +18,9 @@ class Armor(Serializable):
     def get_health(self):
         return self.health
 
+    def reset(self):
+        return
+
     def flat(self):
         return {
             'name': self.name,

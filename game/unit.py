@@ -16,6 +16,11 @@ class Unit(Serializable):
         else:
             self.dead = False
 
+    def reset(self):
+        self.transport.reset()
+        self.weapon.reset()
+        self.armor.reset()
+
     def get_coordinate(self):
         return self.coordinate
 
@@ -40,6 +45,9 @@ class Unit(Serializable):
     def movement_range(self):
         return self.transport.get_spaces_left()
 
+    def attack_range(self):
+        return self.attack_range()
+
     def get_transport_type(self):
         return self.transport.get_name()
 
@@ -49,8 +57,11 @@ class Unit(Serializable):
     def get_attack_strength(self):
         return self.weapon.get_attack_strength()
 
+    # consider moving distance check into game object
+    # for move elaberate attack patterns
     def attack(self, target):
-        if(self.weapon.can_use()):
+        distance = self.coordinate.get_distance(target.coordinate)
+        if(self.weapon.can_use(distance)):
             damage = self.weapon.get_strength()
             target.do_damage(damage)
             self.weapon.use()
