@@ -10,13 +10,21 @@ class MockUnitFactory:
     def create(self, name, pos):
         return "{} {}".format(name, pos)
 
+    def full_unit_info(self, _type):
+        return "everything for {}".format(_type)
+
 
 class MockUnit:
 
-    def __init__(self):
+    def __init__(self, coordinate="ignore"):
         self.uid = id(self)
+        self.coordinate = coordinate
+        self.was_reset = 0
 
-    def as_hash(self):
+    def reset(self):
+        self.was_reset = 1
+
+    def flat(self):
         return "Im a unit"
 
 
@@ -25,11 +33,22 @@ class MockBuilding:
     def __init__(self, coordinate):
         self.coordinate = coordinate
 
+    def flat(self):
+        return "Im a building {}".format(self.coordinate)
 
-def buy_test():
+
+def test_army():
     factory = MockUnitFactory()
     building = MockBuilding(5)
-    army = Army('dragon', factory, [building], 20)
+    building2 = MockBuilding(7)
+    building3 = MockBuilding(9)
+    army = Army('dragon', factory, [building, building2, building3], 20)
+    army.turn = 1
+    return army
+
+
+def buy_test():
+    army = test_army()
     unit = army.buy_unit("footman", 5)
     assert_raises(InvalidArmyRequest, army.buy_unit,
                   "footman", 4)
@@ -43,24 +62,24 @@ def buy_test():
 
 
 def add_unit_test():
-    factory = MockUnitFactory()
-    army = Army('dragon', factory, [], 20)
+    army = test_army()
     army.add_unit("footman")
     assert army.unit_table == ['footman']
 
 
 def serializable_test():
-    factory = MockUnitFactory()
-    army = Army('dragon', factory, [], 20)
+    army = test_army()
     unit = MockUnit()
     army.add_unit(unit)
-    json_string = army.flat()
-    assert army.as_json() == '{"units": ["Im a unit"]}'
+    json_string = army.as_json()
+    assert json_string == (
+        '{"units": ["Im a unit"], "buildings": ["Im a building 5", '
+        '"Im a building 7", "Im a building 9"]}'
+    )
 
 
 def find_unit_test():
-    factory = MockUnitFactory()
-    army = Army('dragon', factory, [], 20)
+    army = test_army()
     unit = MockUnit()
     army.add_unit(unit)
     unit2 = MockUnit()
@@ -74,24 +93,65 @@ def find_unit_test():
 
 
 def has_building_at_test():
-    factory = MockUnitFactory()
-    building = MockBuilding(4)
-    building2 = MockBuilding(7)
-    building3 = MockBuilding(9)
-    army = Army('dragon', factory, [building, building2, building3], 20)
-    assert army.has_building_at(4)
+    army = test_army()
+    assert army.has_building_at(5)
     assert army.has_building_at(7)
     assert army.has_building_at(9)
     assert not army.has_building_at(11)
 
 
 def get_building_at_test():
-    factory = MockUnitFactory()
-    building = MockBuilding(4)
-    building2 = MockBuilding(7)
-    building3 = MockBuilding(9)
-    army = Army('dragon', factory, [building, building2, building3], 20)
+    army = test_army()
     found = army._get_building_at(7)
     assert found.coordinate == 7
-    found = army._get_building_at(4)
-    assert found.coordinate == 4
+    found = army._get_building_at(5)
+    assert found.coordinate == 5
+
+
+def can_build_test():
+    army = test_army()
+    assert army.can_build(5, 5)
+    assert not army.can_build(200, 5)
+    assert not army.can_build(5, 15)
+    army.turn = 0
+    assert not army.can_build(5, 5)
+
+
+def has_unit_at_test():
+    unit = MockUnit("here I am")
+    army = test_army()
+    army.add_unit(unit)
+    assert army.has_unit_at("here I am")
+    assert not army.has_unit_at("")
+
+
+def unit_info_test():
+    army = test_army()
+    unit = MockUnit()
+    info = army.unit_info("the best type")
+    print info
+    assert info == "everything for the best type"
+
+
+def take_turn_test():
+    army = test_army()
+    unit = MockUnit()
+    army.turn = 0
+    army.add_unit(unit)
+    army.take_turn()
+    assert army.turn
+    assert unit.was_reset
+
+
+def end_turn_test():
+    army = test_army()
+    assert army.turn
+    army.end_turn()
+    assert army.turn == 0
+
+
+def is_turn_test():
+    army = test_army()
+    assert army.is_turn()
+    army.end_turn()
+    assert not army.is_turn()

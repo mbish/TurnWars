@@ -41,6 +41,8 @@ class Army(Serializable):
 
     def can_build(self, cost, coordinate):
         result = True
+        if(not self.turn):
+            result = False
         if(self.money < cost):
             result = False
         if(not self.has_building_at(coordinate)):
@@ -63,18 +65,21 @@ class Army(Serializable):
         return found_unit
 
     def take_turn(self):
+        for unit in self.unit_table:
+            unit.reset()
         self.turn = 1
 
     def end_turn(self):
-        for unit in self.unit_table:
-            unit.reset()
+        self.turn = 0
+        return
 
     def is_turn(self):
         return self.turn
 
     def flat(self):
         return {
-            'units': [unit.as_hash() for unit in self.unit_table],
+            'units': [unit.flat() for unit in self.unit_table],
+            'buildings': [building.flat() for building in self.buildings]
         }
 
 
