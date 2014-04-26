@@ -20,30 +20,33 @@ class Board(Serializable):
     def get_dimensions(self):
         return Coordinate(len(self.tiles[0]), len(self.tiles))
 
-    def get_tile_at_coordinate(self, x, y):
-        return self.tiles[y][x]
+    def get_tile_at_coordinate(self, coordinate):
+        return self.tiles[coordinate.y][coordinate.x]
 
     def get_neighbors(self, coordinate):
         neighbors = []
-        if(self.is_on_board(coordinate.x + 1, coordinate.y)):
-            neighbors.append(Coordinate(coordinate.x + 1, coordinate.y))
-        if(self.is_on_board(coordinate.x - 1, coordinate.y)):
-            neighbors.append(Coordinate(coordinate.x - 1, coordinate.y))
-        if(self.is_on_board(coordinate.x, coordinate.y - 1)):
-            neighbors.append(Coordinate(coordinate.x, coordinate.y + 1))
-        if(self.is_on_board(coordinate.x, coordinate.y - 1)):
-            neighbors.append(Coordinate(coordinate.x, coordinate.y - 1))
+        x = coordinate.x
+        y = coordinate.y
+        potential_neighbors = [
+            Coordinate(x + 1, y),
+            Coordinate(x - 1, y),
+            Coordinate(x, y + 1),
+            Coordinate(x, y - 1),
+        ]
+        for neighbor in potential_neighbors:
+            if(self.is_on_board(neighbor)):
+                neighbors.append(neighbor)
 
         return neighbors
 
-    def is_on_board(self, x, y):
+    def is_on_board(self, coordinate):
         x_on_board = False
         y_on_board = False
-        if(x < len(self.tiles[0]) and
-           x >= 0):
+        if(coordinate.x < len(self.tiles[0]) and
+           coordinate.x >= 0):
             x_on_board = True
-        if(y < len(self.tiles) and
-           y >= 0):
+        if(coordinate.y < len(self.tiles) and
+           coordinate.y >= 0):
             y_on_board = True
 
         return True

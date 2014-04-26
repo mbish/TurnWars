@@ -50,15 +50,16 @@ def get_tile_test():
             tiles[row].append(MockTile("{} {}".format(col, row)))
 
     board = Board(tiles)
-    tile = board.get_tile_at_coordinate(1, 4)
+    tile = board.get_tile_at_coordinate(Coordinate(1, 4))
     assert tile.tile_type == "1 4"
-    tile = board.get_tile_at_coordinate(3, 10)
+    tile = board.get_tile_at_coordinate(Coordinate(3, 10))
     assert tile.tile_type == "3 10"
-    tile = board.get_tile_at_coordinate(0, 0)
+    tile = board.get_tile_at_coordinate(Coordinate(0, 0))
     assert tile.tile_type == "0 0"
-    tile = board.get_tile_at_coordinate(4, 29)
+    tile = board.get_tile_at_coordinate(Coordinate(4, 29))
     assert tile.tile_type == "4 29"
-    assert_raises(IndexError, board.get_tile_at_coordinate, 100, 100)
+    assert_raises(IndexError, board.get_tile_at_coordinate,
+                  Coordinate(100, 100))
 
 
 def json_test():

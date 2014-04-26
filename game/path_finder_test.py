@@ -1,5 +1,6 @@
-import path_finder
+from path_finder import NoPathFound, get_path, tiles_in_range
 from coordinate import Coordinate
+from nose.tools import assert_raises
 
 
 class MockTile:
@@ -13,14 +14,23 @@ class MockBoard:
         X = MockTile('wall')
         self.board = [[O, O, O, O, O, O],
                       [X, X, X, X, X, O],
-                      [O, O, X, X, O, O],
-                      [O, X, X, O, X, O],
+                      [O, O, X, O, X, O],
+                      [O, X, X, X, X, O],
                       [O, O, O, O, X, O],
                       [O, O, X, O, O, O],
                       [O, O, O, O, X, X]]
 
-    def get_tile_at_coordinate(self, x, y):
-        return self.board[y][x]
+    def get_tile_at_coordinate(self, coordinate):
+        return self.board[coordinate.y][coordinate.x]
+
+    def is_on_board(self, coordinate):
+        if(coordinate.x < len(self.board[0]) and
+           coordinate.y < len(self.board) and
+           coordinate.x >= 0 and
+           coordinate.y >= 0):
+            return True
+        else:
+            return False
 
     def get_neighbors(self, coordinate):
         neighbors = []
@@ -40,19 +50,71 @@ def get_path_test():
     board = MockBoard()
     cost_table = {
         'plain': 1,
-        'wall': 10000,
     }
-    path = path_finder.get_path(board, cost_table,
-                                Coordinate(0, 0), Coordinate(1, 2))
+    path = get_path(board, cost_table,
+                    Coordinate(0, 0), Coordinate(1, 2))
 
     json_path = [tile.as_json() for tile in path]
     assert cmp(json_path, (['{"y": 0, "x": 0}', '{"y": 0, "x": 1}',
-                            '{"y": 0, "x": 2}', '{"y ": 0, "x": 3}',
+                            '{"y": 0, "x": 2}', '{"y": 0, "x": 3}',
                             '{"y": 0, "x": 4}', '{"y": 0, "x": 5}',
                             '{"y": 1, "x": 5}', '{"y": 2, "x": 5}',
                             '{"y": 3, "x": 5}', '{"y": 4, "x": 5}',
                             '{"y": 5, "x": 5}', '{"y": 5, "x": 4}',
                             '{"y": 5, "x": 3}', '{"y": 4, "x": 3}',
                             '{"y": 4, "x": 2}', '{"y": 4, "x": 1}',
-                            '{"y ": 4, "x": 0}', '{"y": 3, "x": 0}',
-                            '{"y": 2, "x": 0}', '{"y": 2, "x": 1}'])) == 1
+                            '{"y": 4, "x": 0}', '{"y": 3, "x": 0}',
+                            '{"y": 2, "x": 0}', '{"y": 2, "x": 1}'])) == 0
+
+    assert_raises(NoPathFound, get_path, board, cost_table,
+                  Coordinate(0, 0), Coordinate(3, 2))
+
+    path = get_path(board, cost_table,
+                    Coordinate(0, 0), Coordinate(2, 0))
+    json_path = [tile.as_json() for tile in path]
+    assert cmp(json_path, (['{"y": 0, "x": 0}',
+                            '{"y": 0, "x": 1}', '{"y": 0, "x": 2}'])) == 0
+
+    path = get_path(board, cost_table,
+                    Coordinate(0, 0), Coordinate(0, 0))
+    assert path == [Coordinate(0, 0)]
+
+
+def get_range_test():
+    board = MockBoard()
+    cost_table = {
+        'plain': 1,
+    }
+    path = tiles_in_range(board, cost_table,
+                          Coordinate(0, 0), 3)
+
+    json_path = [tile.as_json() for tile in path]
+    assert cmp(json_path, (['{"y": 0, "x": 1}', '{"y": 0, "x": 2}',
+                            '{"y": 0, "x": 3}'])) == 0
+
+    cost_table = {
+        'plain': 2,
+    }
+    path = tiles_in_range(board, cost_table,
+                          Coordinate(0, 0), 4)
+
+    json_path = [tile.as_json() for tile in path]
+    assert cmp(json_path, (['{"y": 0, "x": 1}', '{"y": 0, "x": 2}'])) == 0
+
+    path = tiles_in_range(board, cost_table,
+                          Coordinate(0, 6), 2)
+
+    json_path = [tile.as_json() for tile in path]
+    assert cmp(json_path, (['{"y": 5, "x": 0}', '{"y": 6, "x": 1}'])) == 0
+
+    path = tiles_in_range(board, cost_table,
+                          Coordinate(0, 6), 4)
+
+    json_path = [tile.as_json() for tile in path]
+    assert cmp(json_path, (['{"y": 4, "x": 0}', '{"y": 5, "x": 0}',
+                            '{"y": 5, "x": 1}', '{"y": 6, "x": 1}',
+                            '{"y": 6, "x": 2}'])) == 0
+
+    path = tiles_in_range(board, cost_table,
+                          Coordinate(0, 0), 0)
+    assert path == []

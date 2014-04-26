@@ -2,7 +2,7 @@ from unit import Unit
 import math
 from coordinate import Coordinate
 from serializable import Serializable
-import path_finder
+from path_finder import get_path, path_cost, tiles_in_range, NoPathFound
 
 
 class Game(Serializable):
@@ -23,10 +23,22 @@ class Game(Serializable):
         army = self._find_army(unit.army)
         transport = army.equipment_info(unit.name, 'transport')
         movement_cost = transport['movement_cost']
-        path = path_finder.get_path(self.board, unit.get_coordinate(),
-                                    movement_cost, coordinate)
-        if(len(path) <= unit.movement_range):
-            unit.move(coordinate, len(path))
+        try:
+            path = get_path(self.board, unit.get_coordinate(),
+                            movement_cost, coordinate)
+            if(path_cost(self.board, path, movement_cost) <=
+               unit.movement_range):
+                unit.move(coordinate, len(path))
+        except NoPathFound:
+            return
+
+    def attack(self, attacker, defender):
+        # TODO
+        return
+
+    def build(self, name, coordinate):
+        # TODO
+        return
 
     def do(self, message):
         if(message.name == 'move'):
@@ -35,6 +47,16 @@ class Game(Serializable):
             self.move(unit, to)
 
         return self.flat()
+
+    # This is really a utility function and may get split out from the
+    # truely model-modifying functions above
+    def tiles_in_range(self, unit):
+        army = self._find_army(unit.army)
+        transport = army.equipment_info(unit.name, 'transport')
+        movement_cost = transport['movement_cost']
+        spaces_left = unit.get_spaces_left()
+        return tiles_in_range(self.board, movement_cost, unit.get_coordinate(),
+                              spaces_left)
 
     def flat(self):
         return {

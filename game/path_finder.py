@@ -1,4 +1,5 @@
 import types
+from coordinate import Coordinate, BadCoordinateCreation
 
 
 def get_path(board, cost_table, from_position, to_position):
@@ -28,16 +29,17 @@ def get_path(board, cost_table, from_position, to_position):
 
             cost = 0
 
-            tile = board.get_tile_at_coordinate(
-                neighbor.x, neighbor.y)
+            tile = board.get_tile_at_coordinate(neighbor)
             if tile.tile_type in cost_table:
                 cost = cost_table[tile.tile_type]
+            else:
+                continue
 
             temp_score = score[current] + cost
 
             if (neighbor not in queue or
-                    neighbor in score and
-                    temp_score < score[neighbor]):
+                    (neighbor in score and
+                     temp_score < score[neighbor])):
                 path[neighbor] = current
                 score[neighbor] = temp_score
                 estimated_score[neighbor] = (score[neighbor] +
@@ -48,6 +50,53 @@ def get_path(board, cost_table, from_position, to_position):
 
     raise NoPathFound("Cannot find path between {} and {}".format(
         from_position, to_position))
+
+
+def _is_path(board, cost_table, from_position, to_position):
+    is_path = True
+    try:
+        get_path(board, cost_table, from_position, to_position)
+    except NoPathFound:
+        is_path = False
+
+    return is_path
+
+
+def path_cost(board, path, cost_table):
+    cost = 0
+    for coordinate in path:
+        tile = board.get_tile_at_coordinate(coordinate)
+        cost += cost_table[tile.tile_type]
+
+    return cost
+
+
+def tiles_in_range(board, cost_table, from_position, max_cost):
+    can_move_to = []
+
+    # add 1 to max cost so we're working on a closed interval
+    for x in range(-max_cost, max_cost + 1):
+        for y in range(-max_cost, max_cost + 1):
+            if y == 0 and x == 0 or abs(y) + abs(x) > max_cost:
+                continue
+            try:
+                to_position = Coordinate(from_position.x + x,
+                                         from_position.y + y)
+            except BadCoordinateCreation:
+                continue
+
+            if(board.is_on_board(to_position)):
+                try:
+                    path = get_path(board, cost_table, from_position,
+                                    to_position)
+
+                    path.remove(from_position)
+                    if(path_cost(board, path, cost_table) <= max_cost):
+                        can_move_to.append(to_position)
+                except NoPathFound:
+                    continue
+
+    return can_move_to
 
 
 def _traceback(path, coordinate):
