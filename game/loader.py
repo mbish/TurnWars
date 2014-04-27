@@ -9,22 +9,10 @@ class Loader:
         return self.load_from_json(blob)
 
     def load_from_json(self, json_blob):
-        print json.loads(json_blob)
         return self.load(json.loads(json_blob))
 
     def load(self, data):
-        if(self._validate_data(data)):
-            return self._load_data(data)
-        else:
-            raise BadLoaderData("Could not load data {}".format(data))
-
-    def _validate_data(self, data):
-        raise NotImplementedError(
-            "Loader class must implement validate_data(self, data)")
-
-    def _load_data(self, data):
-        raise NotImplementedError(
-            "Loader class must implement validate_data(self, data)")
+        return data
 
 
 class BadLoaderData(Exception):

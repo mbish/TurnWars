@@ -2,6 +2,12 @@ from army import Army, InvalidArmyRequest
 from nose.tools import assert_raises
 
 
+class MockBuildingFactory:
+
+    def create(self, building_name, coordinate):
+        return "{} {}".format(building_name, coordinate)
+
+
 class MockUnitFactory:
 
     def get_unit_cost(self, name):
@@ -36,13 +42,20 @@ class MockBuilding:
     def flat(self):
         return "Im a building {}".format(self.coordinate)
 
+    def get_revenue(self):
+        return 10
+
 
 def test_army():
     factory = MockUnitFactory()
+    building_factory = MockBuildingFactory()
+    army = Army('dragon', factory, building_factory, 20)
     building = MockBuilding(5)
     building2 = MockBuilding(7)
     building3 = MockBuilding(9)
-    army = Army('dragon', factory, [building, building2, building3], 20)
+    army.add_building(building)
+    army.add_building(building2)
+    army.add_building(building3)
     army.turn = 1
     return army
 
@@ -141,6 +154,7 @@ def take_turn_test():
     army.take_turn()
     assert army.turn
     assert unit.was_reset
+    assert army.money == 50
 
 
 def end_turn_test():
@@ -155,3 +169,11 @@ def is_turn_test():
     assert army.is_turn()
     army.end_turn()
     assert not army.is_turn()
+
+
+def build_building_test():
+    army = test_army()
+    army.build_building('test', 'ignore')
+    assert 'test ignore' in army.buildings
+    army.add_building('ranch')
+    assert 'ranch' in army.buildings

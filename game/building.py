@@ -3,14 +3,18 @@ from serializable import Serializable
 
 class Building(Serializable):
 
-    def __init__(self, name, buildable_units, coordinate):
+    def __init__(self, name, revenue, buildable_units, coordinate):
         Serializable.__init__(self)
         self.name = name
         self.coordinate = coordinate
         self.buildable_units = buildable_units
+        self.revenue = revenue
 
     def can_build(self, unit_name):
         return unit_name in self.buildable_units
+
+    def get_revenue(self):
+        return self.revenue
 
     def flat(self):
         return {
