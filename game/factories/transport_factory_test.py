@@ -1,5 +1,5 @@
-from transport_factory import TransportFactory
-from factory import BadFactoryData
+from game.factories.transport_factory import TransportFactory
+from game.factories.factory import BadFactoryData
 from nose.tools import assert_raises
 
 
@@ -11,7 +11,7 @@ class MockClass:
         self.name = name
 
     def get_value(self):
-        return "{} {} {}".format(self.name,
+        return "{0} {1} {2}".format(self.name,
                                  self.spaces_per_turn,
                                  self.starting_fuel)
 

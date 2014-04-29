@@ -1,5 +1,5 @@
-from factories.unit_factory import UnitFactory
-from serializable import Serializable
+from game.factories.unit_factory import UnitFactory
+from game.serializable import Serializable
 
 
 class Army(Serializable):
@@ -34,7 +34,7 @@ class Army(Serializable):
             new_unit = self.build_unit(unit_name, coordinate)
         else:
             raise InvalidArmyRequest(
-                "Cannot buy unit {}".format(
+                "Cannot buy unit {0}".format(
                     unit_name, self.money, cost)
             )
         return new_unit

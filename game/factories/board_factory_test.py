@@ -1,12 +1,12 @@
-from board_factory import BoardFactory
-from factory import BadFactoryData
+from game.factories.board_factory import BoardFactory
+from game.factories.factory import BadFactoryData
 from nose.tools import assert_raises
 
 
 class MockTileFactory:
 
     def create(self, tile):
-        return "{} created".format(tile)
+        return "{0} created".format(tile)
 
 
 class MockBoard:

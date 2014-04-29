@@ -1,6 +1,6 @@
 from game.unit import Unit
 from game.coordinate import Coordinate
-from factory import Factory, BadFactoryRequest
+from game.factories.factory import Factory, BadFactoryRequest
 
 
 class UnitFactory(Factory):
@@ -42,7 +42,7 @@ class UnitFactory(Factory):
         elif(factory == "transport"):
             result = self.transport_factory
         else:
-            raise BadFactoryRequest("Could not find factory for {}".format(
+            raise BadFactoryRequest("Could not find factory for {0}".format(
                 factory))
 
         return result

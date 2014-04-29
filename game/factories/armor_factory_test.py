@@ -1,4 +1,4 @@
-from armor_factory import ArmorFactory
+from game.factories.armor_factory import ArmorFactory
 from nose.tools import assert_raises
 
 
@@ -9,7 +9,7 @@ class MockClass:
         self.name = name
 
     def get_value(self):
-        return "{} {}".format(self.name, self.health)
+        return "{0} {1}".format(self.name, self.health)
 
 
 def validate_test():

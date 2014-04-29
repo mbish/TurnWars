@@ -1,5 +1,5 @@
-from path_finder import NoPathFound, PathFinder
-from coordinate import Coordinate
+from game.path_finder import NoPathFound, PathFinder
+from game.coordinate import Coordinate
 from nose.tools import assert_raises
 
 

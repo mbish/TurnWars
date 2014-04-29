@@ -1,4 +1,4 @@
-from building import Building
+from game.building import Building
 
 
 class MockCoordinate:

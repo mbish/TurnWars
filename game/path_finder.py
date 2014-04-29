@@ -1,5 +1,5 @@
 import types
-from coordinate import Coordinate, BadCoordinateCreation
+from game.coordinate import Coordinate, BadCoordinateCreation
 
 
 class PathFinder:
@@ -55,7 +55,7 @@ class PathFinder:
                     if neighbor not in queue:
                         queue.append(neighbor)
 
-        raise NoPathFound("Cannot find path between {} and {}".format(
+        raise NoPathFound("Cannot find path between {0} and {1}".format(
             from_position, to_position))
 
     def _is_path(self, cost_table, from_position, to_position):

@@ -1,4 +1,4 @@
-from transport import Transport, BadTransportRequest, BadTransportCreation
+from game.transport import Transport, BadTransportRequest, BadTransportCreation
 from nose.tools import assert_raises
 
 

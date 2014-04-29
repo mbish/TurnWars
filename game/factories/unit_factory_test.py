@@ -1,5 +1,5 @@
-from unit_factory import UnitFactory
-from factory import BadFactoryRequest
+from game.factories.unit_factory import UnitFactory
+from game.factories.factory import BadFactoryRequest
 from nose.tools import assert_raises
 
 
@@ -14,7 +14,7 @@ class MockUnit:
         self.army = army
 
     def get_value(self):
-        return "{} {} {} {} {} {}".format(
+        return "{0} {1} {2} {3} {4} {5}".format(
             self.name,
             self.weapon,
             self.transport,
@@ -34,7 +34,7 @@ class MockFactory:
 
     def get_data(self, name):
         return {
-            'data': "{} data".format(name)
+            'data': "{0} data".format(name)
         }
 
 

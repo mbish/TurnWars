@@ -1,4 +1,4 @@
-from serializable import Serializable
+from game.serializable import Serializable
 
 
 class Scenario(Serializable):
@@ -32,7 +32,7 @@ class Scenario(Serializable):
             self._build_type(army, data)
         else:
             raise BadScenarioData(
-                "Cannot place {} at {}".format(
+                "Cannot place {0} at {1}".format(
                     data.name,
                     data.coordinate.flat()))
 
@@ -43,7 +43,7 @@ class Scenario(Serializable):
             return army.build_building(data.name, data.coordinate)
         else:
             raise BadScenarioData(
-                "Do not know how to build {}".format(data.object_type))
+                "Do not know how to build {0}".format(data.object_type))
 
     def set_starting_money(self, money, army_name=0):
         if(army_name):

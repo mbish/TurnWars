@@ -6,7 +6,7 @@ class Factory(Serializable):
     def __init__(self, factory_data, creation_class):
         for data in factory_data:
             if(not self.validate_data(factory_data[data])):
-                raise BadFactoryData("Data for {} is malformed".format(data))
+                raise BadFactoryData("Data for {0} is malformed".format(data))
 
         self.creation_class = creation_class
         self.factory_data = factory_data
@@ -26,7 +26,7 @@ class Factory(Serializable):
     def get_data(self, name):
         if(name not in self.factory_data):
             raise BadFactoryRequest(
-                "Cannot find factory data for {}".format(name))
+                "Cannot find factory data for {0}".format(name))
         return self.factory_data[name]
 
     def flat(self):

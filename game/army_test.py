@@ -1,11 +1,11 @@
-from army import Army, InvalidArmyRequest
+from game.army import Army, InvalidArmyRequest
 from nose.tools import assert_raises
 
 
 class MockBuildingFactory:
 
     def create(self, building_name, coordinate):
-        return "{} {}".format(building_name, coordinate)
+        return "{0} {1}".format(building_name, coordinate)
 
 
 class MockUnitFactory:
@@ -14,10 +14,10 @@ class MockUnitFactory:
         return 10
 
     def create(self, name, pos):
-        return "{} {}".format(name, pos)
+        return "{0} {1}".format(name, pos)
 
     def full_unit_info(self, _type):
-        return "everything for {}".format(_type)
+        return "everything for {0}".format(_type)
 
 
 class MockUnit:
@@ -40,7 +40,7 @@ class MockBuilding:
         self.coordinate = coordinate
 
     def flat(self):
-        return "Im a building {}".format(self.coordinate)
+        return "Im a building {0}".format(self.coordinate)
 
     def get_revenue(self):
         return 10

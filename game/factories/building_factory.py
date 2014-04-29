@@ -1,5 +1,5 @@
 from game.serializable import Serializable
-from factory import Factory
+from game.factories.factory import Factory
 from game.coordinate import Coordinate
 from game.building import Building
 

@@ -1,4 +1,4 @@
-from serializable import Serializable
+from game.serializable import Serializable
 
 
 class Weapon(Serializable):
@@ -8,7 +8,7 @@ class Weapon(Serializable):
         Serializable.__init__(self)
         if(attack_strength < 0 or uses < 0 or reach < 0):
             raise BadWeaponCreation("Cannot create weapon with \
-                uses {} and attack_strength {}".format(
+                uses {0} and attack_strength {1}".format(
                 uses, attack_strength))
         self.name = name
         self.uses = uses

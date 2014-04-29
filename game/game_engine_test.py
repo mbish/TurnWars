@@ -1,5 +1,5 @@
-from game import Game, InvalidGameCreation
-from path_finder import NoPathFound
+from game.game_engine import Game, InvalidGameCreation
+from game.path_finder import NoPathFound
 from nose.tools import assert_raises
 
 
@@ -9,7 +9,7 @@ class MockArmy:
         self.units = []
 
     def find_unit(self, uid):
-        return "a {} {} unit".format(self.name, uid)
+        return "a {0} {1} unit".format(self.name, uid)
 
     def equipment_info(self, name, _type):
         return {
@@ -17,7 +17,7 @@ class MockArmy:
         }
 
     def buy_unit(self, unit, location):
-        self.units.append("{} {}".format(unit, location))
+        self.units.append("{0} {1}".format(unit, location))
 
     def has_unit_at(self, location):
         return location == "not here"

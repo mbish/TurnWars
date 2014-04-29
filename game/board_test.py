@@ -1,5 +1,5 @@
-from board import Board, InvalidBoardDimensions
-from coordinate import Coordinate
+from game.board import Board, InvalidBoardDimensions
+from game.coordinate import Coordinate
 from nose.tools import assert_raises
 
 
@@ -9,7 +9,7 @@ class MockTile:
         self.tile_type = new_tile_type
 
     def flat(self):
-        return "serial {}".format(self.tile_type)
+        return "serial {0}".format(self.tile_type)
 
 
 def empty_board_test():
@@ -24,7 +24,7 @@ def non_square_board_test():
     for row in range(0, 10):
         tiles.append([])
         for col in range(0, row):
-            tiles[row].append(MockTile("{} {}".format(row, col)))
+            tiles[row].append(MockTile("{0} {1}".format(row, col)))
 
     assert_raises(InvalidBoardDimensions, Board, tiles)
 
@@ -34,7 +34,7 @@ def normal_board_test():
     for row in range(0, 100):
         tiles.append([])
         for col in range(0, 10):
-            tiles[row].append(MockTile("{} {}".format(row, col)))
+            tiles[row].append(MockTile("{0} {1}".format(row, col)))
 
     board = Board(tiles)
     coordinates = board.get_dimensions()
@@ -47,7 +47,7 @@ def get_tile_test():
     for row in range(0, 30):
         tiles.append([])
         for col in range(0, 5):
-            tiles[row].append(MockTile("{} {}".format(col, row)))
+            tiles[row].append(MockTile("{0} {1}".format(col, row)))
 
     board = Board(tiles)
     tile = board.get_tile_at_coordinate(Coordinate(1, 4))
@@ -67,7 +67,7 @@ def json_test():
     for row in range(0, 2):
         tiles.append([])
         for col in range(0, 2):
-            tiles[row].append(MockTile("{} {}".format(col, row)))
+            tiles[row].append(MockTile("{0} {1}".format(col, row)))
 
     board = Board(tiles)
     json_string = (

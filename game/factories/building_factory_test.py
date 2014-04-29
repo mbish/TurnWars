@@ -1,5 +1,5 @@
-from building_factory import BuildingFactory
-from factory import BadFactoryData
+from game.factories.building_factory import BuildingFactory
+from game.factories.factory import BadFactoryData
 from nose.tools import assert_raises
 
 

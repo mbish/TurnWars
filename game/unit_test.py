@@ -1,5 +1,5 @@
-from unit import Unit
-from coordinate import Coordinate
+from game.unit import Unit
+from game.coordinate import Coordinate
 from nose import with_setup
 
 

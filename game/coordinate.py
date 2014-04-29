@@ -1,4 +1,4 @@
-from serializable import Serializable
+from game.serializable import Serializable
 
 
 class Coordinate(Serializable):
@@ -6,7 +6,7 @@ class Coordinate(Serializable):
     def __init__(self, x, y):
         if(x < 0 or y < 0):
             raise BadCoordinateCreation("Cannot create coordinate with values \
-                    x: {} and y: {}".format(x, y))
+                    x: {0} and y: {1}".format(x, y))
         self.x = x
         self.y = y
 

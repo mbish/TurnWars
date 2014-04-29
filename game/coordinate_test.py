@@ -1,4 +1,4 @@
-from coordinate import Coordinate, BadCoordinateCreation
+from game.coordinate import Coordinate, BadCoordinateCreation
 from nose.tools import assert_raises
 
 

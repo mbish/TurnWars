@@ -1,4 +1,4 @@
-from weapon import Weapon, BadWeaponRequest, BadWeaponCreation
+from game.weapon import Weapon, BadWeaponRequest, BadWeaponCreation
 from nose.tools import assert_raises
 
 

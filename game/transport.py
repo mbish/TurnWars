@@ -1,4 +1,4 @@
-from serializable import Serializable
+from game.serializable import Serializable
 
 
 class Transport(Serializable):
@@ -19,12 +19,12 @@ class Transport(Serializable):
     def move(self, distance):
         if(distance > self.spaces_left):
             raise BadTransportRequest(
-                "Cant move {} with spaces {} left".format(distance,
+                "Cant move {0} with spaces {1} left".format(distance,
                                                           self.spaces_left))
         if(self.uses_fuel()):
             if(self.fuel < distance):
                 raise BadTransportRequest(
-                    "Cannot move {} with fuel {} left".format(distance,
+                    "Cannot move {0} with fuel {1} left".format(distance,
                                                               self.fuel))
             self.use_fuel(distance)
 
@@ -57,7 +57,7 @@ class Transport(Serializable):
         if(not self.uses_fuel()):
             return
         if(amount > self.fuel):
-            raise BadTransportRequest("Cannot use {} fuel only have {}".format(
+            raise BadTransportRequest("Cannot use {1} fuel only have {0}".format(
                 amount, self.fuel))
         self.fuel -= amount
 

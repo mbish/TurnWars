@@ -1,5 +1,5 @@
-from coordinate import Coordinate
-from serializable import Serializable
+from game.coordinate import Coordinate
+from game.serializable import Serializable
 
 
 class Board(Serializable):
@@ -12,7 +12,7 @@ class Board(Serializable):
         for row in tiles:
             if(len(row) != row_length or len(row) == 0):
                 raise InvalidBoardDimensions(
-                    "Expected dimension {} got {}".format(
+                    "Expected dimension {0} got {1}".format(
                         len(row), row_length))
         self.tiles = tiles
         return

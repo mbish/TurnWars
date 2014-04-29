@@ -1,6 +1,6 @@
 from game.tile import Tile
 from game.serializable import Serializable
-from factory import Factory, BadFactoryData, BadFactoryRequest
+from game.factories.factory import Factory, BadFactoryData, BadFactoryRequest
 
 
 class TileFactory(Factory):

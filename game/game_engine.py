@@ -1,8 +1,8 @@
-from unit import Unit
 import math
-from coordinate import Coordinate
-from serializable import Serializable
-from path_finder import NoPathFound, PathFinder
+from game.unit import Unit
+from game.coordinate import Coordinate
+from game.serializable import Serializable
+from game.path_finder import NoPathFound, PathFinder
 
 
 class Game(Serializable):

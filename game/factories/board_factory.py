@@ -1,5 +1,5 @@
 import json
-from factory import Factory
+from game.factories.factory import Factory
 from game.board import Board
 import types
 

@@ -1,5 +1,5 @@
 from game.army import Army
-from factory import Factory, BadFactoryData, BadFactoryRequest
+from game.factories.factory import Factory, BadFactoryData, BadFactoryRequest
 
 
 # TODO Tests

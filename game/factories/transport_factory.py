@@ -1,5 +1,5 @@
 from game.transport import Transport
-from factory import Factory
+from game.factories.factory import Factory
 from game.serializable import Serializable
 
 

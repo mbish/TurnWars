@@ -1,4 +1,4 @@
-from tile import Tile
+from game.tile import Tile
 
 
 def serialize_test():

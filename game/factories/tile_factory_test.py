@@ -1,5 +1,5 @@
-from tile_factory import TileFactory
-from factory import BadFactoryData, BadFactoryRequest
+from game.factories.tile_factory import TileFactory
+from game.factories.factory import BadFactoryData, BadFactoryRequest
 from nose.tools import assert_raises
 
 
@@ -13,7 +13,7 @@ class MockTile:
         return
 
     def get_value(self):
-        return "{} {} {} {}".format(self.name, self.cover,
+        return "{0} {1} {2} {3}".format(self.name, self.cover,
                                     len(self.non_passable), len(self.events))
 
 

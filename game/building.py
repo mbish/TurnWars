@@ -1,4 +1,4 @@
-from serializable import Serializable
+from game.serializable import Serializable
 
 
 class Building(Serializable):

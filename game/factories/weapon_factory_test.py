@@ -1,4 +1,4 @@
-from weapon_factory import WeaponFactory
+from game.factories.weapon_factory import WeaponFactory
 from nose.tools import assert_raises
 
 
@@ -12,7 +12,7 @@ class MockClass:
         self.uses_per_turn = pturn
 
     def get_value(self):
-        return "{} {} {} {} {}".format(self.name, self.uses,
+        return "{0} {1} {2} {3} {4}".format(self.name, self.uses,
                                        self.attack_strength,
                                        self.uses_per_turn,
                                        len(self.non_targetables))

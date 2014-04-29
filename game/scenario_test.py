@@ -1,4 +1,4 @@
-from scenario import Scenario, BadScenarioData
+from game.scenario import Scenario, BadScenarioData
 from nose.tools import assert_raises
 
 
@@ -24,11 +24,11 @@ class MockArmy:
         self.turn = 1
 
     def build_unit(self, name, pos):
-        unit = "unit {} {}".format(name, pos)
+        unit = "unit {0} {1}".format(name, pos)
         self.units.append(unit)
 
     def build_building(self, name, pos):
-        unit = "building {} {}".format(name, pos)
+        unit = "building {0} {1}".format(name, pos)
         self.buildings.append(unit)
 
 
