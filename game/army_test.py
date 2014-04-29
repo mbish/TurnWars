@@ -142,7 +142,6 @@ def unit_info_test():
     army = test_army()
     unit = MockUnit()
     info = army.unit_info("the best type")
-    print info
     assert info == "everything for the best type"
 
 

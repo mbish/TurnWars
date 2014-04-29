@@ -12,7 +12,6 @@ class BoardFactory(Factory):
 
     def validate_data(self, data):
         valid = True
-        print data
         if('tiles' not in data):
             valid = False
         elif(not isinstance(data['tiles'], types.ListType)):

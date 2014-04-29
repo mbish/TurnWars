@@ -44,5 +44,4 @@ def creation_test():
     transport = factory.create('foot')
     assert transport.get_value() == 'foot 5 -1'
     transport = factory.create('tire')
-    print transport.get_value()
     assert transport.get_value() == 'tire 10 100'

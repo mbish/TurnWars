@@ -13,7 +13,6 @@ def damage_test():
 
 def serializable_test():
     armor = Armor('shirt', 5)
-    print armor.as_json()
     assert armor.as_json() == '{"health": 5, "name": "shirt"}'
 
 
