@@ -8,11 +8,15 @@ class Scenario(Serializable):
         self.armies = []
         self.army_factory = army_factory
 
+    def num_armies(self):
+        return len(self.armies)
+
     def add_army(self, name):
         army = self.army_factory.create(name)
         if(len(self.armies) == 0):
             army.take_turn()
         self.armies.append(army)
+        return len(self.armies)
 
     def _find_army(self, army_name):
         army = next(army for army in self.armies if army.name == army_name)
@@ -35,6 +39,32 @@ class Scenario(Serializable):
                 "Cannot place {0} at {1}".format(
                     data.name,
                     data.coordinate.flat()))
+
+    def _unit_count(self, army_name=0):
+        count = 0
+        to_count = []
+        if(army_name):
+            to_count = [self._find_army(army_name)]
+        else:
+            to_count = self.armies
+
+        for army in to_count:
+            count += army.num_units()
+
+        return count
+
+    def _building_count(self, army_name=0):
+        count = 0
+        to_count = []
+        if(army_name):
+            to_count = [self._find_army(army_name)]
+        else:
+            to_count = self.armies
+
+        for army in to_count:
+            count += army.num_buildings()
+
+        return count
 
     def _build_type(self, army, data):
         if(data.object_type == "unit"):

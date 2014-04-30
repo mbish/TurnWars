@@ -17,14 +17,14 @@ class ArmyFactory(Factory):
     def validate_data(self, data):
         return True
 
-    def get_unit_factory(self):
+    def _get_unit_factory(self):
         return self.unit_factory
 
-    def get_building_factory(self):
+    def _get_building_factory(self):
         return self.building_factory
 
     def create(self, name):
         data = self.get_data(name)
-        unit_factory = self.get_unit_factory()
-        building_factory = self.get_building_factory()
+        unit_factory = self._get_unit_factory()
+        building_factory = self._get_building_factory()
         return self.creation_class(name, unit_factory, building_factory)

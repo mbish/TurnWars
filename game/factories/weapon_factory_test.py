@@ -13,9 +13,9 @@ class MockClass:
 
     def get_value(self):
         return "{0} {1} {2} {3} {4}".format(self.name, self.uses,
-                                       self.attack_strength,
-                                       self.uses_per_turn,
-                                       len(self.non_targetables))
+                                            self.attack_strength,
+                                            self.uses_per_turn,
+                                            len(self.non_targetables))
 
 
 def validation_test():

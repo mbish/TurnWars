@@ -1,4 +1,3 @@
-from game.factories.unit_factory import UnitFactory
 from game.serializable import Serializable
 
 
@@ -13,6 +12,12 @@ class Army(Serializable):
         self.name = name
         self.buildings = []
         self.turn = 0
+
+    def num_units(self):
+        return len(self.unit_table)
+
+    def num_buildings(self):
+        return len(self.buildings)
 
     def has_building_at(self, coordinate):
         return (coordinate in

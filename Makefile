@@ -4,7 +4,7 @@ clean:
 	rm -f $(shell find . -name "*.pyc")
 
 tests:
-	python -m nose
+	python -m nose --with-coverage --cover-package game
 
 test_watcher:
 	watch python -m nose

@@ -14,7 +14,8 @@ class MockTile:
 
     def get_value(self):
         return "{0} {1} {2} {3}".format(self.name, self.cover,
-                                    len(self.non_passable), len(self.events))
+                                        len(self.non_passable),
+                                        len(self.events))
 
 
 def bad_constructor_test():

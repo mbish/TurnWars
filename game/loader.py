@@ -12,9 +12,10 @@ class Loader:
         return self.load(json.loads(json_blob))
 
     def load(self, data):
-        return data
+        raise NotImplementedError(
+            "Loader class must implement load(self, data)")
 
 
 class BadLoaderData(Exception):
     def __init__(self, message):
-        return Exception.__init__(self, message)
+        Exception.__init__(self, message)

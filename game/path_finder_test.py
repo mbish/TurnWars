@@ -92,7 +92,7 @@ def get_range_test():
 
     json_path = [tile.as_json() for tile in path]
     assert json_path == ['{"y": 0, "x": 1}', '{"y": 0, "x": 2}',
-                        '{"y": 0, "x": 3}']
+                         '{"y": 0, "x": 3}']
 
     cost_table = {
         'plain': 2,

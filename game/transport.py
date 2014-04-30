@@ -20,12 +20,12 @@ class Transport(Serializable):
         if(distance > self.spaces_left):
             raise BadTransportRequest(
                 "Cant move {0} with spaces {1} left".format(distance,
-                                                          self.spaces_left))
+                                                            self.spaces_left))
         if(self.uses_fuel()):
             if(self.fuel < distance):
                 raise BadTransportRequest(
                     "Cannot move {0} with fuel {1} left".format(distance,
-                                                              self.fuel))
+                                                                self.fuel))
             self.use_fuel(distance)
 
         self.spaces_left -= distance
@@ -57,8 +57,8 @@ class Transport(Serializable):
         if(not self.uses_fuel()):
             return
         if(amount > self.fuel):
-            raise BadTransportRequest("Cannot use {1} fuel only have {0}".format(
-                amount, self.fuel))
+            raise BadTransportRequest(
+                "Cannot use {1} fuel only have {0}".format(amount, self.fuel))
         self.fuel -= amount
 
 

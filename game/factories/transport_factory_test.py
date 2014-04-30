@@ -12,8 +12,8 @@ class MockClass:
 
     def get_value(self):
         return "{0} {1} {2}".format(self.name,
-                                 self.spaces_per_turn,
-                                 self.starting_fuel)
+                                    self.spaces_per_turn,
+                                    self.starting_fuel)
 
 
 def validation_test():
