@@ -3,8 +3,8 @@ from game.serializable import Serializable
 
 class Scenario(Serializable):
 
-    def __init__(self, board, army_factory):
-        self.board = board
+    def __init__(self, on_board_check, army_factory):
+        self.on_board_check = on_board_check
         self.armies = []
         self.army_factory = army_factory
 
@@ -32,13 +32,18 @@ class Scenario(Serializable):
 
     def _add_object(self, army_name, data):
         army = self._find_army(army_name)
-        if(self.board.is_on_board(data.coordinate)):
+        if(self.on_board_check(data.coordinate)):
             self._build_type(army, data)
         else:
             raise BadScenarioData(
                 "Cannot place {0} at {1}".format(
                     data.name,
                     data.coordinate.flat()))
+
+    def space_occupied(self, coordinate):
+        for army in self.armies:
+            if(army.has_unit_at(coordinate)):
+                return True
 
     def _unit_count(self, army_name=0):
         count = 0

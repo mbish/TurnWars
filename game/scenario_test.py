@@ -38,16 +38,7 @@ class MockArmyFactory:
         return MockArmy(name)
 
 
-class MockBoard:
-
-    def __init__(self, on_board=True):
-        self.on_board = on_board
-
-    def is_on_board(self, pos):
-        return self.on_board
-
-
-def test_scenario(board=MockBoard()):
+def test_scenario(board=(lambda x: True)):
     army_factory = MockArmyFactory()
     scenario = Scenario(board, army_factory)
     return scenario
@@ -95,7 +86,7 @@ def add_unit_test():
     assert "unit horse here" in dragon.units
     assert "unit horse here" not in rat.units
 
-    scenario = test_scenario(MockBoard(False))
+    scenario = test_scenario(lambda x: False)
     scenario.add_army("dragon")
     scenario.add_army("rat")
     unit3 = MockObject("footman", MockObject("ignore", "ignore"))
@@ -111,7 +102,7 @@ def add_building_test():
     rat = scenario._find_army("rat")
     assert "building house ignore" in rat.buildings
 
-    scenario = test_scenario(MockBoard(False))
+    scenario = test_scenario(lambda x: False)
     scenario.add_army("dragon")
     scenario.add_army("rat")
     building2 = MockObject("house", MockObject("ignore", "ignore"))

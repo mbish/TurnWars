@@ -3,8 +3,9 @@ from game.scenario import Scenario
 
 # TODO Add tests for scenario builder
 class ScenarioBuilder:
-    def __init__(self, board, army_factory, scenario_class=Scenario):
-        self._instance = scenario_class(board, army_factory)
+    def __init__(self, on_board_checker, army_factory,
+                 scenario_class=Scenario):
+        self._instance = scenario_class(on_board_checker, army_factory)
 
     def add_army(self, *args):
         self._instance.add_army(*args)

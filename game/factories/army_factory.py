@@ -1,3 +1,4 @@
+from copy import deepcopy
 from game.army import Army
 from game.factories.factory import Factory, BadFactoryData, BadFactoryRequest
 
@@ -16,14 +17,15 @@ class ArmyFactory(Factory):
     def validate_data(self, data):
         return True
 
-    def _get_unit_factory(self):
-        return self.unit_factory
+    def _get_unit_factory(self, name):
+        unit_factory = deepcopy(self.unit_factory)
+        unit_factory.army = name
+        return unit_factory
 
     def _get_building_factory(self):
         return self.building_factory
 
     def create(self, name):
-        data = self.get_data(name)
-        unit_factory = self._get_unit_factory()
+        unit_factory = self._get_unit_factory(name)
         building_factory = self._get_building_factory()
         return self.creation_class(name, unit_factory, building_factory)

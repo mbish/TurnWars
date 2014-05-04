@@ -1,6 +1,20 @@
-from game.game_engine import Game, InvalidGameCreation
+from game.game_engine import Game
 from game.path_finder import NoPathFound
-from nose.tools import assert_raises
+
+
+class MockScenario:
+    def __init__(self, armies):
+        self.armies = armies
+
+    def _find_army(self, army_name):
+        return next(army for army in self.armies if army.name == army_name)
+
+    def space_occupied(self, coordinate):
+        for army in self.armies:
+            if(army.has_unit_at(coordinate)):
+                return True
+
+        return False
 
 
 class MockArmy:
@@ -60,28 +74,12 @@ class MockPathFinder:
         return self.path
 
 
-def bad_constructor_test():
-    assert_raises(InvalidGameCreation, Game, [], [], [])
-
-
-def find_army_test():
-    army1 = MockArmy('dragon')
-    army2 = MockArmy('salamander')
-    army3 = MockArmy('rat')
-    army4 = MockArmy('phoenix')
-    game = Game([], [army1, army2, army3, army4], [])
-    found_army = game._find_army('dragon')
-    assert found_army.name == 'dragon'
-    found_army = game._find_army('rat')
-    assert found_army.name == 'rat'
-
-
 def find_unit_test():
     army1 = MockArmy('dragon')
     army2 = MockArmy('salamander')
     army3 = MockArmy('rat')
     army4 = MockArmy('phoenix')
-    game = Game([], [army1, army2, army3, army4], [])
+    game = Game([], MockScenario([army1, army2, army3, army4]), [])
     unit = game._find_unit('rat', 'test')
     assert unit == "a rat test unit"
     unit = game._find_unit('dragon', 'best')
@@ -92,11 +90,9 @@ def find_unit_test():
 
 def move_test():
     army1 = MockArmy('dragon')
-    army2 = MockArmy('salamander')
     army3 = MockArmy('rat')
-    army4 = MockArmy('phoenix')
     path_finder = MockPathFinder([1, 2, 3], 10)
-    game = Game([], [army1, army3], path_finder)
+    game = Game([], MockScenario([army1, army3]), path_finder)
     unit = MockUnit(5, 'dragon')
     game.move(unit, "A new place")
     assert unit.pos != "A new place"
@@ -109,7 +105,7 @@ def move2_test():
     army1 = MockArmy('dragon')
     army2 = MockArmy('salamander')
     path_finder = MockPathFinder([1, 2, 3], 10, True)
-    game = Game([], [army1, army2], path_finder)
+    game = Game([], MockScenario([army1, army2]), path_finder)
     unit = MockUnit(100, 'dragon')
     game.move(unit, "There")
     assert unit.pos != "There"
@@ -131,7 +127,7 @@ def attack_test():
 def build_test():
     army1 = MockArmy('dragon')
     army2 = MockArmy('salamander')
-    game = Game([], [army1, army2], [])
+    game = Game([], MockScenario([army1, army2]), [])
     game.build(army1, 'footman', 'here')
     assert army1.units == ['footman here']
     game.build(army1, 'footman', 'again')
