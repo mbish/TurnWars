@@ -2,7 +2,6 @@ from game.army import Army
 from game.factories.factory import Factory, BadFactoryData, BadFactoryRequest
 
 
-# TODO Tests
 class ArmyFactory(Factory):
 
     # for now everyone gets the same unit and building factory
