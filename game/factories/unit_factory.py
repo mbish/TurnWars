@@ -7,11 +7,10 @@ class UnitFactory(Factory):
 
     def __init__(self, factory_data,
                  transport_factory, weapon_factory,
-                 armor_factory, army, unit_class=Unit):
+                 armor_factory, unit_class=Unit):
         self.transport_factory = transport_factory
         self.armor_factory = armor_factory
         self.weapon_factory = weapon_factory
-        self.army = army
         Factory.__init__(self, factory_data, unit_class)
 
     def validate_data(self, data):
@@ -23,15 +22,14 @@ class UnitFactory(Factory):
         else:
             return False
 
-    def create(self, name, coordinate=Coordinate(0, 0)):
+    def create(self, name, army, coordinate=Coordinate(0, 0)):
         data = self.get_data(name)
         return self.creation_class(
             name,
             self.transport_factory.create(data['transport']),
             self.weapon_factory.create(data['weapon']),
             self.armor_factory.create(data['armor']),
-            coordinate,
-            self.army)
+            coordinate, army)
 
     def get_factory(self, factory):
         result = self.armor_factory

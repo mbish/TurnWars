@@ -39,5 +39,5 @@ def get_buliding_factory_test():
 
 def create_test():
     factory = test_factory()
-    army = factory.create('dragon') 
+    army = factory.create('dragon')
     assert army.name == "dragon with unit factory and building factory"
