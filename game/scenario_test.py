@@ -39,26 +39,25 @@ class MockArmyFactory:
 
 
 def test_scenario(board=(lambda x: True)):
-    army_factory = MockArmyFactory()
-    scenario = Scenario(board, army_factory)
+    scenario = Scenario()
     return scenario
 
 
 def add_army_test():
     scenario = test_scenario()
-    scenario.add_army("dragon")
+    scenario.add_army(MockArmy("dragon"))
     assert scenario.armies[0].name == "dragon"
     assert scenario.armies[0].turn == 1
-    scenario.add_army("rat")
+    scenario.add_army(MockArmy("rat"))
     assert scenario.armies[1].name == "rat"
     assert scenario.armies[1].turn == 0
 
 
 def find_army_test():
     scenario = test_scenario()
-    scenario.add_army("dragon")
-    scenario.add_army("rat")
-    scenario.add_army("salamander")
+    scenario.add_army(MockArmy("dragon"))
+    scenario.add_army(MockArmy("rat"))
+    scenario.add_army(MockArmy("salamander"))
     army = scenario._find_army("dragon")
     assert army.name == "dragon"
     army = scenario._find_army("rat")
@@ -69,8 +68,8 @@ def find_army_test():
 
 def add_unit_test():
     scenario = test_scenario()
-    scenario.add_army("dragon")
-    scenario.add_army("rat")
+    scenario.add_army(MockArmy("dragon"))
+    scenario.add_army(MockArmy("rat"))
     unit1 = MockObject("footman", "ignore")
     scenario.add_unit("rat", unit1)
     rat = scenario._find_army("rat")
@@ -86,24 +85,12 @@ def add_unit_test():
     assert "unit horse here" in dragon.units
     assert "unit horse here" not in rat.units
 
-    scenario = test_scenario(lambda x: False)
-    scenario.add_army("dragon")
-    scenario.add_army("rat")
-    unit3 = MockObject("footman", MockObject("ignore", "ignore"))
-    assert_raises(BadScenarioData, scenario.add_unit, "rat", unit3)
-
 
 def add_building_test():
     scenario = test_scenario()
-    scenario.add_army("dragon")
-    scenario.add_army("rat")
+    scenario.add_army(MockArmy("dragon"))
+    scenario.add_army(MockArmy("rat"))
     building1 = MockObject("house", "ignore")
     scenario.add_building("rat", building1)
     rat = scenario._find_army("rat")
     assert "building house ignore" in rat.buildings
-
-    scenario = test_scenario(lambda x: False)
-    scenario.add_army("dragon")
-    scenario.add_army("rat")
-    building2 = MockObject("house", MockObject("ignore", "ignore"))
-    assert_raises(BadScenarioData, scenario.add_building, "rat", building2)
