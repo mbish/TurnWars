@@ -85,15 +85,22 @@ def json_test():
 def get_neighbors_test():
     board = get_test_board() 
     neighbors = board.get_neighbors(Coordinate(0, 0))
-    assert sorted([tile.flat() for tile in neighbors]) == [{'y': 1, 'x': 0},
-                                                           {'y': 0, 'x': 1}]
+    coordinate_sort = lambda c: c['x'] + c['y']
+    assert sorted([tile.flat() for tile in neighbors],
+                  key=coordinate_sort) == (
+        [{'y': 0, 'x': 1},
+         {'y': 1, 'x': 0}])
     neighbors = board.get_neighbors(Coordinate(2, 2))
-    assert sorted([tile.flat() for tile in neighbors]) == [{'y': 2, 'x': 1},
-                                                           {'y': 1, 'x': 2},
-                                                           {'y': 3, 'x': 2},
-                                                           {'y': 2, 'x': 3}]
+    assert sorted([tile.flat() for tile in neighbors],
+                  key=coordinate_sort) == (
+        [{'y': 2, 'x': 1},
+         {'y': 1, 'x': 2},
+         {'y': 2, 'x': 3},
+         {'y': 3, 'x': 2}])
     neighbors = board.get_neighbors(Coordinate(9, 99))
-    assert sorted([tile.flat() for tile in neighbors]) == [{'y': 99, 'x': 8},
-                                                           {'y': 98, 'x': 9}]
+    assert sorted([tile.flat() for tile in neighbors],
+                  key=coordinate_sort) == (
+        [{'y': 99, 'x': 8},
+         {'y': 98, 'x': 9}])
     neighbors = board.get_neighbors(Coordinate(1000, 1000))
     assert neighbors == []
