@@ -29,10 +29,13 @@ class Board(Serializable):
         y = coordinate.y
         potential_neighbors = [
             Coordinate(x + 1, y),
-            Coordinate(x - 1, y),
             Coordinate(x, y + 1),
-            Coordinate(x, y - 1),
         ]
+        if(x > 0):
+            potential_neighbors.append(Coordinate(x - 1, y))
+        if(y > 0):
+            potential_neighbors.append(Coordinate(x, y - 1))
+
         for neighbor in potential_neighbors:
             if(self.is_on_board(neighbor)):
                 neighbors.append(neighbor)
@@ -49,7 +52,7 @@ class Board(Serializable):
            coordinate.y >= 0):
             y_on_board = True
 
-        return True
+        return x_on_board and y_on_board
 
     def flat(self):
         serial_tiles = []

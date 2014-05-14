@@ -7,6 +7,7 @@ class ScenarioBuilder:
     def __init__(self, board_factory, army_factory,
                  scenario_class=Scenario):
         self._instance = scenario_class()
+        self.scenario_class = scenario_class
         self.army_factory = army_factory
         self.board_factory = board_factory
 
@@ -31,12 +32,14 @@ class ScenarioBuilder:
         self._instance.set_starting_money(*args)
         return self
 
-    def get_instance(self):
-        if not self._instance.get_board():
+    def pop_instance(self):
+        if not self._instance.board:
             raise BadScenarioRequest(
                 "Cannot create a scenario with no board")
 
-        self._instance.validate_coordinates()
+        if(not self._instance.validate_coordinates()):
+            raise BadScenarioRequest(
+                "Cannot create a scenario with invalid coordinates")
 
         if(self._instance.num_armies() < 2):
             raise BadScenarioRequest(
@@ -45,7 +48,10 @@ class ScenarioBuilder:
            self._instance._building_count() == 0):
             raise BadScenarioRequest(
                 "Cannot create an empty scenario")
-        return self._instance
+
+        instance = self._instance
+        self._instance = self.scenario_class()
+        return instance
 
 
 class BadScenarioRequest(Exception):

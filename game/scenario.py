@@ -28,6 +28,8 @@ class Scenario(Serializable):
                     coordinate.x, coordinate.y)
                 raise BadScenarioData(msg)
 
+        return True
+
     def add_army(self, army):
         if(self.num_armies() == 0):
             army.take_turn()
@@ -47,6 +49,9 @@ class Scenario(Serializable):
         self._add_object(army_name, data)
 
     def _add_object(self, army_name, data):
+        if(self.space_occupied(data.coordinate)):
+            msg = "Attempt to occupy a location that is already taken"
+            raise BadScenarioData(msg)
         army = self._find_army(army_name)
         self._build_type(army, data)
         self.object_coordinates.append(data.coordinate)
@@ -55,9 +60,6 @@ class Scenario(Serializable):
         for army in self.armies:
             if(army.has_unit_at(coordinate)):
                 return True
-
-    def get_object_coordinates(self):
-        return self.object_coordinates
 
     def _unit_count(self, army_name=0):
         count = 0

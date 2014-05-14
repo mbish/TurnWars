@@ -12,6 +12,16 @@ class MockTile:
         return "serial {0}".format(self.tile_type)
 
 
+def get_test_board():
+    tiles = []
+    for row in range(0, 100):
+        tiles.append([])
+        for col in range(0, 10):
+            tiles[row].append(MockTile("{0} {1}".format(row, col)))
+
+    return Board(tiles)
+
+
 def empty_board_test():
     tiles = []
     assert_raises(InvalidBoardDimensions, Board, tiles)
@@ -30,13 +40,7 @@ def non_square_board_test():
 
 
 def normal_board_test():
-    tiles = []
-    for row in range(0, 100):
-        tiles.append([])
-        for col in range(0, 10):
-            tiles[row].append(MockTile("{0} {1}".format(row, col)))
-
-    board = Board(tiles)
+    board = get_test_board()
     coordinates = board.get_dimensions()
     assert coordinates.x == 10
     assert coordinates.y == 100
@@ -76,3 +80,20 @@ def json_test():
     )
     serial_board = board.as_json()
     assert serial_board == json_string
+
+
+def get_neighbors_test():
+    board = get_test_board() 
+    neighbors = board.get_neighbors(Coordinate(0, 0))
+    assert sorted([tile.flat() for tile in neighbors]) == [{'y': 1, 'x': 0},
+                                                           {'y': 0, 'x': 1}]
+    neighbors = board.get_neighbors(Coordinate(2, 2))
+    assert sorted([tile.flat() for tile in neighbors]) == [{'y': 2, 'x': 1},
+                                                           {'y': 1, 'x': 2},
+                                                           {'y': 3, 'x': 2},
+                                                           {'y': 2, 'x': 3}]
+    neighbors = board.get_neighbors(Coordinate(9, 99))
+    assert sorted([tile.flat() for tile in neighbors]) == [{'y': 99, 'x': 8},
+                                                           {'y': 98, 'x': 9}]
+    neighbors = board.get_neighbors(Coordinate(1000, 1000))
+    assert neighbors == []
