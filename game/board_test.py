@@ -1,6 +1,6 @@
 from game.board import Board, InvalidBoardDimensions
 from game.coordinate import Coordinate
-from nose.tools import assert_raises
+from nose.tools import assert_raises, eq_
 
 
 class MockTile:
@@ -76,3 +76,15 @@ def json_test():
     )
     serial_board = board.as_json()
     assert serial_board == json_string
+
+
+def get_neighbors_test():
+    tiles = []
+    for row in range(0, 30):
+        tiles.append([])
+        for col in range(0, 5):
+            tiles[row].append(MockTile("{0} {1}".format(col, row)))
+
+    board = Board(tiles)
+    neighbors = board.get_neighbors(Coordinate(0, 0))
+    eq_(neighbors, [(1, 0), (0, 1)])

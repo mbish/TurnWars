@@ -19,6 +19,9 @@ class MockUnitFactory:
     def full_unit_info(self, _type):
         return "everything for {0}".format(_type)
 
+    def equipment_info(self, unit_type, equipment):
+        return "this equipment is the best"
+
 
 class MockUnit:
 
@@ -78,6 +81,7 @@ def add_unit_test():
     army = test_army()
     army.add_unit("footman")
     assert army.unit_table == ['footman']
+    assert army.num_units() == 1
 
 
 def serializable_test():
@@ -103,6 +107,7 @@ def find_unit_test():
     assert id(found_unit) == id(unit)
     found_unit = army.find_unit(id(unit2))
     assert id(found_unit) == id(unit2)
+    assert army.num_units() == 3
 
 
 def has_building_at_test():
@@ -176,3 +181,9 @@ def build_building_test():
     assert 'test ignore' in army.buildings
     army.add_building('ranch')
     assert 'ranch' in army.buildings
+    assert army.num_buildings() == 5
+
+
+def equipment_info_test():
+    army = test_army()
+    assert army.equipment_info('test', 'ignore') == "this equipment is the best"

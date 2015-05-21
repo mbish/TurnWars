@@ -1,4 +1,4 @@
-from game.coordinate import Coordinate
+from game.coordinate import Coordinate, BadCoordinateCreation
 from game.serializable import Serializable
 
 
@@ -28,14 +28,17 @@ class Board(Serializable):
         x = coordinate.x
         y = coordinate.y
         potential_neighbors = [
-            Coordinate(x + 1, y),
-            Coordinate(x - 1, y),
-            Coordinate(x, y + 1),
-            Coordinate(x, y - 1),
+            (x + 1, y),
+            (x - 1, y),
+            (x, y + 1),
+            (x, y - 1),
         ]
         for neighbor in potential_neighbors:
-            if(self.is_on_board(neighbor)):
-                neighbors.append(neighbor)
+            try:
+                if(self.is_on_board(Coordinate(neighbor[0], neighbor[1]))):
+                    neighbors.append(neighbor)
+            except BadCoordinateCreation:
+                pass
 
         return neighbors
 
@@ -49,7 +52,7 @@ class Board(Serializable):
            coordinate.y >= 0):
             y_on_board = True
 
-        return True
+        return x_on_board and y_on_board
 
     def flat(self):
         serial_tiles = []

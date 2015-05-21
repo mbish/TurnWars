@@ -9,9 +9,11 @@ class Armor(Serializable):
         self.health = starting_health
         self.starting_health = starting_health
         self.name = name
+        self.taken_this_turn = 0
 
     def do_damage(self, damage):
         self.health -= damage
+        self.taken_this_turn += damage
         if(self.health < 0):
             self.health = 0
 
@@ -19,6 +21,7 @@ class Armor(Serializable):
         return self.health
 
     def reset(self):
+        self.taken_this_turn = 0
         return
 
     def flat(self):

@@ -9,6 +9,9 @@ def damage_test():
     assert armor.get_health() == 0
     armor.do_damage(5)
     assert armor.get_health() == 0
+    assert armor.taken_this_turn == 10
+    armor.reset()
+    assert armor.taken_this_turn == 0
 
 
 def serializable_test():
