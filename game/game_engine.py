@@ -13,6 +13,9 @@ class Game(Serializable):
     def _find_unit(self, army_name, unit_id):
         return self.scenario._find_army(army_name).find_unit(unit_id)
 
+    def _uid_at(self, coordinate):
+        return self.scenario.unit_at(coordinate).uid
+
     def move(self, unit, coordinate):
         if(self.scenario.space_occupied(coordinate)):
             return
@@ -37,23 +40,24 @@ class Game(Serializable):
             army.buy_unit(unit_name, location)
 
     def do(self, message):
+        self.canonicalize(message)
         try:
-            if(message.name == 'move'):
-                unit = self._find_unit(message.army_name, message.unit_id)
-                to = Coordinate(message.to.x, message.to.y)
+            if(message['name']== 'move'):
+                unit = self._find_unit(message['army_name'], message['unit_id'])
+                to = Coordinate(message['to']['x'], message['to']['y'])
                 self.move(unit, to)
-            elif(message.name == 'attack'):
-                attacker = self._find_unit(message.attacking_army,
-                                           message.attacker_id)
-                defender = self._find_unit(message.defending_army,
-                                           message.defender_id)
+            elif(message['name'] == 'attack'):
+                attacker = self._find_unit(message['attacking_army'],
+                                           message['attacker_id'])
+                defender = self._find_unit(message['defending_army'],
+                                           message['defender_id'])
                 self.attack(attacker, defender)
-            elif(message.name == 'build'):
-                army = self.scenario._find_army(message.army_name)
-                location = Coordinate(message.at.x, message.at.y)
-                self.build(army, message.unit_name, location)
-            elif(message.name == 'end_turn'):
-                army = self.scenario._find_army(message.army_name)
+            elif(message['name'] == 'build'):
+                army = self.scenario._find_army(message['army_name'])
+                location = Coordinate(message['at']['x'], message['at']['y'])
+                self.build(army, message['unit_name'], location)
+            elif(message['name'] == 'end_turn'):
+                army = self.scenario._find_army(message['army_name'])
                 if(army.is_turn()):
                     army.end_turn()
 
@@ -72,6 +76,14 @@ class Game(Serializable):
         return self.path_finder.tiles_in_range(self.board, movement_cost,
                                                unit.get_coordinate(),
                                                spaces_left)
+
+    # maps between various verions of the message protocol
+    def canonicalize(self, message):
+        if 'unit' in message:
+            if isinstance(message['unit'], 'dict'):
+                location = Coordinate(message['unit']['x'],
+                                      message['unit', 'y'])
+                message['unit'] = self._uid_at(location)
 
     def flat(self):
         return {

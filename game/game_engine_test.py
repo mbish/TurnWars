@@ -2,6 +2,11 @@ from game.game_engine import Game
 from game.path_finder import NoPathFound
 
 
+class MockBoard:
+    def as_hash(self):
+        return ""
+
+
 class MockScenario:
     def __init__(self, armies):
         self.armies = armies
@@ -15,6 +20,9 @@ class MockScenario:
                 return True
 
         return False
+
+    def as_hash(self):
+        return "a serialized scenario"
 
 
 class MockArmy:
@@ -99,6 +107,8 @@ def move_test():
     unit = MockUnit(10, 'rat')
     game.move(unit, "A new place")
     assert unit.pos == "A new place"
+    game.move(unit, "not here")
+    assert unit.pos == "A new place"
 
 
 def move2_test():
@@ -134,3 +144,58 @@ def build_test():
     assert army1.units == ['footman here', 'footman again']
     game.build(army1, 'footman', 'not here')
     assert army1.units == ['footman here', 'footman again']
+
+
+# tests that the message handling code never chokes on bad input
+def messages_test():
+    army1 = MockArmy('dragon')
+    army2 = MockArmy('salamander')
+    game = Game(MockBoard(), MockScenario([army1, army2]), [])
+    flat = game.do({
+        'name': 'build',
+        'army_name': 'dragon',
+        'unit_name': 'footman',
+        'at': {
+            'x': [],
+            'y': 'not a number'
+        }
+    })
+    assert flat == {'board': '', 'scenario': ['a serialized scenario']}
+    flat = game.do({
+        'name': 'nonsense',
+        'at': {
+            'x': -1,
+            'y': 0
+        }
+    })
+    assert flat == {'board': '', 'scenario': ['a serialized scenario']}
+    flat = game.do({
+        'name': 'move',
+    })
+    assert flat == {'board': '', 'scenario': ['a serialized scenario']}
+    flat = game.do({
+        'name': 'end_turn',
+    })
+    assert flat == {'board': '', 'scenario': ['a serialized scenario']}
+    flat = game.do({
+        'name': 'attack',
+    })
+    assert flat == {'board': '', 'scenario': ['a serialized scenario']}
+    game.build(army1, 'footman', 'here')
+    flat = game.do({
+        'name': 'move',
+        'army_name': 'dragon',
+        'unit_id': 'footman',
+        'to': {
+            'x': 0,
+            'y': 0
+        }
+    })
+    flat = game.do({
+        'name': 'attack',
+        'attacking_army': 'dragon',
+        'attacker_id': 'footman',
+        'defending_army': 'salamander',
+        'defender_id': 'footman'
+    })
+    assert flat == {'board': '', 'scenario': ['a serialized scenario']}

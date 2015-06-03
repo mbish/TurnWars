@@ -22,6 +22,12 @@ class Scenario(Serializable):
         army = next(army for army in self.armies if army.name == army_name)
         return army
 
+    def unit_at(self, coordinate):
+        for army in self.armies:
+            unit = army.unit_at(coordinate)
+            if(unit):
+                return unit
+
     def add_unit(self, army_name, data):
         data.object_type = "unit"
         self._add_object(army_name, data)
