@@ -3,17 +3,35 @@ from game.serializable import Serializable
 
 class Scenario(Serializable):
 
-    def __init__(self, on_board_check, army_factory):
-        self.on_board_check = on_board_check
+    def __init__(self):
         self.armies = []
-        self.army_factory = army_factory
+        self.object_coordinates = []
+        self.board = 0
 
     def num_armies(self):
         return len(self.armies)
 
-    def add_army(self, name):
-        army = self.army_factory.create(name)
-        if(len(self.armies) == 0):
+    def set_board(self, board):
+        self.board = board
+
+    def get_board(self):
+        if(self.board):
+            return self.board
+        else:
+            msg = "Attempt to get board when no board has been set"
+            raise BadScenarioData(msg)
+
+    def validate_coordinates(self):
+        for coordinate in self.object_coordinates:
+            if(not self.get_board().is_on_board(coordinate)):
+                msg = "Cannot have object at x:{0} y:{0}".format(
+                    coordinate.x, coordinate.y)
+                raise BadScenarioData(msg)
+
+        return True
+
+    def add_army(self, army):
+        if(self.num_armies() == 0):
             army.take_turn()
         self.armies.append(army)
         return len(self.armies)
@@ -37,14 +55,12 @@ class Scenario(Serializable):
         self._add_object(army_name, data)
 
     def _add_object(self, army_name, data):
+        if(self.space_occupied(data.coordinate)):
+            msg = "Attempt to occupy a location that is already taken"
+            raise BadScenarioData(msg)
         army = self._find_army(army_name)
-        if(self.on_board_check(data.coordinate)):
-            self._build_type(army, data)
-        else:
-            raise BadScenarioData(
-                "Cannot place {0} at {1}".format(
-                    data.name,
-                    data.coordinate.flat()))
+        self._build_type(army, data)
+        self.object_coordinates.append(data.coordinate)
 
     def space_occupied(self, coordinate):
         for army in self.armies:

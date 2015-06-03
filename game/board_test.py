@@ -12,6 +12,16 @@ class MockTile:
         return "serial {0}".format(self.tile_type)
 
 
+def get_test_board():
+    tiles = []
+    for row in range(0, 100):
+        tiles.append([])
+        for col in range(0, 10):
+            tiles[row].append(MockTile("{0} {1}".format(row, col)))
+
+    return Board(tiles)
+
+
 def empty_board_test():
     tiles = []
     assert_raises(InvalidBoardDimensions, Board, tiles)
@@ -30,13 +40,7 @@ def non_square_board_test():
 
 
 def normal_board_test():
-    tiles = []
-    for row in range(0, 100):
-        tiles.append([])
-        for col in range(0, 10):
-            tiles[row].append(MockTile("{0} {1}".format(row, col)))
-
-    board = Board(tiles)
+    board = get_test_board()
     coordinates = board.get_dimensions()
     assert coordinates.x == 10
     assert coordinates.y == 100
@@ -79,12 +83,26 @@ def json_test():
 
 
 def get_neighbors_test():
-    tiles = []
-    for row in range(0, 30):
-        tiles.append([])
-        for col in range(0, 5):
-            tiles[row].append(MockTile("{0} {1}".format(col, row)))
-
-    board = Board(tiles)
+    board = get_test_board() 
     neighbors = board.get_neighbors(Coordinate(0, 0))
-    eq_(neighbors, [(1, 0), (0, 1)])
+    coordinate_sort = lambda c: c['x'] + c['y']
+    assert sorted([tile.flat() for tile in neighbors],
+                  key=coordinate_sort) == (
+        [{'y': 0, 'x': 1},
+         {'y': 1, 'x': 0}])
+    neighbors = board.get_neighbors(Coordinate(2, 2))
+    for tile in neighbors:
+        print tile.flat()
+    assert sorted([tile.flat() for tile in neighbors],
+                  key=coordinate_sort) == (
+        [{'y': 2, 'x': 1},
+         {'y': 1, 'x': 2},
+         {'y': 2, 'x': 3},
+         {'y': 3, 'x': 2}])
+    neighbors = board.get_neighbors(Coordinate(9, 99))
+    assert sorted([tile.flat() for tile in neighbors],
+                  key=coordinate_sort) == (
+        [{'y': 99, 'x': 8},
+         {'y': 98, 'x': 9}])
+    neighbors = board.get_neighbors(Coordinate(1000, 1000))
+    assert neighbors == []

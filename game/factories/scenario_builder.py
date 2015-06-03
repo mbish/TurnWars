@@ -1,14 +1,23 @@
 from game.scenario import Scenario
 
 
-# TODO Add tests for scenario builder
+# TODO Add tests for scenario builder specifically the add_army
+# and board interaction calls
 class ScenarioBuilder:
-    def __init__(self, on_board_checker, army_factory,
+    def __init__(self, board_factory, army_factory,
                  scenario_class=Scenario):
-        self._instance = scenario_class(on_board_checker, army_factory)
+        self._instance = scenario_class()
+        self.scenario_class = scenario_class
+        self.army_factory = army_factory
+        self.board_factory = board_factory
 
-    def add_army(self, *args):
-        self._instance.add_army(*args)
+    def set_board(self, name):
+        board = self.board_factory.create(name)
+        self._instance.set_board(board)
+
+    def add_army(self, name):
+        army = self.army_factory.create(name)
+        self._instance.add_army(army)
         return self
 
     def add_unit(self, *args):
@@ -23,7 +32,15 @@ class ScenarioBuilder:
         self._instance.set_starting_money(*args)
         return self
 
-    def get_instance(self):
+    def pop_instance(self):
+        if not self._instance.board:
+            raise BadScenarioRequest(
+                "Cannot create a scenario with no board")
+
+        if(not self._instance.validate_coordinates()):
+            raise BadScenarioRequest(
+                "Cannot create a scenario with invalid coordinates")
+
         if(self._instance.num_armies() < 2):
             raise BadScenarioRequest(
                 "Cannot create a scenario with 1 or 0 armies")
@@ -31,7 +48,10 @@ class ScenarioBuilder:
            self._instance._building_count() == 0):
             raise BadScenarioRequest(
                 "Cannot create an empty scenario")
-        return self._instance
+
+        instance = self._instance
+        self._instance = self.scenario_class()
+        return instance
 
 
 class BadScenarioRequest(Exception):

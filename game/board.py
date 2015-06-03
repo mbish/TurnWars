@@ -29,14 +29,18 @@ class Board(Serializable):
         y = coordinate.y
         potential_neighbors = [
             (x + 1, y),
-            (x - 1, y),
             (x, y + 1),
-            (x, y - 1),
         ]
+        if(x > 0):
+            potential_neighbors.append((x - 1, y))
+        if(y > 0):
+            potential_neighbors.append((x, y - 1))
+
         for neighbor in potential_neighbors:
             try:
-                if(self.is_on_board(Coordinate(neighbor[0], neighbor[1]))):
-                    neighbors.append(neighbor)
+                checkOnBoard = Coordinate(neighbor[0], neighbor[1])
+                if(self.is_on_board(checkOnBoard)):
+                    neighbors.append(checkOnBoard)
             except BadCoordinateCreation:
                 pass
 
