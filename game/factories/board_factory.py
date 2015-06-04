@@ -16,8 +16,6 @@ class BoardFactory(Factory):
             valid = False
         elif(not isinstance(data['tiles'], types.ListType)):
             valid = False
-        elif(not isinstance(data['tiles'], types.ListType)):
-            valid = False
 
         return valid
 

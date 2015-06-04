@@ -1,4 +1,5 @@
 from game.serializable import Serializable
+from coordinate import Coordinate
 
 
 class Scenario(Serializable):
@@ -8,6 +9,28 @@ class Scenario(Serializable):
         self.object_coordinates = []
         self.board = 0
 
+    def validate(self):
+        if not self.board:
+            raise BadScenarioData(
+                "Cannot create a scenario with no board")
+
+        if self.num_armies() < 2:
+            raise BadScenarioData(
+                "Cannot create a scenario with 1 or 0 armies")
+        if(self._unit_count() == 0 and
+           self._building_count() == 0):
+            raise BadScenarioData(
+                "Cannot create an empty scenario")
+        for army in self.armies:
+            if army.num_units() == 0 and army.num_buildings() == 0:
+                raise BadScenarioData(
+                    "Army {0} must start with at least one unit " +
+                    "or building").format(
+                        army.name
+                    )
+
+        self.validate_coordinates()
+
     def num_armies(self):
         return len(self.armies)
 
@@ -15,7 +38,7 @@ class Scenario(Serializable):
         self.board = board
 
     def get_board(self):
-        if(self.board):
+        if self.board:
             return self.board
         else:
             msg = "Attempt to get board when no board has been set"
@@ -47,25 +70,25 @@ class Scenario(Serializable):
                 return unit
 
     def add_unit(self, army_name, data):
-        data.object_type = "unit"
-        self._add_object(army_name, data)
+        self._add_object(army_name, data, "unit")
 
     def add_building(self, army_name, data):
-        data.object_type = "building"
-        self._add_object(army_name, data)
+        self._add_object(army_name, data, "building")
 
-    def _add_object(self, army_name, data):
-        if(self.space_occupied(data.coordinate)):
+    def _add_object(self, army_name, data, object_type):
+        location = Coordinate(data['x'], data['y'])
+        if(self.space_occupied(location)):
             msg = "Attempt to occupy a location that is already taken"
             raise BadScenarioData(msg)
         army = self._find_army(army_name)
-        self._build_type(army, data)
-        self.object_coordinates.append(data.coordinate)
+        self._build_type(army, data, location, object_type)
+        self.object_coordinates.append(location)
 
     def space_occupied(self, coordinate):
         for army in self.armies:
             if(army.has_unit_at(coordinate)):
                 return True
+        return False
 
     def _unit_count(self, army_name=0):
         count = 0
@@ -93,17 +116,18 @@ class Scenario(Serializable):
 
         return count
 
-    def _build_type(self, army, data):
-        if(data.object_type == "unit"):
-            return army.build_unit(data.name, data.coordinate)
-        elif(data.object_type == "building"):
-            return army.build_building(data.name, data.coordinate)
+    def _build_type(self, army, data, location, object_type):
+        if object_type == "unit":
+            return army.build_unit(data['name'], location)
+        elif object_type == "building":
+            return army.build_building(data['name'], location)
         else:
             raise BadScenarioData(
-                "Do not know how to build {0}".format(data.object_type))
+                "Do not know how to build {0}".format(object_type)
+            )
 
     def set_starting_money(self, money, army_name=0):
-        if(army_name):
+        if army_name:
             army = self._find_army(army_name)
             army.money = money
         else:

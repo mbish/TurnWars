@@ -42,10 +42,11 @@ class Game(Serializable):
     def do(self, message):
         self.canonicalize(message)
         try:
-            if(message['name']== 'move'):
-                unit = self._find_unit(message['army_name'], message['unit_id'])
-                to = Coordinate(message['to']['x'], message['to']['y'])
-                self.move(unit, to)
+            if(message['name'] == 'move'):
+                unit = self._find_unit(message['army_name'],
+                                       message['unit_id'])
+                move_to = Coordinate(message['to']['x'], message['to']['y'])
+                self.move(unit, move_to)
             elif(message['name'] == 'attack'):
                 attacker = self._find_unit(message['attacking_army'],
                                            message['attacker_id'])

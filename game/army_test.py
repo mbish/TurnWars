@@ -13,7 +13,7 @@ class MockUnitFactory:
     def get_unit_cost(self, name):
         return 10
 
-    def create(self, name, pos):
+    def create(self, name, army, pos):
         return "{0} {1}".format(name, pos)
 
     def full_unit_info(self, _type):
@@ -47,6 +47,9 @@ class MockBuilding:
 
     def get_revenue(self):
         return 10
+
+    def can_build(self, unit_name):
+        return unit_name != 'bear'
 
 
 def test_army():
@@ -128,11 +131,11 @@ def get_building_at_test():
 
 def can_build_test():
     army = test_army()
-    assert army.can_build(5, 5)
-    assert not army.can_build(200, 5)
-    assert not army.can_build(5, 15)
+    assert army.can_build(5, 5, 'joe')
+    assert not army.can_build(200, 5, 'solider')
+    assert not army.can_build(5, 15, 'dragon')
     army.turn = 0
-    assert not army.can_build(5, 5)
+    assert not army.can_build(5, 5, 'tank')
 
 
 def has_unit_at_test():
@@ -186,4 +189,5 @@ def build_building_test():
 
 def equipment_info_test():
     army = test_army()
-    assert army.equipment_info('test', 'ignore') == "this equipment is the best"
+    assert army.equipment_info('test', 'ignore') == \
+        "this equipment is the best"

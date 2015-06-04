@@ -18,7 +18,7 @@ class Unit(Serializable):
 
     def at(self, coordinate):
         return self.get_coordinate().x == coordinate.x and \
-               self.get_coordinate().y == coordinate.y
+            self.get_coordinate().y == coordinate.y
 
     def reset(self):
         self.transport.reset()

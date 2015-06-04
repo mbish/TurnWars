@@ -83,7 +83,7 @@ def json_test():
 
 
 def get_neighbors_test():
-    board = get_test_board() 
+    board = get_test_board()
     neighbors = board.get_neighbors(Coordinate(0, 0))
     coordinate_sort = lambda c: c['x'] + c['y']
     assert sorted([tile.flat() for tile in neighbors],

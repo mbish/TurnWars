@@ -8,16 +8,6 @@ class MockCoordinate:
         self.y = y
 
 
-class MockObject:
-
-    def __init__(self, name, position):
-        self.name = name
-        self.coordinate = position
-
-    def flat(self):
-        return self.name
-
-
 class MockArmy:
 
     def __init__(self, name):
@@ -30,15 +20,15 @@ class MockArmy:
         self.turn = 1
 
     def build_unit(self, name, pos):
-        unit = "unit {0} {1}".format(name, pos)
+        unit = "unit {0} {1} {2}".format(name, pos.x, pos.y)
         self.units.append(unit)
 
     def build_building(self, name, pos):
-        unit = "building {0} {1}".format(name, pos)
+        unit = "building {0} {1} {2}".format(name, pos.x, pos.y)
         self.buildings.append(unit)
 
     def has_unit_at(self, coordinate):
-        return coordinate == "taken"
+        return coordinate.x == "taken"
 
     def num_units(self):
         return len(self.units)
@@ -94,30 +84,42 @@ def add_unit_test():
     scenario = test_scenario()
     scenario.add_army(MockArmy("dragon"))
     scenario.add_army(MockArmy("rat"))
-    unit1 = MockObject("footman", "ignore")
+    unit1 = {
+        'name': 'footman',
+        'x': 'ignore',
+        'y': 1
+    }
     scenario.add_unit("rat", unit1)
     rat = scenario._find_army("rat")
-    assert "unit footman ignore" in rat.units
+    assert "unit footman ignore 1" in rat.units
 
     scenario.add_unit("dragon", unit1)
     dragon = scenario._find_army("dragon")
-    assert "unit footman ignore" in dragon.units
-    assert "unit footman ignore" in rat.units
+    assert "unit footman ignore 1" in dragon.units
+    assert "unit footman ignore 1" in rat.units
 
-    unit2 = MockObject("horse", "here")
+    unit2 = {
+        'name': "horse",
+        'x': "here",
+        'y': 1
+    }
     scenario.add_unit("dragon", unit2)
-    assert "unit horse here" in dragon.units
-    assert "unit horse here" not in rat.units
+    assert "unit horse here 1" in dragon.units
+    assert "unit horse here 1" not in rat.units
 
 
 def add_building_test():
     scenario = test_scenario()
     scenario.add_army(MockArmy("dragon"))
     scenario.add_army(MockArmy("rat"))
-    building1 = MockObject("house", "ignore")
+    building1 = {
+        'name': "house",
+        'x': "ignore",
+        'y': 0
+    }
     scenario.add_building("rat", building1)
     rat = scenario._find_army("rat")
-    assert "building house ignore" in rat.buildings
+    assert "building house ignore 0" in rat.buildings
 
 
 def set_board_test():
@@ -148,20 +150,38 @@ def space_occupied_test():
     scenario = test_scenario()
     scenario.add_army(MockArmy("dragon"))
     scenario.add_army(MockArmy("rat"))
-    scenario.add_unit('dragon', MockObject("footman", "ignore"))
-    assert_raises(BadScenarioData, scenario.add_unit, 'dragon',
-                  MockObject("footman", "taken"))
-    assert_raises(BadScenarioData, scenario.add_building, 'dragon',
-                  MockObject("tower", "taken"))
+    scenario.add_unit('dragon', {
+        'name': "footman",
+        'x': "ignore",
+        'y': 0
+    })
+    assert_raises(BadScenarioData, scenario.add_unit, 'dragon', {
+        'name': "footman",
+        'x': 'taken',
+        'y': 1
+    })
+    assert_raises(BadScenarioData, scenario.add_building, 'dragon', {
+        'name': "tower",
+        'x': "taken",
+        'y': 0
+    })
 
 
 def unit_count_test():
     scenario = test_scenario()
     assert scenario._unit_count() == 0
     scenario.add_army(MockArmy("dragon"))
-    scenario.add_unit('dragon', MockObject("footman", "ignore"))
+    scenario.add_unit('dragon', {
+        'name': "footman",
+        'x': "ignore",
+        'y': 0
+    })
     assert scenario._unit_count() == 1
-    scenario.add_building('dragon', MockObject("tower", "ignore"))
+    scenario.add_building('dragon', {
+        'name': "tower",
+        'x': "ignore",
+        'y': 0
+    })
     assert scenario._unit_count() == 1
 
 
@@ -169,9 +189,21 @@ def building_count_test():
     scenario = test_scenario()
     assert scenario._building_count() == 0
     scenario.add_army(MockArmy("dragon"))
-    scenario.add_building('dragon', MockObject("tower", "ignore"))
+    scenario.add_building('dragon', {
+        'name': "tower",
+        'x': "ignore",
+        'y': 0
+    })
     assert scenario._building_count() == 1
-    scenario.add_unit('dragon', MockObject("footman", "ignore"))
+    scenario.add_unit('dragon', {
+        'name': "footman",
+        'x': "ignore",
+        'y': 0
+    })
     assert scenario._building_count() == 1
-    scenario.add_building('dragon', MockObject("tower", "ignore"))
+    scenario.add_building('dragon', {
+        'name': "tower",
+        'x': "ignore",
+        'y': 0
+    })
     assert scenario._building_count() == 2

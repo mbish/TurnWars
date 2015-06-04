@@ -1,4 +1,5 @@
-from game.factories.scenario_builder import ScenarioBuilder, BadScenarioRequest
+from game.factories.scenario_builder import ScenarioBuilder
+from game.factories.builder import BuildInvalid
 from nose.tools import assert_raises
 
 
@@ -22,6 +23,10 @@ class MockScenario:
         self.units = 2
         self.board = []
         self.coordinates_valid = True
+
+    def validate(self):
+        if not self.validate_coordinates():
+            raise Exception
 
     def get_board(self):
         return self.board
@@ -88,8 +93,6 @@ def pop_instance_clear_test():
                               MockArmyFactory(), MockScenario)
     builder.set_board("this is a board")
     assert builder.pop_instance().board == "this is a board"
-    # instance should be cleared when poped
-    assert_raises(BadScenarioRequest, builder.pop_instance)
 
 
 def pop_instance_failure_test():
@@ -97,13 +100,6 @@ def pop_instance_failure_test():
                               MockArmyFactory(), MockScenario)
     builder._instance.coordinates_valid = False
     builder.set_board("this is a board")
-    assert_raises(BadScenarioRequest, builder.pop_instance)
+    assert_raises(BuildInvalid, builder.pop_instance)
     builder._instance.coordinates_valid = True
-    builder._instance.armies = 1
-    assert_raises(BadScenarioRequest, builder.pop_instance)
-    builder._instance.armies = 2
-    builder._instance.units = 0
-    builder._instance.buildings = 0
-    assert_raises(BadScenarioRequest, builder.pop_instance)
-    builder._instance.buildings = 1
     builder.pop_instance()

@@ -8,18 +8,19 @@ from game.factories.army_factory import ArmyFactory
 from game.factories.board_factory import BoardFactory
 from game.factories.scenario_builder import ScenarioBuilder
 from game.factories.transport_factory import TransportFactory
+from game.coordinate import Coordinate
 
 
-def bootstrap_game():
-    factory_loader = Loader()
-    armor_data = factory_loader.load_from_file("data/armor.json")
-    weapon_data = factory_loader.load_from_file("data/weapon.json")
-    transport_data = factory_loader.load_from_file("data/transport.json")
-    building_data = factory_loader.load_from_file("data/building.json")
-    unit_data = factory_loader.load_from_file("data/unit.json")
-    tile_data = factory_loader.load_from_file("data/tile.json")
-    army_data = factory_loader.load_from_file("data/army.json")
-    board_data = factory_loader.load_from_file("data/board.json")
+def load_scenario(scenario_metadata, loader):
+    armor_data = loader.load(scenario_metadata["armor_data"])
+    weapon_data = loader.load(scenario_metadata["weapon_data"])
+    transport_data = loader.load(scenario_metadata["transport_data"])
+    building_data = loader.load(scenario_metadata["building_data"])
+    unit_data = loader.load(scenario_metadata["unit_data"])
+    tile_data = loader.load(scenario_metadata["tile_data"])
+    army_data = loader.load(scenario_metadata["army_data"])
+    board_data = loader.load(scenario_metadata["board_data"])
+    layout_data = loader.load(scenario_metadata["layout_data"])
 
     armor_factory = ArmorFactory(armor_data)
     weapon_factory = WeaponFactory(weapon_data)
@@ -31,3 +32,17 @@ def bootstrap_game():
     army_factory = ArmyFactory(army_data, unit_factory,
                                building_factory)
     board_factory = BoardFactory(board_data, tile_factory)
+
+    scenario = ScenarioBuilder(board_factory, army_factory)
+    scenario.set_board(layout_data['board'])
+    for army in layout_data['armies']:
+        army_name = army['name']
+        scenario.add_army(army_name)
+        for unit in army['units']:
+            scenario.add_unit(army_name, unit)
+        for building in army['buildings']:
+            scenario.add_building(army_name, building)
+
+        scenario.set_starting_money(army['money'], army_name)
+
+    return scenario.pop_instance()

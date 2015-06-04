@@ -34,7 +34,7 @@ class Army(Serializable):
     def buy_unit(self, unit_name, coordinate):
         cost = self.unit_factory.get_unit_cost(unit_name)
         new_unit = 0
-        if(self.can_build(cost, coordinate)):
+        if(self.can_build(cost, coordinate, unit_name)):
             self.money -= cost
             new_unit = self.build_unit(unit_name, coordinate)
         else:
@@ -50,17 +50,19 @@ class Army(Serializable):
         return new_building
 
     def build_unit(self, unit_name, coordinate):
-        new_unit = self.unit_factory.create(unit_name, coordinate)
+        new_unit = self.unit_factory.create(unit_name, self.name, coordinate)
         self.add_unit(new_unit)
         return new_unit
 
-    def can_build(self, cost, coordinate):
+    def can_build(self, cost, coordinate, unit_name):
         result = True
         if(not self.turn):
             result = False
         if(self.money < cost):
             result = False
         if(not self.has_building_at(coordinate)):
+            result = False
+        elif(not self._get_building_at(coordinate).can_build(unit_name)):
             result = False
 
         return result
