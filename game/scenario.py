@@ -1,5 +1,5 @@
 from game.serializable import Serializable
-from coordinate import Coordinate
+from game.coordinate import Coordinate
 
 
 class Scenario(Serializable):
