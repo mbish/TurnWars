@@ -91,8 +91,6 @@ def get_neighbors_test():
         [{'y': 0, 'x': 1},
          {'y': 1, 'x': 0}])
     neighbors = board.get_neighbors(Coordinate(2, 2))
-    for tile in neighbors:
-        print tile.flat()
     assert sorted([tile.flat() for tile in neighbors],
                   key=coordinate_sort) == (
         [{'y': 2, 'x': 1},

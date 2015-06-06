@@ -28,7 +28,7 @@ class MockArmy:
         self.buildings.append(unit)
 
     def has_unit_at(self, coordinate):
-        return coordinate.x == "taken"
+        return coordinate.x == 8
 
     def num_units(self):
         return len(self.units)
@@ -86,26 +86,26 @@ def add_unit_test():
     scenario.add_army(MockArmy("rat"))
     unit1 = {
         'name': 'footman',
-        'x': 'ignore',
+        'x': 0,
         'y': 1
     }
     scenario.add_unit("rat", unit1)
     rat = scenario._find_army("rat")
-    assert "unit footman ignore 1" in rat.units
+    assert "unit footman 0 1" in rat.units
 
     scenario.add_unit("dragon", unit1)
     dragon = scenario._find_army("dragon")
-    assert "unit footman ignore 1" in dragon.units
-    assert "unit footman ignore 1" in rat.units
+    assert "unit footman 0 1" in dragon.units
+    assert "unit footman 0 1" in rat.units
 
     unit2 = {
         'name': "horse",
-        'x': "here",
+        'x': 3,
         'y': 1
     }
     scenario.add_unit("dragon", unit2)
-    assert "unit horse here 1" in dragon.units
-    assert "unit horse here 1" not in rat.units
+    assert "unit horse 3 1" in dragon.units
+    assert "unit horse 3 1" not in rat.units
 
 
 def add_building_test():
@@ -114,12 +114,12 @@ def add_building_test():
     scenario.add_army(MockArmy("rat"))
     building1 = {
         'name': "house",
-        'x': "ignore",
+        'x': 6,
         'y': 0
     }
     scenario.add_building("rat", building1)
     rat = scenario._find_army("rat")
-    assert "building house ignore 0" in rat.buildings
+    assert "building house 6 0" in rat.buildings
 
 
 def set_board_test():
@@ -152,17 +152,17 @@ def space_occupied_test():
     scenario.add_army(MockArmy("rat"))
     scenario.add_unit('dragon', {
         'name': "footman",
-        'x': "ignore",
+        'x': 2,
         'y': 0
     })
     assert_raises(BadScenarioData, scenario.add_unit, 'dragon', {
         'name': "footman",
-        'x': 'taken',
+        'x': 8,
         'y': 1
     })
     assert_raises(BadScenarioData, scenario.add_building, 'dragon', {
         'name': "tower",
-        'x': "taken",
+        'x': 8,
         'y': 0
     })
 
@@ -173,13 +173,13 @@ def unit_count_test():
     scenario.add_army(MockArmy("dragon"))
     scenario.add_unit('dragon', {
         'name': "footman",
-        'x': "ignore",
+        'x': 1,
         'y': 0
     })
     assert scenario._unit_count() == 1
     scenario.add_building('dragon', {
         'name': "tower",
-        'x': "ignore",
+        'x': 1,
         'y': 0
     })
     assert scenario._unit_count() == 1
@@ -191,19 +191,19 @@ def building_count_test():
     scenario.add_army(MockArmy("dragon"))
     scenario.add_building('dragon', {
         'name': "tower",
-        'x': "ignore",
+        'x': 1,
         'y': 0
     })
     assert scenario._building_count() == 1
     scenario.add_unit('dragon', {
         'name': "footman",
-        'x': "ignore",
+        'x': 1,
         'y': 0
     })
     assert scenario._building_count() == 1
     scenario.add_building('dragon', {
         'name': "tower",
-        'x': "ignore",
+        'x': 1,
         'y': 0
     })
     assert scenario._building_count() == 2
