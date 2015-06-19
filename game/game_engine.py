@@ -5,16 +5,21 @@ from game.path_finder import NoPathFound, PathFinder
 
 class Game(Serializable):
 
-    def __init__(self, board, scenario, path_finder=PathFinder):
-        self.board = board
+    def __init__(self, scenario, path_finder=PathFinder):
         self.path_finder = path_finder
         self.scenario = scenario
 
-    def _find_unit(self, army_name, unit_id):
-        return self.scenario._find_army(army_name).find_unit(unit_id)
+    def _get_board(self):
+        return self.scenario.get_board()
+
+    def _find_unit(self, unit_id):
+        return self.scenario.find_unit(unit_id)
 
     def _uid_at(self, coordinate):
-        return self.scenario.unit_at(coordinate).uid
+        return self.unit_at(coordinate).uid
+
+    def unit_at(self, coordinate):
+        return self.scenario.unit_at(coordinate)
 
     def move(self, unit, coordinate):
         if(self.scenario.space_occupied(coordinate)):
@@ -25,7 +30,8 @@ class Game(Serializable):
         try:
             path = self.path_finder.get_path(unit.get_coordinate(),
                                              movement_cost, coordinate)
-            if(self.path_finder.path_cost(self.board, path, movement_cost) <=
+            if(self.path_finder.path_cost(self._get_board(),
+                                          path, movement_cost) <=
                unit.movement_range()):
                 unit.move(coordinate, len(path))
         except NoPathFound:
@@ -43,15 +49,12 @@ class Game(Serializable):
         self.canonicalize(message)
         try:
             if(message['name'] == 'move'):
-                unit = self._find_unit(message['army_name'],
-                                       message['unit_id'])
+                unit = message['unit']
                 move_to = Coordinate(message['to']['x'], message['to']['y'])
                 self.move(unit, move_to)
             elif(message['name'] == 'attack'):
-                attacker = self._find_unit(message['attacking_army'],
-                                           message['attacker_id'])
-                defender = self._find_unit(message['defending_army'],
-                                           message['defender_id'])
+                attacker = self._find_unit(message['attacker'])
+                defender = self._find_unit(message['defender'])
                 self.attack(attacker, defender)
             elif(message['name'] == 'build'):
                 army = self.scenario._find_army(message['army_name'])
@@ -74,7 +77,8 @@ class Game(Serializable):
         transport = army.equipment_info(unit.name, 'transport')
         movement_cost = transport['movement_cost']
         spaces_left = unit.get_spaces_left()
-        return self.path_finder.tiles_in_range(self.board, movement_cost,
+        return self.path_finder.tiles_in_range(self._get_board(),
+                                               movement_cost,
                                                unit.get_coordinate(),
                                                spaces_left)
 
@@ -82,13 +86,16 @@ class Game(Serializable):
     def canonicalize(self, message):
         if 'unit' in message:
             if isinstance(message['unit'], 'dict'):
-                location = Coordinate(message['unit']['x'],
-                                      message['unit', 'y'])
-                message['unit'] = self._uid_at(location)
+                if('x' in message['unit'] and 'y' in message['unit']):
+                    location = Coordinate(message['unit']['x'],
+                                          message['unit', 'y'])
+                    message['unit'] = self._uid_at(location)
+                elif('id' in message['unit']):
+                    message['unit'] = self._find_unit(message['unit']['id'])
 
     def flat(self):
         return {
-            'board': self.board.as_hash(),
+            'board': self._get_board().as_hash(),
             'scenario': [self.scenario.as_hash()],
         }
 

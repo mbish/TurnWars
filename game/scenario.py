@@ -24,10 +24,8 @@ class Scenario(Serializable):
         for army in self.armies:
             if army.num_units() == 0 and army.num_buildings() == 0:
                 raise BadScenarioData(
-                    "Army {0} must start with at least one unit " +
-                    "or building").format(
-                        army.name
-                    )
+                    ("Army {0} must start with at least one unit " +
+                     "or building").format(army.name))
 
         self.validate_coordinates()
 
@@ -59,13 +57,18 @@ class Scenario(Serializable):
         self.armies.append(army)
         return len(self.armies)
 
+    def find_unit(self, unit_id):
+        for army in self.armies:
+            if(army.find_unit(unit_id)):
+                return army.find_unit(unit_id)
+
     def _find_army(self, army_name):
         army = next(army for army in self.armies if army.name == army_name)
         return army
 
     def unit_at(self, coordinate):
         for army in self.armies:
-            unit = army.unit_at(coordinate)
+            unit = army.get_unit_at(coordinate)
             if(unit):
                 return unit
 
@@ -137,4 +140,5 @@ class Scenario(Serializable):
 
 class BadScenarioData(Exception):
     def __init__(self, message):
-        Exception.__init__(self, message)
+        print message
+        super(BadScenarioData, self).__init__(message)

@@ -80,16 +80,18 @@ class Army(Serializable):
         self.buildings.append(building)
 
     def find_unit(self, unit_id):
-        found_unit = next(unit for unit in self.unit_table if
-                          unit.uid == unit_id)
+        try:
+            found_unit = next(unit for unit in self.unit_table if
+                              unit.uid == unit_id)
+        except:
+            return False
+
         return found_unit
 
     def get_unit_at(self, coordinate):
         found_unit = next(unit for unit in self.unit_table if
                           unit.at(coordinate))
         return found_unit
-        return (coordinate in
-                [unit.coordinate for unit in self.unit_table])
 
     def income(self):
         amount = 0

@@ -21,6 +21,15 @@ class MockScenario:
 
         return False
 
+    def get_board(self):
+        return MockBoard()
+
+    def find_unit(self, uid):
+        for army in self.armies:
+            unit = army.find_unit(uid)
+            if(unit):
+                return unit
+
     def as_hash(self):
         return "a serialized scenario"
 
@@ -31,7 +40,10 @@ class MockArmy:
         self.units = []
 
     def find_unit(self, uid):
-        return "a {0} {1} unit".format(self.name, uid)
+        if(uid in self.units):
+            return self.name
+        else:
+            return False
 
     def equipment_info(self, name, _type):
         return {
@@ -84,23 +96,26 @@ class MockPathFinder:
 
 def find_unit_test():
     army1 = MockArmy('dragon')
+    army1.buy_unit("best", "1")
     army2 = MockArmy('salamander')
     army3 = MockArmy('rat')
+    army3.buy_unit("test", "0")
     army4 = MockArmy('phoenix')
-    game = Game([], MockScenario([army1, army2, army3, army4]), [])
-    unit = game._find_unit('rat', 'test')
-    assert unit == "a rat test unit"
-    unit = game._find_unit('dragon', 'best')
-    assert unit == "a dragon best unit"
-    unit = game._find_unit('phoenix', 'stressed')
-    assert unit == "a phoenix stressed unit"
+    army4.buy_unit("stressed", "4")
+    game = Game(MockScenario([army1, army2, army3, army4]), [])
+    unit = game._find_unit('test 0')
+    assert unit == "rat"
+    unit = game._find_unit('best 1')
+    assert unit == "dragon"
+    unit = game._find_unit('stressed 4')
+    assert unit == "phoenix"
 
 
 def move_test():
     army1 = MockArmy('dragon')
     army3 = MockArmy('rat')
     path_finder = MockPathFinder([1, 2, 3], 10)
-    game = Game([], MockScenario([army1, army3]), path_finder)
+    game = Game(MockScenario([army1, army3]), path_finder)
     unit = MockUnit(5, 'dragon')
     game.move(unit, "A new place")
     assert unit.pos != "A new place"
@@ -115,7 +130,7 @@ def move2_test():
     army1 = MockArmy('dragon')
     army2 = MockArmy('salamander')
     path_finder = MockPathFinder([1, 2, 3], 10, True)
-    game = Game([], MockScenario([army1, army2]), path_finder)
+    game = Game(MockScenario([army1, army2]), path_finder)
     unit = MockUnit(100, 'dragon')
     game.move(unit, "There")
     assert unit.pos != "There"
@@ -124,7 +139,7 @@ def move2_test():
 def attack_test():
     army1 = MockArmy('dragon')
     army2 = MockArmy('salamander')
-    game = Game([], [army1, army2], [])
+    game = Game([army1, army2], [])
     unit1 = MockUnit(100, 'dragon')
     unit2 = MockUnit(10, 'salamander')
     unit3 = MockUnit(100, 'dragon')
@@ -137,7 +152,7 @@ def attack_test():
 def build_test():
     army1 = MockArmy('dragon')
     army2 = MockArmy('salamander')
-    game = Game([], MockScenario([army1, army2]), [])
+    game = Game(MockScenario([army1, army2]), [])
     game.build(army1, 'footman', 'here')
     assert army1.units == ['footman here']
     game.build(army1, 'footman', 'again')
@@ -150,7 +165,7 @@ def build_test():
 def messages_test():
     army1 = MockArmy('dragon')
     army2 = MockArmy('salamander')
-    game = Game(MockBoard(), MockScenario([army1, army2]), [])
+    game = Game(MockScenario([army1, army2]), [])
     flat = game.do({
         'name': 'build',
         'army_name': 'dragon',

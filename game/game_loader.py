@@ -9,6 +9,7 @@ from game.factories.board_factory import BoardFactory
 from game.factories.scenario_builder import ScenarioBuilder
 from game.factories.transport_factory import TransportFactory
 from game.coordinate import Coordinate
+from game.game_engine import Game
 
 
 def load_scenario(scenario_metadata, loader):
@@ -41,8 +42,11 @@ def load_scenario(scenario_metadata, loader):
         for unit in army['units']:
             scenario.add_unit(army_name, unit)
         for building in army['buildings']:
+            print "adding building"
+            print building
             scenario.add_building(army_name, building)
 
         scenario.set_starting_money(army['money'], army_name)
 
-    return scenario.pop_instance()
+    scenario = scenario.pop_instance()
+    return Game(scenario)

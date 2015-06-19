@@ -1,4 +1,5 @@
 from game.game_loader import *
+from nose.tools import assert_raises, eq_
 
 class MockLoader:
     def __init__(self):
@@ -40,7 +41,8 @@ def test_scenario():
             'fort': {
                 'buildable_units': [
                     'footman'
-                ]
+                ],
+                'revenue': 100,
             }
         },
         'unit_data': {
@@ -108,3 +110,53 @@ def test_scenario():
 def load_scenario_test():
     load_scenario(test_scenario(), MockLoader())
     return 
+
+def no_tiles_test():
+    scenario = test_scenario()
+    scenario['board_data']['basic'].pop("tiles")
+    assert_raises(Exception, load_scenario, scenario, MockLoader())
+    return
+
+def bad_tiles_test():
+    scenario = test_scenario()
+    scenario['board_data']['basic'].pop("tiles")
+    scenario['board_data']['basic']['tiles'] = [
+        ['bad', 'grass'],
+    ]
+    assert_raises(Exception, load_scenario, scenario, MockLoader())
+    return
+
+def missing_factories_test():
+    for factory_key in ['weapon_data', 'army_data', 'board_data', 'layout_data',
+                        'armor_data', 'transport_data', 'building_data', 'unit_data',
+                        'tile_data']:
+        scenario = test_scenario()
+        scenario.pop(factory_key)
+        assert_raises(Exception, load_scenario, scenario, MockLoader())
+    return
+
+def missing_layout_test():
+    scenario = test_scenario()
+    scenario['layout_data'].pop('board')
+    assert_raises(Exception, load_scenario, scenario, MockLoader())
+
+    scenario = test_scenario()
+    scenario['layout_data']['board'] = 'advanced'
+    assert_raises(Exception, load_scenario, scenario, MockLoader())
+
+    scenario = test_scenario()
+    scenario['layout_data']['armies'][0]['units'] = []
+    assert_raises(Exception, load_scenario, scenario, MockLoader())
+
+    scenario = test_scenario()
+    scenario['layout_data']['armies'][1]['units'] = []
+    assert_raises(Exception, load_scenario, scenario, MockLoader())
+
+    scenario = test_scenario()
+    scenario['layout_data']['armies'][0]['buildings'] = [{
+        'name': 'fort',
+        'x': 1,
+        'y': 0,
+    }]
+    scenario['layout_data']['armies'][0]['units'] = []
+    load_scenario(scenario, MockLoader())

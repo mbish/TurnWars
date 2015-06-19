@@ -6,7 +6,7 @@ class Builder:
     def pop_instance(self):
         try:
             self._instance.validate()
-        except Exception:
+        except Exception as e:
             raise BuildInvalid()
 
         instance = self._instance
@@ -15,6 +15,6 @@ class Builder:
 
 
 class BuildInvalid(Exception):
-    def __init__(self):
-        Exception.__init__(self)
+    def __init__(self, message=''):
+        super(BuildInvalid, self).__init__(message)
 

@@ -4,7 +4,7 @@ from nose.tools import assert_raises
 
 
 class MockBuliding:
-    def __init__(self, name, buildable_units, coordinate):
+    def __init__(self, name, revenue, buildable_units, coordinate):
         self.name = name
         self.coordinate = coordinate
         self.buildable_units = buildable_units
@@ -15,6 +15,7 @@ def validation_test():
     factory_data = {
         'fort': {
             'buildable_units': ['footman'],
+            'revenue': 100
         },
     }
     factory = BuildingFactory(factory_data, MockBuliding)
@@ -26,11 +27,19 @@ def validation_test():
     }
     assert_raises(BadFactoryData, BuildingFactory, factory_data, MockBuliding)
 
+    factory_data = {
+        'fort': {
+            'revenue': 100
+        }
+    }
+    assert_raises(BadFactoryData, BuildingFactory, factory_data, MockBuliding)
+
 
 def creation_test():
     factory_data = {
         'fort': {
             'buildable_units': ['footman'],
+            'revenue': 100
         },
     }
     factory = BuildingFactory(factory_data, MockBuliding)
