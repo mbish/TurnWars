@@ -1,0 +1,14 @@
+{
+    "sword": {
+        "uses": 1,
+        "uses_per_turn": 1,
+        "attack_strength": 1
+    },
+    "flack": {
+        "uses": 10,
+        "attack_strength": 1,
+        "non_targetables": [
+            "foot"
+        ]
+    }
+}

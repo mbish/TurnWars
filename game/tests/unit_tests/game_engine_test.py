@@ -35,9 +35,10 @@ class MockScenario:
 
 
 class MockArmy:
-    def __init__(self, name):
+    def __init__(self, name, turn=True):
         self.name = name
         self.units = []
+        self.turn = turn
 
     def find_unit(self, uid):
         if(uid in self.units):
@@ -55,6 +56,9 @@ class MockArmy:
 
     def has_unit_at(self, location):
         return location == "not here"
+
+    def is_turn(self):
+        return self.turn
 
 
 class MockUnit:
@@ -116,14 +120,31 @@ def move_test():
     army3 = MockArmy('rat')
     path_finder = MockPathFinder([1, 2, 3], 10)
     game = Game(MockScenario([army1, army3]), path_finder)
+
+    # out of range move
     unit = MockUnit(5, 'dragon')
     game.move(unit, "A new place")
     assert unit.pos != "A new place"
+
+    # in range move
     unit = MockUnit(10, 'rat')
     game.move(unit, "A new place")
     assert unit.pos == "A new place"
+
+    # occupied move
     game.move(unit, "not here")
     assert unit.pos == "A new place"
+
+
+def wrong_turn_move_test():
+    army1 = MockArmy('dragon')
+    army3 = MockArmy('rat', False)
+    path_finder = MockPathFinder([1, 2, 3], 10)
+    game = Game(MockScenario([army1, army3]), path_finder)
+
+    unit = MockUnit(10, 'rat')
+    game.move(unit, "A new place")
+    assert unit.pos == 0
 
 
 def move2_test():
@@ -139,7 +160,7 @@ def move2_test():
 def attack_test():
     army1 = MockArmy('dragon')
     army2 = MockArmy('salamander')
-    game = Game([army1, army2], [])
+    game = Game(MockScenario([army1, army2]), [])
     unit1 = MockUnit(100, 'dragon')
     unit2 = MockUnit(10, 'salamander')
     unit3 = MockUnit(100, 'dragon')
@@ -162,7 +183,7 @@ def build_test():
 
 
 # tests that the message handling code never chokes on bad input
-def messages_test():
+def bad_messages_test():
     army1 = MockArmy('dragon')
     army2 = MockArmy('salamander')
     game = Game(MockScenario([army1, army2]), [])
@@ -208,9 +229,15 @@ def messages_test():
     })
     flat = game.do({
         'name': 'attack',
-        'attacking_army': 'dragon',
-        'attacker_id': 'footman',
+        'attacker': 'footman',
         'defending_army': 'salamander',
         'defender_id': 'footman'
+    })
+    assert flat == {'board': '', 'scenario': ['a serialized scenario']}
+    flat = game.do({
+        'name': 'the chacha'
+    })
+    assert flat == {'board': '', 'scenario': ['a serialized scenario']}
+    flat = game.do({
     })
     assert flat == {'board': '', 'scenario': ['a serialized scenario']}

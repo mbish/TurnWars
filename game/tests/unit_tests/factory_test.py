@@ -1,6 +1,7 @@
 from game.factories.factory import Factory
 from nose.tools import assert_raises
 
+
 class MockClass:
 
     def __init__(self, data):

@@ -1,0 +1,8 @@
+{
+    "foot": {
+        "spaces_per_turn": 2
+    },
+    "tires": {
+        "spaces_per_turn": 5
+    }
+}

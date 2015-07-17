@@ -1,0 +1,8 @@
+{
+    "footman": {
+        "transport": "foot",
+        "weapon": "sword",
+        "armor": "plate",
+        "cost": 100
+    }
+}

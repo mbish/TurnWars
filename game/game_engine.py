@@ -12,6 +12,9 @@ class Game(Serializable):
     def _get_board(self):
         return self.scenario.get_board()
 
+    def _find_army(self, army_name):
+        return self.scenario._find_army(army_name)
+
     def _find_unit(self, unit_id):
         return self.scenario.find_unit(unit_id)
 
@@ -25,6 +28,8 @@ class Game(Serializable):
         if(self.scenario.space_occupied(coordinate)):
             return
         army = self.scenario._find_army(unit.army)
+        if(not army.is_turn()):
+            return
         transport = army.equipment_info(unit.name, 'transport')
         movement_cost = transport['movement_cost']
         try:
@@ -38,6 +43,9 @@ class Game(Serializable):
             return
 
     def attack(self, attacker, defender):
+        attacking_army = self._find_army(attacker.army)
+        if(not attacking_army.is_turn()):
+            return
         if(attacker.army != defender.army):
             attacker.attack(defender)
 
@@ -57,11 +65,11 @@ class Game(Serializable):
                 defender = self._find_unit(message['defender'])
                 self.attack(attacker, defender)
             elif(message['name'] == 'build'):
-                army = self.scenario._find_army(message['army_name'])
+                army = self._find_army(message['army'])
                 location = Coordinate(message['at']['x'], message['at']['y'])
                 self.build(army, message['unit_name'], location)
             elif(message['name'] == 'end_turn'):
-                army = self.scenario._find_army(message['army_name'])
+                army = self._find_army(message['army'])
                 if(army.is_turn()):
                     army.end_turn()
 
@@ -73,7 +81,7 @@ class Game(Serializable):
     # This is really a utility function and may get split out from the
     # truely model-modifying functions above
     def tiles_in_range(self, unit):
-        army = self.scenario._find_army(unit.army)
+        army = self._find_army(unit.army)
         transport = army.equipment_info(unit.name, 'transport')
         movement_cost = transport['movement_cost']
         spaces_left = unit.get_spaces_left()

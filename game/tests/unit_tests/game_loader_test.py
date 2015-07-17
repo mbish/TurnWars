@@ -1,12 +1,14 @@
 from game.game_loader import *
 from nose.tools import assert_raises, eq_
 
+
 class MockLoader:
     def __init__(self):
         return
 
     def load(self, val):
         return val
+
 
 def test_scenario():
     return {
@@ -109,13 +111,15 @@ def test_scenario():
 
 def load_scenario_test():
     load_scenario(test_scenario(), MockLoader())
-    return 
+    return
+
 
 def no_tiles_test():
     scenario = test_scenario()
     scenario['board_data']['basic'].pop("tiles")
     assert_raises(Exception, load_scenario, scenario, MockLoader())
     return
+
 
 def bad_tiles_test():
     scenario = test_scenario()
@@ -126,14 +130,16 @@ def bad_tiles_test():
     assert_raises(Exception, load_scenario, scenario, MockLoader())
     return
 
+
 def missing_factories_test():
-    for factory_key in ['weapon_data', 'army_data', 'board_data', 'layout_data',
-                        'armor_data', 'transport_data', 'building_data', 'unit_data',
-                        'tile_data']:
+    for factory_key in ['weapon_data', 'army_data', 'board_data',
+                        'layout_data', 'armor_data', 'transport_data',
+                        'building_data', 'unit_data', 'tile_data']:
         scenario = test_scenario()
         scenario.pop(factory_key)
         assert_raises(Exception, load_scenario, scenario, MockLoader())
     return
+
 
 def missing_layout_test():
     scenario = test_scenario()

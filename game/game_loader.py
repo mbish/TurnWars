@@ -1,6 +1,6 @@
 from game.loader import Loader
 from game.factories.armor_factory import ArmorFactory
-from game.factories.weapon_factory import WeaponFactory 
+from game.factories.weapon_factory import WeaponFactory
 from game.factories.unit_factory import UnitFactory
 from game.factories.building_factory import BuildingFactory
 from game.factories.tile_factory import TileFactory

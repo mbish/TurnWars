@@ -17,4 +17,3 @@ class Builder:
 class BuildInvalid(Exception):
     def __init__(self, message=''):
         super(BuildInvalid, self).__init__(message)
-
