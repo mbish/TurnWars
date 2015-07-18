@@ -140,5 +140,4 @@ class Scenario(Serializable):
 
 class BadScenarioData(Exception):
     def __init__(self, message):
-        print message
         super(BadScenarioData, self).__init__(message)

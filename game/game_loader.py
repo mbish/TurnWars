@@ -42,8 +42,6 @@ def load_scenario(scenario_metadata, loader):
         for unit in army['units']:
             scenario.add_unit(army_name, unit)
         for building in army['buildings']:
-            print "adding building"
-            print building
             scenario.add_building(army_name, building)
 
         scenario.set_starting_money(army['money'], army_name)
