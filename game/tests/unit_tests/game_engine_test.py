@@ -30,7 +30,7 @@ class MockScenario:
             if(unit):
                 return unit
 
-    def as_hash(self):
+    def flat(self):
         return "a serialized scenario"
 
 
@@ -196,7 +196,7 @@ def bad_messages_test():
             'y': 'not a number'
         }
     })
-    assert flat == {'board': '', 'scenario': ['a serialized scenario']}
+    assert flat == {'scenario': 'a serialized scenario'}
     flat = game.do({
         'name': 'nonsense',
         'at': {
@@ -204,19 +204,19 @@ def bad_messages_test():
             'y': 0
         }
     })
-    assert flat == {'board': '', 'scenario': ['a serialized scenario']}
+    assert flat == {'scenario': 'a serialized scenario'}
     flat = game.do({
         'name': 'move',
     })
-    assert flat == {'board': '', 'scenario': ['a serialized scenario']}
+    assert flat == {'scenario': 'a serialized scenario'}
     flat = game.do({
         'name': 'end_turn',
     })
-    assert flat == {'board': '', 'scenario': ['a serialized scenario']}
+    assert flat == {'scenario': 'a serialized scenario'}
     flat = game.do({
         'name': 'attack',
     })
-    assert flat == {'board': '', 'scenario': ['a serialized scenario']}
+    assert flat == {'scenario': 'a serialized scenario'}
     game.build(army1, 'footman', 'here')
     flat = game.do({
         'name': 'move',
@@ -233,11 +233,11 @@ def bad_messages_test():
         'defending_army': 'salamander',
         'defender_id': 'footman'
     })
-    assert flat == {'board': '', 'scenario': ['a serialized scenario']}
+    assert flat == {'scenario': 'a serialized scenario'}
     flat = game.do({
         'name': 'the chacha'
     })
-    assert flat == {'board': '', 'scenario': ['a serialized scenario']}
+    assert flat == {'scenario': 'a serialized scenario'}
     flat = game.do({
     })
-    assert flat == {'board': '', 'scenario': ['a serialized scenario']}
+    assert flat == {'scenario': 'a serialized scenario'}

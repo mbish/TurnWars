@@ -1,5 +1,5 @@
 {
-    "board": "basic",
+    "board": "open",
     "armies": [
         {
             "name": "dragon",
@@ -8,19 +8,25 @@
                 "x": 1,
                 "y": 0
             }],
-            "buildings": [
-            ],
+            "buildings": [{
+                "name": "castle",
+                "x": 0,
+                "y": 0
+            }],
             "money": 1000
         },
         {
             "name": "salamander",
             "units": [{
                 "name": "footman",
-                "x": 0,
-                "y": 0
+                "x": 10,
+                "y": 11
             }],
-            "buildings": [
-            ],
+            "buildings": [{
+                "name": "castle",
+                "x": 11,
+                "y": 11
+            }],
             "money": 1000
         }
     ]

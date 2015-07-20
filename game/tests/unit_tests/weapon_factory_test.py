@@ -4,18 +4,21 @@ from nose.tools import assert_raises
 
 class MockClass:
 
-    def __init__(self, name, uses, attack_strength, pturn, non_targetables={}):
+    def __init__(self, name, uses, attack_strength,
+                 reach, pturn, non_targetables={}):
         self.name = name
         self.uses = uses
         self.attack_strength = attack_strength
         self.non_targetables = non_targetables
         self.uses_per_turn = pturn
+        self.reach = reach
 
     def get_value(self):
-        return "{0} {1} {2} {3} {4}".format(self.name, self.uses,
-                                            self.attack_strength,
-                                            self.uses_per_turn,
-                                            len(self.non_targetables))
+        return "{0} {1} {2} {3} {4} {5}".format(self.name, self.uses,
+                                                self.attack_strength,
+                                                self.uses_per_turn,
+                                                len(self.non_targetables),
+                                                self.reach)
 
 
 def validation_test():
@@ -60,6 +63,6 @@ def create_test():
     }
     factory = WeaponFactory(factory_data, MockClass)
     weapon = factory.create('cannon')
-    assert weapon.get_value() == 'cannon 3 10 1 0'
+    assert weapon.get_value() == 'cannon 3 10 1 0 1'
     weapon = factory.create('rod')
-    assert weapon.get_value() == 'rod 20 22 50 0'
+    assert weapon.get_value() == 'rod 20 22 50 0 1'

@@ -1,1 +1,17 @@
-{ "plate": { "starting_health": 10 } }
+{ 
+    "plate": { 
+        "starting_health": 10 
+    },
+    "leather": {
+        "starting_health": 5
+    },
+    "cloth": {
+        "starting_health": 1
+    },
+    "scale": {
+        "starting_health": 25
+    },
+    "wood": {
+        "starting_health": 1
+    }
+}

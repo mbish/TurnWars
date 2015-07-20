@@ -6,8 +6,8 @@ from game.path_finder import NoPathFound, PathFinder
 class Game(Serializable):
 
     def __init__(self, scenario, path_finder=PathFinder):
-        self.path_finder = path_finder
         self.scenario = scenario
+        self.path_finder = path_finder(self._get_board())
 
     def _get_board(self):
         return self.scenario.get_board()
@@ -27,19 +27,24 @@ class Game(Serializable):
     def move(self, unit, coordinate):
         if(self.scenario.space_occupied(coordinate)):
             return
+        unit = self._find_unit(unit)
         army = self.scenario._find_army(unit.army)
         if(not army.is_turn()):
             return
         transport = army.equipment_info(unit.name, 'transport')
-        movement_cost = transport['movement_cost']
+        cost_table = transport['cost_table']
         try:
-            path = self.path_finder.get_path(unit.get_coordinate(),
-                                             movement_cost, coordinate)
-            if(self.path_finder.path_cost(self._get_board(),
-                                          path, movement_cost) <=
+            path = self.path_finder.get_path(cost_table,
+                                             unit.get_coordinate(),
+                                             coordinate)
+            if(self.path_finder.path_cost(path, cost_table) <=
                unit.movement_range()):
                 unit.move(coordinate, len(path))
-        except NoPathFound:
+            else:
+                print "no path found"
+        except NoPathFound as e:
+            print "exception"
+            print e
             return
 
     def attack(self, attacker, defender):
@@ -73,7 +78,8 @@ class Game(Serializable):
                 if(army.is_turn()):
                     army.end_turn()
 
-        except Exception:
+        except Exception as e:
+            # need to do a better job of error reporting here
             return self.flat()
 
         return self.flat()
@@ -83,28 +89,28 @@ class Game(Serializable):
     def tiles_in_range(self, unit):
         army = self._find_army(unit.army)
         transport = army.equipment_info(unit.name, 'transport')
-        movement_cost = transport['movement_cost']
+        cost_table = transport['cost_table']
         spaces_left = unit.get_spaces_left()
         return self.path_finder.tiles_in_range(self._get_board(),
-                                               movement_cost,
+                                               cost_table,
                                                unit.get_coordinate(),
                                                spaces_left)
 
     # maps between various verions of the message protocol
     def canonicalize(self, message):
         if 'unit' in message:
-            if isinstance(message['unit'], 'dict'):
+            if isinstance(message['unit'], dict):
                 if('x' in message['unit'] and 'y' in message['unit']):
                     location = Coordinate(message['unit']['x'],
-                                          message['unit', 'y'])
+                                          message['unit']['y'])
+                    print "got uid of unit"
                     message['unit'] = self._uid_at(location)
                 elif('id' in message['unit']):
                     message['unit'] = self._find_unit(message['unit']['id'])
 
     def flat(self):
         return {
-            'board': self._get_board().as_hash(),
-            'scenario': [self.scenario.as_hash()],
+            'scenario': self.scenario.flat(),
         }
 
 

@@ -114,8 +114,10 @@ class Army(Serializable):
 
     def flat(self):
         return {
+            'name': self.name,
             'units': [unit.flat() for unit in self.unit_table],
-            'buildings': [building.flat() for building in self.buildings]
+            'buildings': [building.flat() for building in self.buildings],
+            'turn': self.turn
         }
 
 

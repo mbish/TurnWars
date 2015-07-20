@@ -18,14 +18,18 @@ class WeaponFactory(Factory):
 
     def create(self, name):
         data = self.get_data(name)
+        if('range' not in data):
+            data['range'] = 1
         if('uses_per_turn' not in data):
             data['uses_per_turn'] = 1
         if('non_targetables' in data):
             return self.creation_class(name, data['uses'],
                                        data['attack_strength'],
+                                       data['range'],
                                        data['uses_per_turn'],
                                        data['non_targetables'])
         else:
             return self.creation_class(name, data['uses'],
                                        data['attack_strength'],
+                                       data['range'],
                                        data['uses_per_turn'])

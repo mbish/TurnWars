@@ -1,14 +1,22 @@
 {
     "sword": {
-        "uses": 1,
+        "uses": 30,
         "uses_per_turn": 1,
         "attack_strength": 1
     },
-    "flack": {
+    "fire_breath": {
+        "uses": 30,
+        "attack_strength": 6,
+        "uses_per_turn": 1
+    },
+    "boulder": {
+        "uses": 5,
+        "attack_strength": 8,
+        "uses_per_turn": 1
+    },
+    "lance": {
         "uses": 10,
-        "attack_strength": 1,
-        "non_targetables": [
-            "foot"
-        ]
+        "attack_strength": 4,
+        "uses_per_turn": 1
     }
 }

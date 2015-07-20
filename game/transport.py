@@ -3,7 +3,7 @@ from game.serializable import Serializable
 
 class Transport(Serializable):
 
-    def __init__(self, name, spaces_per_turn, starting_fuel=-1):
+    def __init__(self, name, spaces_per_turn, cost_table, starting_fuel=-1):
         if(spaces_per_turn < 0):
             raise BadTransportCreation("Cannot create transport with movement \
                     less than 0")
@@ -12,6 +12,7 @@ class Transport(Serializable):
         self.fuel = starting_fuel
         self.starting_fuel = starting_fuel
         self.name = name
+        self.cost_table = cost_table
 
     def uses_fuel(self):
         return self.fuel != -1

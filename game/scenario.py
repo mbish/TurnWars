@@ -137,6 +137,12 @@ class Scenario(Serializable):
             for army in self.armies:
                 army.money = money
 
+    def flat(self):
+        return {
+            'board': self.board.flat(),
+            'armies': [army.flat() for army in self.armies],
+        }
+
 
 class BadScenarioData(Exception):
     def __init__(self, message):

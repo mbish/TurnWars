@@ -12,6 +12,8 @@ class TransportFactory(Factory):
     def validate_data(self, data):
         if('spaces_per_turn' not in data):
             return False
+        elif('cost_table' not in data):
+            return False
         else:
             return True
 
@@ -19,6 +21,8 @@ class TransportFactory(Factory):
         data = self.get_data(name)
         if('starting_fuel' in data):
             return self.creation_class(name, data['spaces_per_turn'],
+                                       data['cost_table'],
                                        data['starting_fuel'])
         else:
-            return self.creation_class(name, data['spaces_per_turn'])
+            return self.creation_class(name, data['spaces_per_turn'],
+                                       data['cost_table'])

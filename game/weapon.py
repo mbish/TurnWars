@@ -3,7 +3,11 @@ from game.serializable import Serializable
 
 class Weapon(Serializable):
 
-    def __init__(self, name, uses, attack_strength, reach,
+    # eventually reach will take a "pattern" object
+    # which will designate a specific pattern of tiles in
+    # via an arbitrarily sized 2-dimensional matrix centered
+    # at the unit for now just a linear range
+    def __init__(self, name, uses, attack_strength, reach=1,
                  uses_per_turn=1, non_targetables=''):
         Serializable.__init__(self)
         if(attack_strength < 0 or uses < 0 or reach < 0):

@@ -8,6 +8,8 @@ class PathFinder:
         self.board = board
 
     def get_path(self, cost_table, from_position, to_position):
+        print from_position
+        print to_position
         evaluated = []
         queue = [from_position]
         path = {}
@@ -24,7 +26,9 @@ class PathFinder:
                 key=estimated_score.get))
             current = queue[current_index]
             if(current == to_position):
-                return self._traceback(path, to_position)
+                result = self._traceback(path, to_position)
+                result.remove(from_position)
+                return result
 
             del queue[current_index]
             evaluated.append(current)
