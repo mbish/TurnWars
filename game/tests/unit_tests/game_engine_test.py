@@ -48,7 +48,9 @@ class MockArmy:
 
     def equipment_info(self, name, _type):
         return {
-            'movement_cost': 0
+            'movement_cost': 0,
+            'cost_table': {
+            }
         }
 
     def buy_unit(self, unit, location):
@@ -84,12 +86,13 @@ class MockUnit:
 
 class MockPathFinder:
 
-    def __init__(self, path, cost, throw_exception=False):
+    def __init__(self, board, path, cost, throw_exception=False):
+        self.board = board
         self.path = path
         self.cost = cost
         self.throw_exception = throw_exception
 
-    def path_cost(self, board, path, costs):
+    def path_cost(self, path, costs):
         return self.cost
 
     def get_path(self, coordinate, costs, coordinate2):
@@ -118,7 +121,7 @@ def find_unit_test():
 def move_test():
     army1 = MockArmy('dragon')
     army3 = MockArmy('rat')
-    path_finder = MockPathFinder([1, 2, 3], 10)
+    path_finder = MockPathFinder(MockBoard(), [1, 2, 3], 10)
     game = Game(MockScenario([army1, army3]), path_finder)
 
     # out of range move
@@ -139,7 +142,7 @@ def move_test():
 def wrong_turn_move_test():
     army1 = MockArmy('dragon')
     army3 = MockArmy('rat', False)
-    path_finder = MockPathFinder([1, 2, 3], 10)
+    path_finder = MockPathFinder(MockBoard(), [1, 2, 3], 10)
     game = Game(MockScenario([army1, army3]), path_finder)
 
     unit = MockUnit(10, 'rat')
@@ -150,7 +153,7 @@ def wrong_turn_move_test():
 def move2_test():
     army1 = MockArmy('dragon')
     army2 = MockArmy('salamander')
-    path_finder = MockPathFinder([1, 2, 3], 10, True)
+    path_finder = MockPathFinder(MockBoard(), [1, 2, 3], 10, True)
     game = Game(MockScenario([army1, army2]), path_finder)
     unit = MockUnit(100, 'dragon')
     game.move(unit, "There")

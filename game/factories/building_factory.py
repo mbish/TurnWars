@@ -1,5 +1,5 @@
 from game.serializable import Serializable
-from game.factories.factory import Factory
+from game.factories.factory import Factory, BadFactoryData
 from game.coordinate import Coordinate
 from game.building import Building
 
@@ -11,9 +11,9 @@ class BuildingFactory(Factory):
 
     def validate_data(self, data):
         if('buildable_units' not in data):
-            return False
+            raise BadFactoryData("buildable_units not found")
         elif('revenue' not in data):
-            return False
+            raise BadFactoryData("revenue not found")
         else:
             return True
 

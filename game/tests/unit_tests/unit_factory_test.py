@@ -1,5 +1,5 @@
 from game.factories.unit_factory import UnitFactory
-from game.factories.factory import BadFactoryRequest
+from game.factories.factory import BadFactoryRequest, BadFactoryData
 from nose.tools import assert_raises
 
 
@@ -87,9 +87,12 @@ def validate_test():
                           MockWeaponFactory(), MockArmorFactory(),
                           MockUnit)
     assert factory.validate_data(factory_data['footman'])
-    assert not factory.validate_data(factory_data['snowman'])
-    assert not factory.validate_data(factory_data['goman'])
-    assert not factory.validate_data(factory_data['toeman'])
+    assert_raises(BadFactoryData,
+                  factory.validate_data, factory_data['snowman'])
+    assert_raises(BadFactoryData,
+                  factory.validate_data, factory_data['goman'])
+    assert_raises(BadFactoryData,
+                  factory.validate_data, factory_data['toeman'])
 
 
 def create_test():

@@ -33,10 +33,16 @@ def test_scenario():
         },
         'transport_data': {
             'foot': {
-                'spaces_per_turn': 2
+                'spaces_per_turn': 2,
+                'cost_table': {
+                    'grass': 1
+                }
             },
             'tires': {
-                'spaces_per_turn': 5
+                'spaces_per_turn': 5,
+                'cost_table': {
+                    'grass': 1
+                }
             }
         },
         'building_data': {

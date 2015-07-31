@@ -1,3 +1,4 @@
+from game.factories.factory import BadFactoryData
 from game.factories.armor_factory import ArmorFactory
 from nose.tools import assert_raises
 
@@ -23,8 +24,8 @@ def validate_test():
     }
     factory = ArmorFactory({}, MockClass)
     assert factory.validate_data(factory_data['plate'])
-    assert not factory.validate_data(factory_data['fake'])
-    assert not factory.validate_data([])
+    assert_raises(BadFactoryData, factory.validate_data, factory_data['fake'])
+    assert_raises(BadFactoryData, factory.validate_data, [])
 
 
 def create_test():

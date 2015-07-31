@@ -5,8 +5,12 @@ class Factory(Serializable):
 
     def __init__(self, factory_data, creation_class):
         for data in factory_data:
-            if(not self.validate_data(factory_data[data])):
-                raise BadFactoryData("Data for {0} is malformed".format(data))
+            try:
+                self.validate_data(factory_data[data])
+            except BadFactoryData as e:
+                raise BadFactoryData(
+                    "Error creating {0}: {1}".format(data, e.message)
+                )
 
         self.creation_class = creation_class
         self.factory_data = factory_data

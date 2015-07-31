@@ -1,5 +1,5 @@
 from game.serializable import Serializable
-from game.factories.factory import Factory
+from game.factories.factory import Factory, BadFactoryData
 from game.armor import Armor
 
 
@@ -10,7 +10,7 @@ class ArmorFactory(Factory):
 
     def validate_data(self, data):
         if('starting_health' not in data):
-            return False
+            raise BadFactoryData("starting_health not found")
         else:
             return True
 

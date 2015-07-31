@@ -1,6 +1,6 @@
 from game.unit import Unit
 from game.coordinate import Coordinate
-from game.factories.factory import Factory, BadFactoryRequest
+from game.factories.factory import Factory, BadFactoryRequest, BadFactoryData
 
 
 class UnitFactory(Factory):
@@ -14,13 +14,15 @@ class UnitFactory(Factory):
         Factory.__init__(self, factory_data, unit_class)
 
     def validate_data(self, data):
-        if(self.transport_factory.can_make(data['transport']) and
-           self.weapon_factory.can_make(data['weapon']) and
-           self.armor_factory.can_make(data['armor']) and
-           'cost' in data):
-            return True
-        else:
-            return False
+        if not self.transport_factory.can_make(data['transport']):
+            raise BadFactoryData("transport_factory cannot make transport")
+        elif not self.weapon_factory.can_make(data['weapon']):
+            raise BadFactoryData("weapon_factory cannot make weapon")
+        elif not self.armor_factory.can_make(data['armor']):
+            raise BadFactoryData("armor_factory cannot make weapon")
+        elif 'cost' not in data:
+            raise BadFactoryData("cost not found")
+        return True
 
     def create(self, name, army, coordinate=Coordinate(0, 0)):
         data = self.get_data(name)

@@ -1,5 +1,5 @@
 from game.transport import Transport
-from game.factories.factory import Factory
+from game.factories.factory import Factory, BadFactoryData
 from game.serializable import Serializable
 
 
@@ -11,9 +11,9 @@ class TransportFactory(Factory):
 
     def validate_data(self, data):
         if('spaces_per_turn' not in data):
-            return False
+            raise BadFactoryData("spaces_per_turn not found")
         elif('cost_table' not in data):
-            return False
+            raise BadFactoryData("cost_table not found")
         else:
             return True
 

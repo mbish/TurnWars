@@ -1,13 +1,13 @@
 from game.coordinate import Coordinate
 from game.serializable import Serializable
-from game.path_finder import NoPathFound, PathFinder
+from game.path_finder import NoPathFound
 
 
 class Game(Serializable):
 
-    def __init__(self, scenario, path_finder=PathFinder):
+    def __init__(self, scenario, path_finder):
         self.scenario = scenario
-        self.path_finder = path_finder(self._get_board())
+        self.path_finder = path_finder
 
     def _get_board(self):
         return self.scenario.get_board()
@@ -24,10 +24,11 @@ class Game(Serializable):
     def unit_at(self, coordinate):
         return self.scenario.unit_at(coordinate)
 
+    # this does need to be a full unit any uid lookup
+    # should be done outside of this function
     def move(self, unit, coordinate):
         if(self.scenario.space_occupied(coordinate)):
             return
-        unit = self._find_unit(unit)
         army = self.scenario._find_army(unit.army)
         if(not army.is_turn()):
             return
@@ -115,6 +116,12 @@ class Game(Serializable):
 
 
 class InvalidGameCreation(Exception):
+
+    def __init__(self, message):
+        Exception.__init__(self, message)
+
+
+class InvalidUnit(Exception):
 
     def __init__(self, message):
         Exception.__init__(self, message)

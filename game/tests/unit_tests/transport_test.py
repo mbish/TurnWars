@@ -7,7 +7,7 @@ def bad_constructor_test():
 
 
 def move_test():
-    transport = Transport('tred', 10, 20)
+    transport = Transport('tred', 10, {}, 20)
     assert transport.get_spaces_left() == 10
     transport.move(5)
     assert transport.get_spaces_left() == 5
@@ -17,7 +17,7 @@ def move_test():
 
 
 def fuel_test():
-    transport = Transport('tred', 30, 10)
+    transport = Transport('tred', 30, {}, 10)
     assert transport.get_spaces_left() == 10
     assert_raises(BadTransportRequest, transport.move, 20)
     transport.refuel()
@@ -29,7 +29,7 @@ def fuel_test():
 
 
 def non_fuel_test():
-    transport = Transport('foot', 10)
+    transport = Transport('foot', 10, {})
     assert not transport.uses_fuel()
     assert transport.get_spaces_left() == 10
     transport.move(5)
@@ -41,7 +41,7 @@ def non_fuel_test():
 
 
 def serialize_test():
-    transport = Transport('pogo-stick', 2)
+    transport = Transport('pogo-stick', 2, {})
     json_string = (
         '{"spaces_left": 2, "fuel": '
         '-1, "name": "pogo-stick"}'

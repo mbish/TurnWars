@@ -10,6 +10,7 @@ from game.factories.scenario_builder import ScenarioBuilder
 from game.factories.transport_factory import TransportFactory
 from game.coordinate import Coordinate
 from game.game_engine import Game
+from game.path_finder import NoPathFound, PathFinder
 
 
 def load_scenario(scenario_metadata, loader):
@@ -47,4 +48,7 @@ def load_scenario(scenario_metadata, loader):
         scenario.set_starting_money(army['money'], army_name)
 
     scenario = scenario.pop_instance()
-    return Game(scenario)
+
+    # I don't love this, it's sort of like glue
+    path_finder = PathFinder(scenario.get_board())
+    return Game(scenario, path_finder)

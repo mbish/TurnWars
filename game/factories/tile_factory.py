@@ -1,6 +1,6 @@
 from game.tile import Tile
 from game.serializable import Serializable
-from game.factories.factory import Factory, BadFactoryData, BadFactoryRequest
+from game.factories.factory import Factory, BadFactoryData
 
 
 class TileFactory(Factory):
@@ -10,10 +10,12 @@ class TileFactory(Factory):
         return
 
     def validate_data(self, data):
-        if('cover' not in data or
-           'non_passables' not in data or
-           'events' not in data):
-            return False
+        if 'cover' not in data:
+            raise BadFactoryData("cover not found")
+        elif 'non_passables' not in data:
+            raise BadFactoryData("non_passables not found")
+        elif 'events' not in data:
+            raise BadFactoryData("events not found")
         else:
             return True
 

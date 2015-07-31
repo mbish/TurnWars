@@ -94,13 +94,14 @@ class PathFinder:
                 except BadCoordinateCreation:
                     continue
 
-                if(self.board.is_on_board(to_position)):
+                if self.board.is_on_board(to_position):
                     try:
                         path = self. get_path(cost_table, from_position,
                                               to_position)
 
-                        path.remove(from_position)
-                        if(self.path_cost(path, cost_table) <= max_cost):
+                        if from_position in path:
+                            path.remove(from_position)
+                        if self.path_cost(path, cost_table) <= max_cost:
                             can_move_to.append(to_position)
                     except NoPathFound:
                         continue

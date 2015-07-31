@@ -1,5 +1,5 @@
 import json
-from game.factories.factory import Factory
+from game.factories.factory import Factory, BadFactoryData
 from game.board import Board
 import types
 
@@ -11,13 +11,12 @@ class BoardFactory(Factory):
         self.tile_factory = tile_factory
 
     def validate_data(self, data):
-        valid = True
-        if('tiles' not in data):
-            valid = False
-        elif(not isinstance(data['tiles'], list)):
-            valid = False
+        if 'tiles' not in data:
+            raise BadFactoryData("tiles not found")
+        elif not isinstance(data['tiles'], list):
+            raise BadFactoryData("tiles is not a list")
 
-        return valid
+        return True
 
     def create(self, name):
         data = self.get_data(name)

@@ -1,5 +1,5 @@
 from game.serializable import Serializable
-from game.factories.factory import Factory
+from game.factories.factory import Factory, BadFactoryData
 from game.weapon import Weapon
 
 
@@ -10,9 +10,10 @@ class WeaponFactory(Factory):
         return
 
     def validate_data(self, data):
-        if('uses' not in data or
-                'attack_strength' not in data):
-            return False
+        if 'uses' not in data:
+            raise BadFactoryData("uses not found")
+        if 'attack_strength' not in data:
+            raise BadFactoryData("attack_strength not found")
         else:
             return True
 

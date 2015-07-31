@@ -1,3 +1,4 @@
+from game.factories.factory import BadFactoryData
 from game.factories.weapon_factory import WeaponFactory
 from nose.tools import assert_raises
 
@@ -43,8 +44,10 @@ def validation_test():
     }
     factory = WeaponFactory({}, MockClass)
     assert factory.validate_data(factory_data['cannon'])
-    assert not factory.validate_data(factory_data['no_uses'])
-    assert not factory.validate_data(factory_data['no_strength'])
+    assert_raises(BadFactoryData,
+                  factory.validate_data, factory_data['no_uses'])
+    assert_raises(BadFactoryData,
+                  factory.validate_data, factory_data['no_strength'])
     assert factory.validate_data(factory_data['no_list'])
 
 
