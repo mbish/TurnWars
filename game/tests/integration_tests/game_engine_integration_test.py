@@ -2,9 +2,8 @@ from game.game_engine import Game
 from game.loader import Loader
 from game.game_loader import *
 
-
-def game_integration_test():
-    game = load_scenario({
+def test_game():
+    return load_scenario({
         "armor_data": "armor.json",
         "weapon_data": "weapon.json",
         "transport_data": "transport.json",
@@ -15,6 +14,40 @@ def game_integration_test():
         "board_data": "board.json",
         "layout_data": "scenarios/basic_integration.json"
     }, Loader("./game/tests/integration_tests/resources"))
+
+
+def out_of_bounds_test():
+    game = test_game()
+    game.do({
+        'name': 'move',
+        'unit': {
+            'x': 1,
+            'y': 0
+        },
+        'to': {
+            'x': 1,
+            'y': -1
+        }
+    })
+    assert game.unit_at(Coordinate(1, 0)).name == 'footman'
+
+def onto_buildings_test():
+    game = test_game()
+    game.do({
+        'name': 'move',
+        'unit': {
+            'x': 1,
+            'y': 0
+        },
+        'to': {
+            'x': 0,
+            'y': 0
+        }
+    })
+    assert game.unit_at(Coordinate(0, 0)).name == 'footman'
+
+def double_move_test():
+    game = test_game()
     game.do({
         'name': 'move',
         'unit': {
@@ -23,6 +56,68 @@ def game_integration_test():
         },
         'to': {
             'x': 2,
-            'y': 0
+            'y': 1
         }
-    }),
+    })
+    assert game.unit_at(Coordinate(2, 1)).name == 'footman'
+    game.do({
+        'name': 'move',
+        'unit': {
+            'x': 2,
+            'y': 1
+        },
+        'to': {
+            'x': 3,
+            'y': 1
+        }
+    })
+    assert game.unit_at(Coordinate(2, 1)).name == 'footman'
+    assert game.unit_at(Coordinate(3, 1)) == None
+
+def out_of_turn_test():
+    game = test_game()
+    game.do({
+        'name': 'move',
+        'unit': {
+            'x': 10,
+            'y': 11
+        },
+        'to': {
+            'x': 10,
+            'y': 10
+        }
+    })
+    assert game.unit_at(Coordinate(10, 10)) == None
+
+
+def unit_collision_test():
+    game = test_game()
+    game.do({
+        'name': 'move',
+        'unit': {
+            'x': 5,
+            'y': 5
+        },
+        'to': {
+            'x': 6,
+            'y': 5
+        }
+    })
+    assert game.unit_at(Coordinate(5, 5)).name == "footman"
+    assert game.unit_at(Coordinate(6, 5)).name == "footman"
+
+
+def unit_attack_test():
+    game = test_game()
+    game.do({
+        'name': 'attack',
+        'attacker': {
+            'x': 5,
+            'y': 5
+        },
+        'defender': {
+            'x': 6,
+            'y': 5
+        }
+    })
+    assert game.unit_at(Coordinate(6, 5)).get_health() == 9

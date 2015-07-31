@@ -32,8 +32,11 @@ class Unit(Serializable):
         self.coordinate = coordinate
 
     def move(self, coordinate, distance):
-        self.transport.move(distance)
-        return self.set_coordinate(coordinate)
+        if self.can_move(distance):
+            self.transport.move(distance)
+            return self.set_coordinate(coordinate)
+        else:
+            raise UnitDoubleMoveRequest()
 
     def do_damage(self, damage):
         self.armor.do_damage(damage)
@@ -56,6 +59,8 @@ class Unit(Serializable):
         return self.transport.get_name()
 
     def can_move(self, distance):
+        if self.transport.has_moved():
+            return False
         return self.movement_range() >= distance
 
     def get_attack_strength(self):
@@ -80,3 +85,8 @@ class Unit(Serializable):
             'army': self.army,
             'id': self.uid
         }
+
+
+class UnitDoubleMoveRequest(Exception):
+    def __init__(self, message=""):
+        Exception.__init__(self, message)

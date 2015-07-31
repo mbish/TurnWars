@@ -13,6 +13,7 @@ class Transport(Serializable):
         self.starting_fuel = starting_fuel
         self.name = name
         self.cost_table = cost_table
+        self.moved_this_turn = False
 
     def uses_fuel(self):
         return self.fuel != -1
@@ -30,6 +31,7 @@ class Transport(Serializable):
             self.use_fuel(distance)
 
         self.spaces_left -= distance
+        self.moved_this_turn = True
 
     def get_name(self):
         return self.name
@@ -40,6 +42,7 @@ class Transport(Serializable):
 
     def reset(self):
         self.spaces_left = self.spaces_per_turn
+        self.moved_this_turn = False
 
     def flat(self):
         return {
@@ -47,6 +50,9 @@ class Transport(Serializable):
             'spaces_left': self.spaces_left,
             'fuel': self.fuel,
         }
+
+    def has_moved(self):
+        return self.moved_this_turn
 
     def get_spaces_left(self):
         if(self.uses_fuel()):

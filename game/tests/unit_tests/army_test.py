@@ -92,7 +92,6 @@ def serializable_test():
     unit = MockUnit()
     army.add_unit(unit)
     json_string = army.as_json()
-    print json_string
     assert json_string == (
         '{"units": ["Im a unit"], "turn": 1, "buildings": ["Im a building 5", '
         '"Im a building 7", "Im a building 9"], "name": "dragon"}'

@@ -29,9 +29,11 @@ class MockTransport:
         self.spaces_per_turn = spaces_per_turn
         self.fuel = fuel
         self.name = name
+        self.moved_this_turn = False
 
     def move(self, distance):
         self.spaces_left -= distance
+        self.moved_this_turn = True
 
     def get_spaces_left(self):
         return self.spaces_left
@@ -41,6 +43,9 @@ class MockTransport:
 
     def reset(self):
         self.spaces_left = self.spaces_per_turn
+
+    def has_moved(self):
+        return self.moved_this_turn
 
 
 class MockWeapon:
@@ -100,7 +105,7 @@ def move_test():
     assert coordinate.x == 5
     assert coordinate.y == 5
     assert not unit.can_move(5)
-    assert unit.can_move(2)
+    assert not unit.can_move(2)
 
 
 def attack_test():

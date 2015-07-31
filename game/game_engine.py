@@ -22,7 +22,10 @@ class Game(Serializable):
         return self.unit_at(coordinate).uid
 
     def unit_at(self, coordinate):
-        return self.scenario.unit_at(coordinate)
+        try:
+            return self.scenario.unit_at(coordinate)
+        except StopIteration:
+            return None
 
     # this does need to be a full unit any uid lookup
     # should be done outside of this function
@@ -41,11 +44,8 @@ class Game(Serializable):
             if(self.path_finder.path_cost(path, cost_table) <=
                unit.movement_range()):
                 unit.move(coordinate, len(path))
-            else:
-                print "no path found"
         except NoPathFound as e:
-            print "exception"
-            print e
+            print(e)
             return
 
     def attack(self, attacker, defender):
@@ -60,15 +60,15 @@ class Game(Serializable):
             army.buy_unit(unit_name, location)
 
     def do(self, message):
-        self.canonicalize(message)
         try:
+            self.canonicalize(message)
             if(message['name'] == 'move'):
                 unit = message['unit']
                 move_to = Coordinate(message['to']['x'], message['to']['y'])
                 self.move(unit, move_to)
             elif(message['name'] == 'attack'):
-                attacker = self._find_unit(message['attacker'])
-                defender = self._find_unit(message['defender'])
+                attacker = message['attacker']
+                defender = message['defender']
                 self.attack(attacker, defender)
             elif(message['name'] == 'build'):
                 army = self._find_army(message['army'])
@@ -78,9 +78,11 @@ class Game(Serializable):
                 army = self._find_army(message['army'])
                 if(army.is_turn()):
                     army.end_turn()
+                self.scenario.next_army()
 
         except Exception as e:
             # need to do a better job of error reporting here
+            print(e)
             return self.flat()
 
         return self.flat()
@@ -99,15 +101,15 @@ class Game(Serializable):
 
     # maps between various verions of the message protocol
     def canonicalize(self, message):
-        if 'unit' in message:
-            if isinstance(message['unit'], dict):
-                if('x' in message['unit'] and 'y' in message['unit']):
-                    location = Coordinate(message['unit']['x'],
-                                          message['unit']['y'])
-                    print "got uid of unit"
-                    message['unit'] = self._uid_at(location)
-                elif('id' in message['unit']):
-                    message['unit'] = self._find_unit(message['unit']['id'])
+        for unit_key in ['unit', 'attacker', 'defender']:
+            if unit_key in message:
+                if isinstance(message[unit_key], dict):
+                    if('x' in message[unit_key] and 'y' in message[unit_key]):
+                        location = Coordinate(message[unit_key]['x'],
+                                              message[unit_key]['y'])
+                        message[unit_key] = self.unit_at(location)
+                    elif('id' in message[unit_key]):
+                        message[unit_key] = self._find_unit(message[unit_key]['id'])
 
     def flat(self):
         return {

@@ -89,9 +89,12 @@ class Army(Serializable):
         return found_unit
 
     def get_unit_at(self, coordinate):
-        found_unit = next(unit for unit in self.unit_table if
-                          unit.at(coordinate))
-        return found_unit
+        try:
+            found_unit = next(unit for unit in self.unit_table if
+                              unit.at(coordinate))
+            return found_unit
+        except StopIteration:
+            return None
 
     def income(self):
         amount = 0

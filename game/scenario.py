@@ -8,6 +8,7 @@ class Scenario(Serializable):
         self.armies = []
         self.object_coordinates = []
         self.board = 0
+        self.current_army = 0
 
     def validate(self):
         if not self.board:
@@ -56,6 +57,10 @@ class Scenario(Serializable):
             army.take_turn()
         self.armies.append(army)
         return len(self.armies)
+
+    def next_army(self):
+        self.current_army = (self.current_army + 1) % len(self.armies)
+        return self.armies[self.current_army].take_turn()
 
     def find_unit(self, unit_id):
         for army in self.armies:

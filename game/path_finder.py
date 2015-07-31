@@ -8,8 +8,6 @@ class PathFinder:
         self.board = board
 
     def get_path(self, cost_table, from_position, to_position):
-        print from_position
-        print to_position
         evaluated = []
         queue = [from_position]
         path = {}

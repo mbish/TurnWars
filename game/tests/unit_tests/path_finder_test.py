@@ -56,7 +56,6 @@ def get_path_test():
                            Coordinate(0, 0), Coordinate(1, 2))
 
     json_path = [tile.as_json() for tile in path]
-    print json_path
     assert json_path == ['{"y": 0, "x": 1}',
                          '{"y": 0, "x": 2}', '{"y": 0, "x": 3}',
                          '{"y": 0, "x": 4}', '{"y": 0, "x": 5}',
