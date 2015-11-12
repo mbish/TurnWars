@@ -1,15 +1,19 @@
-import socket
-import struct
+from twisted.internet import reactor, defer
+from twisted.internet.protocol import Factory, Protocol
+from twisted.internet.endpoints import TCP4ClientEndpoint
+from twisted.protocols import basic
+import json
 
-TCP_IP = '127.0.0.1'
-TCP_PORT = 1025
-BUFFER_SIZE = 2**32
+class ClientProtocolTest(basic.Int32StringReceiver):
+    def __init__(self):
+        self.results = []
 
-def send(message):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((TCP_IP, TCP_PORT))
-    packed_message = struct.pack("!i{}s".format(len(message)), len(message), message)
-    s.send(packed_message)
-    s.close()
+    def stringReceived(self, data):
+        callback = self.results.pop(0)
+        callback.callback(json.loads(data))
 
-send("hello world")
+    def send(self, data):
+        callback = defer.Deferred()
+        self.results.append(callback)
+        self.sendString(json.dumps(data))
+        return callback
