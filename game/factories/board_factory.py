@@ -28,4 +28,4 @@ class BoardFactory(Factory):
                 new_tile = self.tile_factory.create(tile)
                 tiles[row].append(new_tile)
 
-        return self.creation_class(tiles)
+        return self.creation_class(tiles, self.tile_factory.get_all_data())

@@ -1,3 +1,4 @@
+from time import time
 from game.coordinate import Coordinate
 from game.serializable import Serializable
 from game.exceptions import NoPathFound
@@ -114,4 +115,5 @@ class Game(Serializable):
     def flat(self):
         return {
             'scenario': self.scenario.flat(),
+            'timestamp': int(time()),
         }

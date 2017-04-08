@@ -5,7 +5,7 @@ from game.exceptions import InvalidBoardDimensions
 
 class Board(Serializable):
 
-    def __init__(self, tiles):
+    def __init__(self, tiles, tile_data):
         if(len(tiles) == 0):
             raise InvalidBoardDimensions("Refusing to create empty board")
 
@@ -16,6 +16,7 @@ class Board(Serializable):
                     "Expected dimension {0} got {1}".format(
                         len(row), row_length))
         self.tiles = tiles
+        self.tile_data = tile_data
         return
 
     def get_dimensions(self):
@@ -66,5 +67,8 @@ class Board(Serializable):
             for col in range(len(self.tiles[row])):
                 serial_tiles[row].append(self.tiles[row][col].flat())
 
-        return serial_tiles
+        return {
+            'tiles': serial_tiles,
+            'tile_data': self.tile_data,
+        }
 

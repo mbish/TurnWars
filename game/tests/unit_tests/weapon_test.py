@@ -37,7 +37,6 @@ def serializable_test():
     json_string = ('{"attack_strength": 4, "name": "sword",'
             ' "non_targetables": "", "range": 3, "uses_left": {"plane": 0}}')
 
-    print(weapon.as_json())
     assert weapon.as_json() == json_string
 
 

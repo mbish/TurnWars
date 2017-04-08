@@ -9,6 +9,7 @@ class Scenario(Serializable):
         self.armies = []
         self.object_coordinates = []
         self.board = 0
+        self.tile_data = {}
         self.current_army = 0
 
     def validate(self):

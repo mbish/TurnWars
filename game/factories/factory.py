@@ -34,5 +34,8 @@ class Factory(Serializable):
                 "Cannot find factory data for {0}".format(name))
         return self.factory_data[name]
 
+    def get_all_data(self):
+        return self.factory_data
+
     def flat(self):
         return self.factory_data

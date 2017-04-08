@@ -19,6 +19,7 @@ class TileFactory(Factory):
             raise BadFactoryData("events not found")
         else:
             return True
+        return factory_data
 
     def create(self, name):
         data = self.get_data(name)

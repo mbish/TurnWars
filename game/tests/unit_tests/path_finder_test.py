@@ -75,7 +75,6 @@ def get_path_test():
     path = finder.get_path(cost_table,
                            Coordinate(0, 0), Coordinate(2, 0))
     json_path = [tile.as_json() for tile in path]
-    print(json_path)
     assert json_path == ['{"x": 1, "y": 0}', '{"x": 2, "y": 0}']
 
     path = finder.get_path(cost_table,
@@ -109,7 +108,6 @@ def get_range_test():
                                  Coordinate(0, 6), 2)
 
     json_path = [tile.as_json() for tile in path]
-    print(json_path)
     assert json_path == ['{"x": 0, "y": 5}', '{"x": 1, "y": 6}']
 
     path = finder.tiles_in_range(cost_table,

@@ -1,0 +1,330 @@
+{
+    "scenario": {
+        "board": [
+            [
+                "grass",
+                "rocks",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass"
+            ],
+            [
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass"
+            ],
+            [
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass"
+            ],
+            [
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass"
+            ],
+            [
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass"
+            ],
+            [
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass"
+            ],
+            [
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass"
+            ],
+            [
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass"
+            ],
+            [
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass"
+            ],
+            [
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass"
+            ],
+            [
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass"
+            ],
+            [
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass"
+            ],
+            [
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass",
+                "grass"
+            ]
+        ],
+        "armies": [
+            {
+                "name": "dragon",
+                "units": [
+                    {
+                        "name": "footman",
+                        "transport": {
+                            "name": "foot",
+                            "spaces_left": 2,
+                            "fuel": -1
+                        },
+                        "weapon": {
+                            "name": "sword",
+                            "attack_strength": 1,
+                            "non_targetables": "",
+                            "range": 1,
+                            "uses_left": 1
+                        },
+                        "armor": {
+                            "name": "plate",
+                            "health": 10
+                        },
+                        "coordinate": {
+                            "x": 1,
+                            "y": 0
+                        },
+                        "army": "dragon",
+                        "id": 140659157503112
+                    },
+                    {
+                        "name": "footman",
+                        "transport": {
+                            "name": "foot",
+                            "spaces_left": 2,
+                            "fuel": -1
+                        },
+                        "weapon": {
+                            "name": "sword",
+                            "attack_strength": 1,
+                            "non_targetables": "",
+                            "range": 1,
+                            "uses_left": 1
+                        },
+                        "armor": {
+                            "name": "plate",
+                            "health": 10
+                        },
+                        "coordinate": {
+                            "x": 5,
+                            "y": 5
+                        },
+                        "army": "dragon",
+                        "id": 140659157503392
+                    }
+                ],
+                "buildings": [
+                    {
+                        "name": "castle",
+                        "coordinate": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "buildable_units": [
+                            "dragon",
+                            "catapult",
+                            "horseman"
+                        ]
+                    }
+                ],
+                "turn": 1
+            },
+            {
+                "name": "salamander",
+                "units": [
+                    {
+                        "name": "footman",
+                        "transport": {
+                            "name": "foot",
+                            "spaces_left": 2,
+                            "fuel": -1
+                        },
+                        "weapon": {
+                            "name": "sword",
+                            "attack_strength": 1,
+                            "non_targetables": "",
+                            "range": 1,
+                            "uses_left": 1
+                        },
+                        "armor": {
+                            "name": "plate",
+                            "health": 10
+                        },
+                        "coordinate": {
+                            "x": 10,
+                            "y": 11
+                        },
+                        "army": "salamander",
+                        "id": 140659157569888
+                    },
+                    {
+                        "name": "footman",
+                        "transport": {
+                            "name": "foot",
+                            "spaces_left": 2,
+                            "fuel": -1
+                        },
+                        "weapon": {
+                            "name": "sword",
+                            "attack_strength": 1,
+                            "non_targetables": "",
+                            "range": 1,
+                            "uses_left": 1
+                        },
+                        "armor": {
+                            "name": "plate",
+                            "health": 10
+                        },
+                        "coordinate": {
+                            "x": 6,
+                            "y": 5
+                        },
+                        "army": "salamander",
+                        "id": 140659157570168
+                    }
+                ],
+                "buildings": [
+                    {
+                        "name": "castle",
+                        "coordinate": {
+                            "x": 11,
+                            "y": 11
+                        },
+                        "buildable_units": [
+                            "dragon",
+                            "catapult",
+                            "horseman"
+                        ]
+                    }
+                ],
+                "turn": 0
+            }
+        ]
+    }
+}

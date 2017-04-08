@@ -48,6 +48,8 @@ def onto_buildings_test():
 
 def double_move_test():
     game = test_game()
+    print(game.flat())
+    assert False
     game.do({
         'name': 'move',
         'unit': {
