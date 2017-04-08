@@ -121,6 +121,8 @@ class Army(Serializable):
             'name': self.name,
             'units': [unit.flat() for unit in self.unit_table],
             'buildings': [building.flat() for building in self.buildings],
-            'turn': self.turn
+            'turn': self.turn,
+            'unit_data': self.unit_factory.flat(),
+            'building_data': self.building_factory.flat()
         }
 

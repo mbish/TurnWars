@@ -66,3 +66,11 @@ class UnitFactory(Factory):
             unit_data[equipment] = self.equipment_info(name, equipment)
 
         return unit_data
+
+    def flat(self):
+        return {
+            'armor': self.armor_factory.flat(),
+            'weapon': self.weapon_factory.flat(),
+            'transport': self.transport_factory.flat(),
+            'units': self.factory_data
+        }

@@ -149,4 +149,3 @@ class Scenario(Serializable):
             'board': self.board.flat(),
             'armies': [army.flat() for army in self.armies],
         }
-
