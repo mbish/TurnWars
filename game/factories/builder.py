@@ -1,3 +1,5 @@
+from game.exceptions import BuildInvalid
+
 class Builder:
     def __init__(self, creation_class):
         self.creation_class = creation_class
@@ -12,8 +14,3 @@ class Builder:
         instance = self._instance
         self._instance = self.creation_class()
         return instance
-
-
-class BuildInvalid(Exception):
-    def __init__(self, message=''):
-        super(BuildInvalid, self).__init__(message)

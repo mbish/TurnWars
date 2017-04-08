@@ -1,4 +1,5 @@
 from game.serializable import Serializable
+from game.exceptions import InvalidArmyRequest
 
 
 class Army(Serializable):
@@ -123,8 +124,3 @@ class Army(Serializable):
             'turn': self.turn
         }
 
-
-class InvalidArmyRequest(Exception):
-
-    def __init__(self, message):
-        Exception.__init__(self, message)

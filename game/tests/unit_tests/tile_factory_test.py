@@ -1,5 +1,5 @@
 from game.factories.tile_factory import TileFactory
-from game.factories.factory import BadFactoryData, BadFactoryRequest
+from game.exceptions import BadFactoryData, BadFactoryRequest
 from nose.tools import assert_raises
 
 
@@ -80,8 +80,7 @@ def get_data_test():
 def serializable_test():
     factory_data = make_factory_data()
     factory = TileFactory(factory_data, MockTile)
-    json_string = (
-        '{"plains": {"non_passables": {}, "cover": 0, "events": {}}, '
-        '"forest": {"non_passables": {"tred": 1}, "cover": 5, "events": {}}}'
-    )
+    json_string = ('{"forest": {"cover": 5, "events": {}, "non_passables": '
+        '{"tred": 1}}, "plains": {"cover": 0, "events": {}, '
+        '"non_passables": {}}}')
     assert factory.as_json() == json_string

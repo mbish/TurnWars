@@ -1,4 +1,5 @@
-from game.transport import Transport, BadTransportRequest, BadTransportCreation
+from game.transport import Transport
+from game.exceptions import BadTransportRequest, BadTransportCreation
 from nose.tools import assert_raises
 
 
@@ -42,8 +43,5 @@ def non_fuel_test():
 
 def serialize_test():
     transport = Transport('pogo-stick', 2, {})
-    json_string = (
-        '{"spaces_left": 2, "fuel": '
-        '-1, "name": "pogo-stick"}'
-    )
+    json_string = ('{"fuel": -1, "name": "pogo-stick", "spaces_left": 2}')
     assert transport.as_json() == json_string

@@ -1,5 +1,5 @@
 from game.factories.unit_factory import UnitFactory
-from game.factories.factory import BadFactoryRequest, BadFactoryData
+from game.exceptions import BadFactoryRequest, BadFactoryData
 from nose.tools import assert_raises
 
 

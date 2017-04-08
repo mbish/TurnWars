@@ -1,7 +1,8 @@
 from game.serializable import Serializable
-from game.factories.factory import Factory, BadFactoryData
+from game.factories.factory import Factory
 from game.coordinate import Coordinate
 from game.building import Building
+from game.exceptions import BadFactoryData
 
 
 class BuildingFactory(Factory):

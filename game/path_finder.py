@@ -1,5 +1,6 @@
 import types
-from game.coordinate import Coordinate, BadCoordinateCreation
+from game.coordinate import Coordinate
+from game.exceptions import BadCoordinateCreation, NoPathFound
 
 
 class PathFinder:
@@ -118,9 +119,3 @@ class PathFinder:
         horizontal_distance = abs(start.x - goal.x)
         virtical_distance = abs(start.y - goal.y)
         return horizontal_distance + virtical_distance
-
-
-class NoPathFound(Exception):
-
-    def __init__(self, message):
-        Exception.__init__(self, message)

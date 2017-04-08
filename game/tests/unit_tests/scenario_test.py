@@ -1,4 +1,5 @@
-from game.scenario import Scenario, BadScenarioData
+from game.scenario import Scenario
+from game.exceptions import BadScenarioData
 from nose.tools import assert_raises
 
 

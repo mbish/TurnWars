@@ -1,4 +1,5 @@
 from game.serializable import Serializable
+from game.exceptions import BadCoordinateCreation
 
 
 class Coordinate(Serializable):
@@ -30,6 +31,3 @@ class Coordinate(Serializable):
         }
 
 
-class BadCoordinateCreation(Exception):
-    def __init__(self, message):
-        Exception.__init__(self, message)

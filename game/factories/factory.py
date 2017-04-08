@@ -1,4 +1,5 @@
 from game.serializable import Serializable
+from game.exceptions import BadFactoryData, BadFactoryRequest
 
 
 class Factory(Serializable):
@@ -35,15 +36,3 @@ class Factory(Serializable):
 
     def flat(self):
         return self.factory_data
-
-
-class BadFactoryData(Exception):
-
-    def __init__(self, message):
-        Exception.__init__(self, message)
-
-
-class BadFactoryRequest(Exception):
-
-    def __init__(self, message):
-        Exception.__init__(self, message)

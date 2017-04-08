@@ -1,4 +1,5 @@
-from game.army import Army, InvalidArmyRequest
+from game.army import Army
+from game.exceptions import InvalidArmyRequest
 from nose.tools import assert_raises
 
 
@@ -92,10 +93,11 @@ def serializable_test():
     unit = MockUnit()
     army.add_unit(unit)
     json_string = army.as_json()
+    print(json_string)
     assert json_string == (
-        '{"units": ["Im a unit"], "turn": 1, "buildings": ["Im a building 5", '
-        '"Im a building 7", "Im a building 9"], "name": "dragon"}'
-    )
+        '{"buildings": ["Im a building 5", "Im a building 7",'
+        ' "Im a building 9"], "name": "dragon", "turn": 1, "units": '
+        '["Im a unit"]}')
 
 
 def find_unit_test():

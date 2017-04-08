@@ -15,6 +15,6 @@ def can_build_test():
 
 def serializable_test():
     building = Building('house', 10, ['footman'], MockCoordinate())
-    assert building.as_json() == (
-        '{"coordinate": "here", '
-        '"buildable_units": ["footman"], "name": "house"}')
+    print (building.as_json())
+    assert building.as_json() == ('{"buildable_units": ["footman"], '
+            '"coordinate": "here", "name": "house"}')

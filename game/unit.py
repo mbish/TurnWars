@@ -1,4 +1,5 @@
 from game.serializable import Serializable
+from game.exceptions import BadMoveRequest
 
 
 class Unit(Serializable):
@@ -36,7 +37,7 @@ class Unit(Serializable):
             self.transport.move(distance)
             return self.set_coordinate(coordinate)
         else:
-            raise UnitDoubleMoveRequest()
+            raise BadMoveRequest()
 
     def do_damage(self, damage):
         self.armor.do_damage(damage)
@@ -85,8 +86,3 @@ class Unit(Serializable):
             'army': self.army,
             'id': self.uid
         }
-
-
-class UnitDoubleMoveRequest(Exception):
-    def __init__(self, message=""):
-        Exception.__init__(self, message)

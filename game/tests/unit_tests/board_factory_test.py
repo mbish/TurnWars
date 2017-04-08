@@ -1,5 +1,5 @@
 from game.factories.board_factory import BoardFactory
-from game.factories.factory import BadFactoryData
+from game.exceptions import BadFactoryData
 from nose.tools import assert_raises
 
 

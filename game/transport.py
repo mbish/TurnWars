@@ -1,4 +1,5 @@
 from game.serializable import Serializable
+from game.exceptions import BadTransportCreation, BadTransportRequest
 
 
 class Transport(Serializable):
@@ -68,12 +69,3 @@ class Transport(Serializable):
                 "Cannot use {1} fuel only have {0}".format(amount, self.fuel))
         self.fuel -= amount
 
-
-class BadTransportRequest(Exception):
-    def __init__(self, message):
-        Exception.__init__(self, message)
-
-
-class BadTransportCreation(Exception):
-    def __init__(self, message):
-        Exception.__init__(self, message)

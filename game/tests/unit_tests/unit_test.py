@@ -143,11 +143,9 @@ def attack_strength_test():
 
 def serialization_test():
     unit = test_unit()
-    json_string = (
-        '{"name": "tank", "army": "dragon", "armor": "plate", "weapon": '
-        '"cannon", "coordinate": {"y": 4, "x": 1}, '
-        '"id": 0, "transport": "tred"}'
-    )
+    json_string = ('{"armor": "plate", "army": "dragon", '
+        '"coordinate": {"x": 1, "y": 4}, "id": 0, "name": "tank", '
+        '"transport": "tred", "weapon": "cannon"}')
     assert unit.as_json() == json_string
 
 

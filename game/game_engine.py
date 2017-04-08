@@ -1,6 +1,6 @@
 from game.coordinate import Coordinate
 from game.serializable import Serializable
-from game.path_finder import NoPathFound
+from game.exceptions import NoPathFound
 
 
 class Game(Serializable):
@@ -115,15 +115,3 @@ class Game(Serializable):
         return {
             'scenario': self.scenario.flat(),
         }
-
-
-class InvalidGameCreation(Exception):
-
-    def __init__(self, message):
-        Exception.__init__(self, message)
-
-
-class InvalidUnit(Exception):
-
-    def __init__(self, message):
-        Exception.__init__(self, message)

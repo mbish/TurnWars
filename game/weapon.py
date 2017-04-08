@@ -1,4 +1,5 @@
 from game.serializable import Serializable
+from game.exceptions import BadWeaponCreation, BadWeaponRequest
 
 
 class Weapon(Serializable):
@@ -55,15 +56,3 @@ class Weapon(Serializable):
 
     def can_target(self, unit_type):
         return not (unit_type in self.non_targetables)
-
-
-class BadWeaponRequest(Exception):
-
-    def __init__(self, message):
-        Exception.__init__(self, message)
-
-
-class BadWeaponCreation(Exception):
-
-    def __init__(self, message):
-        Exception.__init__(self, message)

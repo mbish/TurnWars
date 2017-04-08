@@ -1,5 +1,5 @@
 from game.game_engine import Game
-from game.path_finder import NoPathFound
+from game.exceptions import NoPathFound
 
 
 class MockBoard:

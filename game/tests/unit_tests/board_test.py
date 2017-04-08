@@ -1,4 +1,5 @@
-from game.board import Board, InvalidBoardDimensions
+from game.board import Board
+from game.exceptions import InvalidBoardDimensions
 from game.coordinate import Coordinate
 from nose.tools import assert_raises, eq_
 

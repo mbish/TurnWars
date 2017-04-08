@@ -1,4 +1,4 @@
-from game.factories.factory import BadFactoryData
+from game.exceptions import BadFactoryData
 from game.factories.armor_factory import ArmorFactory
 from nose.tools import assert_raises
 

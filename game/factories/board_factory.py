@@ -1,6 +1,7 @@
 import json
-from game.factories.factory import Factory, BadFactoryData
+from game.factories.factory import Factory
 from game.board import Board
+from game.exceptions import BadFactoryData
 import types
 
 

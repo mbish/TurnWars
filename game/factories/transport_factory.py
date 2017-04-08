@@ -1,6 +1,7 @@
 from game.transport import Transport
-from game.factories.factory import Factory, BadFactoryData
+from game.factories.factory import Factory
 from game.serializable import Serializable
+from game.exceptions import BadFactoryData
 
 
 class TransportFactory(Factory):

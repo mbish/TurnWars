@@ -9,7 +9,7 @@ def bad_constructor_test():
 
 def serializable_test():
     coordinate = Coordinate(5, 5)
-    assert coordinate.as_json() == '{"y": 5, "x": 5}'
+    assert coordinate.as_json() == '{"x": 5, "y": 5}'
 
 
 def comparison_test():

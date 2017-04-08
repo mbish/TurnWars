@@ -1,4 +1,5 @@
-from game.path_finder import NoPathFound, PathFinder
+from game.exceptions import NoPathFound
+from game.path_finder import PathFinder
 from game.coordinate import Coordinate
 from nose.tools import assert_raises
 
@@ -56,16 +57,17 @@ def get_path_test():
                            Coordinate(0, 0), Coordinate(1, 2))
 
     json_path = [tile.as_json() for tile in path]
-    assert json_path == ['{"y": 0, "x": 1}',
-                         '{"y": 0, "x": 2}', '{"y": 0, "x": 3}',
-                         '{"y": 0, "x": 4}', '{"y": 0, "x": 5}',
-                         '{"y": 1, "x": 5}', '{"y": 2, "x": 5}',
-                         '{"y": 3, "x": 5}', '{"y": 4, "x": 5}',
-                         '{"y": 5, "x": 5}', '{"y": 5, "x": 4}',
-                         '{"y": 5, "x": 3}', '{"y": 4, "x": 3}',
-                         '{"y": 4, "x": 2}', '{"y": 4, "x": 1}',
-                         '{"y": 4, "x": 0}', '{"y": 3, "x": 0}',
-                         '{"y": 2, "x": 0}', '{"y": 2, "x": 1}']
+    assert json_path == ['{"x": 1, "y": 0}', '{"x": 2, "y": 0}',
+        '{"x": 3, "y": 0}', '{"x": 4, "y": 0}', 
+        '{"x": 5, "y": 0}', '{"x": 5, "y": 1}', 
+        '{"x": 5, "y": 2}', '{"x": 5, "y": 3}',
+        '{"x": 5, "y": 4}', '{"x": 5, "y": 5}',
+        '{"x": 4, "y": 5}', '{"x": 3, "y": 5}',
+        '{"x": 3, "y": 4}', '{"x": 2, "y": 4}',
+        '{"x": 1, "y": 4}', '{"x": 0, "y": 4}',
+        '{"x": 0, "y": 3}', '{"x": 0, "y": 2}',
+        '{"x": 1, "y": 2}']
+
 
     assert_raises(NoPathFound, finder.get_path, cost_table,
                   Coordinate(0, 0), Coordinate(3, 2))
@@ -73,7 +75,8 @@ def get_path_test():
     path = finder.get_path(cost_table,
                            Coordinate(0, 0), Coordinate(2, 0))
     json_path = [tile.as_json() for tile in path]
-    assert json_path == ['{"y": 0, "x": 1}', '{"y": 0, "x": 2}']
+    print(json_path)
+    assert json_path == ['{"x": 1, "y": 0}', '{"x": 2, "y": 0}']
 
     path = finder.get_path(cost_table,
                            Coordinate(0, 0), Coordinate(0, 0))
@@ -90,8 +93,8 @@ def get_range_test():
                                  Coordinate(0, 0), 3)
 
     json_path = [tile.as_json() for tile in path]
-    assert json_path == ['{"y": 0, "x": 1}', '{"y": 0, "x": 2}',
-                         '{"y": 0, "x": 3}']
+    assert json_path == ['{"x": 1, "y": 0}', '{"x": 2, "y": 0}',
+            '{"x": 3, "y": 0}']
 
     cost_table = {
         'plain': 2,
@@ -100,21 +103,21 @@ def get_range_test():
                                  Coordinate(0, 0), 4)
 
     json_path = [tile.as_json() for tile in path]
-    assert json_path == ['{"y": 0, "x": 1}', '{"y": 0, "x": 2}']
+    assert json_path == ['{"x": 1, "y": 0}', '{"x": 2, "y": 0}']
 
     path = finder.tiles_in_range(cost_table,
                                  Coordinate(0, 6), 2)
 
     json_path = [tile.as_json() for tile in path]
-    assert json_path == ['{"y": 5, "x": 0}', '{"y": 6, "x": 1}']
+    print(json_path)
+    assert json_path == ['{"x": 0, "y": 5}', '{"x": 1, "y": 6}']
 
     path = finder.tiles_in_range(cost_table,
                                  Coordinate(0, 6), 4)
 
     json_path = [tile.as_json() for tile in path]
-    assert json_path == ['{"y": 4, "x": 0}', '{"y": 5, "x": 0}',
-                         '{"y": 5, "x": 1}', '{"y": 6, "x": 1}',
-                         '{"y": 6, "x": 2}']
+    assert json_path == ['{"x": 0, "y": 4}', '{"x": 0, "y": 5}', 
+            '{"x": 1, "y": 5}', '{"x": 1, "y": 6}', '{"x": 2, "y": 6}']
 
     path = finder.tiles_in_range(cost_table,
                                  Coordinate(0, 0), 0)

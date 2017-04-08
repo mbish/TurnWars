@@ -1,6 +1,7 @@
 from game.unit import Unit
 from game.coordinate import Coordinate
-from game.factories.factory import Factory, BadFactoryRequest, BadFactoryData
+from game.factories.factory import Factory
+from game.exceptions import BadFactoryRequest, BadFactoryData
 
 
 class UnitFactory(Factory):

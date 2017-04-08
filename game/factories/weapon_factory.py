@@ -1,5 +1,6 @@
 from game.serializable import Serializable
-from game.factories.factory import Factory, BadFactoryData
+from game.factories.factory import Factory
+from game.exceptions import BadFactoryData
 from game.weapon import Weapon
 
 

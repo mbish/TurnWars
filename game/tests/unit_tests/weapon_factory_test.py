@@ -1,7 +1,6 @@
-from game.factories.factory import BadFactoryData
+from game.exceptions import BadFactoryData
 from game.factories.weapon_factory import WeaponFactory
 from nose.tools import assert_raises
-
 
 class MockClass:
 

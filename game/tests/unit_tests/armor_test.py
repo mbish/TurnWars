@@ -1,4 +1,5 @@
-from game.armor import Armor, BadArmorCreation
+from game.armor import Armor
+from game.exceptions import BadArmorCreation
 from nose.tools import assert_raises
 
 

@@ -1,6 +1,7 @@
 from copy import deepcopy
 from game.army import Army
-from game.factories.factory import Factory, BadFactoryData, BadFactoryRequest
+from game.factories.factory import Factory
+from game.exceptions import BadFactoryData, BadFactoryRequest
 
 
 class ArmyFactory(Factory):

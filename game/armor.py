@@ -1,5 +1,5 @@
 from game.serializable import Serializable
-
+from game.exceptions import BadArmorCreation
 
 class Armor(Serializable):
 
@@ -29,8 +29,3 @@ class Armor(Serializable):
             'name': self.name,
             'health': self.health,
         }
-
-
-class BadArmorCreation(Exception):
-    def __init__(self, message):
-        Exception.__init__(self, message)

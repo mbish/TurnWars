@@ -1,5 +1,6 @@
 from game.serializable import Serializable
 from game.coordinate import Coordinate
+from game.exceptions import BadScenarioData
 
 
 class Scenario(Serializable):
@@ -148,7 +149,3 @@ class Scenario(Serializable):
             'armies': [army.flat() for army in self.armies],
         }
 
-
-class BadScenarioData(Exception):
-    def __init__(self, message):
-        super(BadScenarioData, self).__init__(message)

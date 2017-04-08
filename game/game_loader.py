@@ -10,7 +10,8 @@ from game.factories.scenario_builder import ScenarioBuilder
 from game.factories.transport_factory import TransportFactory
 from game.coordinate import Coordinate
 from game.game_engine import Game
-from game.path_finder import NoPathFound, PathFinder
+from game.path_finder import PathFinder
+from game.exceptions import NoPathFound
 
 
 def load_scenario(scenario_metadata, loader):

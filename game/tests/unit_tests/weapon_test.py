@@ -1,4 +1,5 @@
-from game.weapon import Weapon, BadWeaponRequest, BadWeaponCreation
+from game.weapon import Weapon
+from game.exceptions import BadWeaponRequest, BadWeaponCreation
 from nose.tools import assert_raises
 
 
@@ -33,11 +34,10 @@ def targeting_test():
 
 def serializable_test():
     weapon = Weapon('sword', 5, 4, 3, {'plane': 0})
-    json_string = (
-        '{"non_targetables": "", "range": 3, "attack_strength": 4, '
-        '"name": "sword", "uses_left": {"plane": 0}}'
-    )
+    json_string = ('{"attack_strength": 4, "name": "sword",'
+            ' "non_targetables": "", "range": 3, "uses_left": {"plane": 0}}')
 
+    print(weapon.as_json())
     assert weapon.as_json() == json_string
 
 

@@ -1,5 +1,6 @@
 from game.coordinate import Coordinate, BadCoordinateCreation
 from game.serializable import Serializable
+from game.exceptions import InvalidBoardDimensions
 
 
 class Board(Serializable):
@@ -67,7 +68,3 @@ class Board(Serializable):
 
         return serial_tiles
 
-
-class InvalidBoardDimensions(Exception):
-    def __init__(self, message):
-        Exception.__init__(self, message)

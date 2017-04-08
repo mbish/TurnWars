@@ -1,5 +1,5 @@
 from game.factories.scenario_builder import ScenarioBuilder
-from game.factories.builder import BuildInvalid
+from game.exceptions import BuildInvalid
 from nose.tools import assert_raises
 
 
