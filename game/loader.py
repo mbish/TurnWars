@@ -6,7 +6,7 @@ class Loader:
     def __init__(self, directory):
         real_path = os.path.realpath(directory)
         if not os.path.exists(real_path):
-            raise BadLoaderData
+            raise BadLoaderData("Could not find path {0}".format(real_path))
         self.directory = real_path
 
     def load_from_file(self, filename):

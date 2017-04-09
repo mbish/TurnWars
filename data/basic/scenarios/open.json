@@ -1,0 +1,43 @@
+{
+    "board": "open",
+    "armies": [
+        {
+            "name": "dragon",
+            "units": [{
+                "name": "footman",
+                "x": 1,
+                "y": 0
+            },
+            {
+                "name": "footman",
+                "x": 5,
+                "y": 5
+            }],
+            "buildings": [{
+                "name": "castle",
+                "x": 0,
+                "y": 0
+            }],
+            "money": 1000
+        },
+        {
+            "name": "salamander",
+            "units": [{
+                "name": "footman",
+                "x": 10,
+                "y": 11
+            },
+            {
+                "name": "footman",
+                "x": 6,
+                "y": 5
+            }],
+            "buildings": [{
+                "name": "castle",
+                "x": 11,
+                "y": 11
+            }],
+            "money": 1000
+        }
+    ]
+}

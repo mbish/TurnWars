@@ -102,6 +102,9 @@ class Game(Serializable):
 
     # maps between various verions of the message protocol
     def canonicalize(self, message):
+        if('type' in message and 'name' not in message):
+            message['name'] = message['type']
+            del message['type']
         for unit_key in ['unit', 'attacker', 'defender']:
             if unit_key in message:
                 if isinstance(message[unit_key], dict):

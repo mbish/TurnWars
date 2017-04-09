@@ -1,0 +1,27 @@
+{
+    "foot": {
+        "spaces_per_turn": 2,
+        "cost_table": {
+            "grass": 1,
+            "rocks": 2
+        }
+    },
+    "wheel": {
+        "spaces_per_turn": 2,
+        "cost_table": {
+            "grass": 1
+        }
+    },
+    "wing": {
+        "spaces_per_turn": 7,
+        "cost_table": {
+            "grass": 1
+        }
+    },
+    "horse": {
+        "spaces_per_turn": 5,
+        "cost_table": {
+            "grass": 1
+        }
+    }
+}

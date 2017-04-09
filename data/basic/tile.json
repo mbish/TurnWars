@@ -1,0 +1,12 @@
+{
+    "grass": {
+        "non_passables": [],
+        "events": [],
+        "cover": 0
+    },
+    "rocks": {
+        "non_passables": ["tires"],
+        "events": [],
+        "cover": 0
+    }
+}

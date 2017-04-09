@@ -27,7 +27,7 @@ def out_of_bounds_test():
         'to': {
             'x': 1,
             'y': -1
-        }
+       }
     })
     assert game.unit_at(Coordinate(1, 0)).name == 'footman'
 

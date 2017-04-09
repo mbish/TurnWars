@@ -1,0 +1,16 @@
+{
+    "fort": {
+        "buildable_units": [
+            "footman"
+        ],
+        "revenue": 100
+    },
+    "castle": {
+        "buildable_units": [
+            "dragon",
+            "catapult",
+            "horseman"
+        ],
+        "revenue": 500
+    }
+}
