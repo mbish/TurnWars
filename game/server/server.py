@@ -1,9 +1,15 @@
+from os import listdir
+from os.path import isfile, join
+
 from twisted.protocols import basic
 from twisted.internet import protocol
 from game.server.match import Match
 import json
 import uuid
+import traceback
 from game.server.client import Client
+
+dataDir = './data/basic'
 
 class PublicProtocol(basic.Int32StringReceiver):
     def __init__(self, factory, MatchType):
@@ -28,41 +34,52 @@ class PublicProtocol(basic.Int32StringReceiver):
         self.factory.connections.remove(self)
 
     def stringReceived(self, message):
-        #try:
-        data = json.loads(message)
-        if 'id' in data:
-            print('recognized client')
-            client = self.factory.clients[data['id']]
+        try:
+            data = json.loads(message)
+            if 'id' in data:
+                client = self.factory.clients[data['id']]
 
-        if data['type'] == "register":
-            if self.state == 'registered':
-                self.terminate('error, repeated registration')
-            else:
-                new_client = Client(self)
-                self.factory.clients[new_client.id_string] = new_client
-                print('create client', new_client.id_string)
+            if data['type'] == "listMatches":
                 self.send({
-                    'type': 'accept', 'id': str(new_client.id_string)
+                    'type': 'matchList',
+                    'matches': self.factory.list_matches()
                 })
-                self.state = 'registered'
 
-        if 'matchId' in data:
-            match = self.factory.pass_to_match(data['matchId'], client, data)
+            if data['type'] == "listMaps":
+                onlyfiles = [f for f in listdir("./data/basic/scenarios".format(dataDir))]
+                self.send({
+                    'type': 'mapList',
+                    'maps': onlyfiles
+                })
+                
 
-        if data['type'] == "create":
-            if 'scenario' in data:
-                scenario = data['scenario']
-            else:
-                scenario = 'default.json'
-            match_id = self.factory.create_match(client, scenario)
-            self.send({
-                'type': 'matchCreated', 'matchId': match_id
-            })
+            if data['type'] == "register":
+                if self.state == 'registered':
+                    self.terminate('error, repeated registration')
+                else:
+                    new_client = Client(self)
+                    self.factory.clients[new_client.id_string] = new_client
+                    self.send({
+                        'type': 'accept', 'id': str(new_client.id_string)
+                    })
+                    self.state = 'registered'
 
-        # except Exception as e:
-        #    print(repr(e))
-        #    print('closing')
-        #    #self.transport.loseConnection()
+            if 'matchId' in data:
+                match = self.factory.pass_to_match(data['matchId'], client, data)
+
+            if data['type'] == "create":
+                if 'scenario' in data:
+                    scenario = data['scenario']
+                else:
+                    scenario = 'default.json'
+                match_id = self.factory.create_match(client, scenario)
+                self.send({
+                    'type': 'matchCreated', 'matchId': match_id
+                })
+
+        except Exception as e:
+            traceback.print_exception(Exception, e, None)
+            #self.transport.loseConnection()
 
 
 class Server(protocol.Factory):
@@ -82,6 +99,9 @@ class Server(protocol.Factory):
         new_match = Match(client, scenario) 
         self.matches[new_match.id_string] = new_match
         return new_match.id_string
+
+    def list_matches(self):
+        return list(self.matches.keys())
 
     def pass_to_match(self, match_id, connection, data):
         if(data['type'] in ['join', 'action']):

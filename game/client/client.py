@@ -9,30 +9,20 @@ class TWCli(basic.LineReceiver):
 
     def __init__(self, web_client):
         self.web_client = web_client
-
-    def connectionMade(self):
-        self.transport.write(b'>>> ')
-
-    def dataReceived(self, data):
-        message = self.parse_message(data.decode('utf-8').strip('\n'))
-        self.send(message)
-
-    def parse_message(self, message):
-        parts = message.split(' ')
-        command = parts[0]
-        return getattr(self, command)(parts[1:])
+        self.web_client.postStringReceived = self._prompt
+        self.web_client.postStringSent = self._prompt
 
     def join(self, message):
         [matchId] = message
         return {
             'type': 'join',
-            'id': self.web_client.get_id(),
+            'id': self.web_client.getId(),
             'matchId': matchId
         }
 
     def create(self, message):
         response = {
-            'id': self.web_client.get_id(),
+            'id': self.web_client.getId(),
             'type': 'create'
         }
         if(len(message)):
@@ -40,9 +30,36 @@ class TWCli(basic.LineReceiver):
 
         return response
 
-    def send(self, message):
+    def listMatches(self, message):
+        response = {
+            'type': 'listMatches'
+        }
+        return response
+
+    def listMaps(self, message):
+        response = {
+            'type': 'listMaps'
+        }
+        return response
+
+    def _prompt(self, data=""):
+        self.transport.write(b'\r>>> ')
+
+    def connectionMade(self):
+        self._prompt()
+
+    def dataReceived(self, data):
+        message = self._parseMessage(data.decode('utf-8').strip('\n'))
+        self._send(message)
+
+    def _parseMessage(self, message):
+        parts = message.split(' ')
+        command = parts[0]
+        return getattr(self, command)(parts[1:])
+
+    def _send(self, message):
         self.web_client.send(message)
-        self.transport.write(b'>>> ')
+        self._prompt()
         return
 
     
@@ -51,15 +68,19 @@ class WebClient(basic.Int32StringReceiver):
     def __init__(self):
         self.state = 'unregistered'
         self.id = 0
+        self.postStringReceived = lambda: None
+        self.postStringSent = lambda: None
 
     def stringReceived(self, data):
-        print("V", data.decode('utf-8'))
+        print("\rV", data.decode('utf-8'))
         getattr(self, self.state)(json.loads(data.decode('utf-8')))
+        self.postStringReceived(data)
 
     def send(self, data):
-        print("^", data)
+        print("\r^", data)
         message = json.dumps(data).encode('utf-8')
         self.sendString(message)
+        self.postStringSent(data)
 
     def registered(self, data):
         return
@@ -74,7 +95,7 @@ class WebClient(basic.Int32StringReceiver):
                 self.id = data['id']
                 self.state = 'registered'
 
-    def get_id(self):
+    def getId(self):
         return self.id
 
 class ClientFactory(ClientFactory):

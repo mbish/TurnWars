@@ -1,13 +1,10 @@
 from game.loader import Loader
-from game.factories.armor_factory import ArmorFactory
-from game.factories.weapon_factory import WeaponFactory
-from game.factories.unit_factory import UnitFactory
+from game.factories.unit_factory_factory import UnitFactoryFactory
 from game.factories.building_factory import BuildingFactory
 from game.factories.tile_factory import TileFactory
 from game.factories.army_factory import ArmyFactory
 from game.factories.board_factory import BoardFactory
 from game.factories.scenario_builder import ScenarioBuilder
-from game.factories.transport_factory import TransportFactory
 from game.coordinate import Coordinate
 from game.game_engine import Game
 from game.path_finder import PathFinder
@@ -25,14 +22,19 @@ def load_scenario(scenario_metadata, loader):
     board_data = loader.load(scenario_metadata["board_data"])
     layout_data = loader.load(scenario_metadata["layout_data"])
 
-    armor_factory = ArmorFactory(armor_data)
-    weapon_factory = WeaponFactory(weapon_data)
-    transport_factory = TransportFactory(transport_data)
     building_factory = BuildingFactory(building_data)
-    unit_factory = UnitFactory(unit_data, transport_factory, weapon_factory,
-                               armor_factory)
+
+    unit_factory_factory = UnitFactoryFactory({
+        'basic': {
+            'units': unit_data,
+            'transports': transport_data,
+            'weapons': weapon_data,
+            'armor': armor_data
+        },
+    })
+
     tile_factory = TileFactory(tile_data)
-    army_factory = ArmyFactory(army_data, unit_factory,
+    army_factory = ArmyFactory(army_data, unit_factory_factory,
                                building_factory)
     board_factory = BoardFactory(board_data, tile_factory)
 

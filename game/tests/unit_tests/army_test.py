@@ -7,6 +7,9 @@ class MockBuildingFactory:
 
     def create(self, building_name, coordinate):
         return "{0} {1}".format(building_name, coordinate)
+    
+    def flat(self):
+        return "Im a factory for buildings"
 
 
 class MockUnitFactory:
@@ -22,6 +25,9 @@ class MockUnitFactory:
 
     def equipment_info(self, unit_type, equipment):
         return "this equipment is the best"
+
+    def flat(self):
+        return "Im a factory for units"
 
 
 class MockUnit:
@@ -93,10 +99,12 @@ def serializable_test():
     unit = MockUnit()
     army.add_unit(unit)
     json_string = army.as_json()
+    print(json_string)
     assert json_string == (
-        '{"buildings": ["Im a building 5", "Im a building 7",'
-        ' "Im a building 9"], "name": "dragon", "turn": 1, "units": '
-        '["Im a unit"]}')
+        '{"building_data": "Im a factory for buildings", '
+        '"buildings": ["Im a building 5", "Im a building 7",'
+        ' "Im a building 9"], "name": "dragon", "turn": 1, "unit_data": '
+        '"Im a factory for units", "units": ["Im a unit"]}')
 
 
 def find_unit_test():

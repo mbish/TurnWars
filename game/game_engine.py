@@ -6,9 +6,10 @@ from game.exceptions import NoPathFound
 
 class Game(Serializable):
 
-    def __init__(self, scenario, path_finder):
+    def __init__(self, scenario, path_finder, timer=time):
         self.scenario = scenario
         self.path_finder = path_finder
+        self.timer = timer
 
     def _get_board(self):
         return self.scenario.get_board()
@@ -118,5 +119,5 @@ class Game(Serializable):
     def flat(self):
         return {
             'scenario': self.scenario.flat(),
-            'timestamp': int(time()),
+            'timestamp': int(self.timer())
         }

@@ -189,7 +189,7 @@ def build_test():
 def bad_messages_test():
     army1 = MockArmy('dragon')
     army2 = MockArmy('salamander')
-    game = Game(MockScenario([army1, army2]), [])
+    game = Game(MockScenario([army1, army2]), [], lambda: 0)
     flat = game.do({
         'name': 'build',
         'army_name': 'dragon',
@@ -199,7 +199,8 @@ def bad_messages_test():
             'y': 'not a number'
         }
     })
-    assert flat == {'scenario': 'a serialized scenario'}
+    print(flat)
+    assert flat == {'scenario': 'a serialized scenario', 'timestamp': 0}
     flat = game.do({
         'name': 'nonsense',
         'at': {
@@ -207,19 +208,19 @@ def bad_messages_test():
             'y': 0
         }
     })
-    assert flat == {'scenario': 'a serialized scenario'}
+    assert flat == {'scenario': 'a serialized scenario', 'timestamp': 0}
     flat = game.do({
         'name': 'move',
     })
-    assert flat == {'scenario': 'a serialized scenario'}
+    assert flat == {'scenario': 'a serialized scenario', 'timestamp': 0}
     flat = game.do({
         'name': 'end_turn',
     })
-    assert flat == {'scenario': 'a serialized scenario'}
+    assert flat == {'scenario': 'a serialized scenario', 'timestamp': 0}
     flat = game.do({
         'name': 'attack',
     })
-    assert flat == {'scenario': 'a serialized scenario'}
+    assert flat == {'scenario': 'a serialized scenario', 'timestamp': 0}
     game.build(army1, 'footman', 'here')
     flat = game.do({
         'name': 'move',
@@ -236,11 +237,11 @@ def bad_messages_test():
         'defending_army': 'salamander',
         'defender_id': 'footman'
     })
-    assert flat == {'scenario': 'a serialized scenario'}
+    assert flat == {'scenario': 'a serialized scenario', 'timestamp': 0}
     flat = game.do({
         'name': 'the chacha'
     })
-    assert flat == {'scenario': 'a serialized scenario'}
+    assert flat == {'scenario': 'a serialized scenario', 'timestamp': 0}
     flat = game.do({
     })
-    assert flat == {'scenario': 'a serialized scenario'}
+    assert flat == {'scenario': 'a serialized scenario', 'timestamp': 0}

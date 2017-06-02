@@ -20,14 +20,14 @@ def get_test_board():
         for col in range(0, 10):
             tiles[row].append(MockTile("{0} {1}".format(row, col)))
 
-    return Board(tiles)
+    return Board(tiles, {})
 
 
 def empty_board_test():
     tiles = []
-    assert_raises(InvalidBoardDimensions, Board, tiles)
+    assert_raises(InvalidBoardDimensions, Board, tiles, {})
     tiles = [[], [], []]
-    assert_raises(InvalidBoardDimensions, Board, tiles)
+    assert_raises(InvalidBoardDimensions, Board, tiles, {})
 
 
 def non_square_board_test():
@@ -37,7 +37,7 @@ def non_square_board_test():
         for col in range(0, row):
             tiles[row].append(MockTile("{0} {1}".format(row, col)))
 
-    assert_raises(InvalidBoardDimensions, Board, tiles)
+    assert_raises(InvalidBoardDimensions, Board, tiles, {})
 
 
 def normal_board_test():
@@ -54,7 +54,7 @@ def get_tile_test():
         for col in range(0, 5):
             tiles[row].append(MockTile("{0} {1}".format(col, row)))
 
-    board = Board(tiles)
+    board = Board(tiles, {})
     tile = board.get_tile_at_coordinate(Coordinate(1, 4))
     assert tile.tile_type == "1 4"
     tile = board.get_tile_at_coordinate(Coordinate(3, 10))
@@ -74,12 +74,14 @@ def json_test():
         for col in range(0, 2):
             tiles[row].append(MockTile("{0} {1}".format(col, row)))
 
-    board = Board(tiles)
+    board = Board(tiles, {})
     json_string = (
+        '{"tile_data": {}, "tiles": '
         '[["serial 0 0", "serial 1 0"], '
-        '["serial 0 1", "serial 1 1"]]'
+        '["serial 0 1", "serial 1 1"]]}'
     )
     serial_board = board.as_json()
+    print(serial_board)
     assert serial_board == json_string
 
 
