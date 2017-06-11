@@ -6,8 +6,14 @@ from game.factories.factory import Factory
 
 class UnitFactoryFactory(Factory):
     
-    def __init__(self, factory_data, factory_class=UnitFactory):
+    def __init__(self, factory_data, factory_class=UnitFactory,
+            transport_class=TransportFactory,
+            weapon_class=WeaponFactory,
+            armor_class=ArmorFactory):
         Factory.__init__(self, factory_data, factory_class)
+        self.transport_class = transport_class
+        self.weapon_class = weapon_class
+        self.armor_class = armor_class
 
     def validate_data(self, data):
         if 'units' not in data:
@@ -21,10 +27,9 @@ class UnitFactoryFactory(Factory):
 
     def create(self, name):
         data = self.get_data(name)
-        self.creation_class(
+        return self.creation_class(
             data['units'],
-            TransportFactory(data['transports']),
-            WeaponFactory(data['weapons']),
-            ArmorFactory(data['armor'])
+            self.transport_class(data['transports']),
+            self.weapon_class(data['weapons']),
+            self.armor_class(data['armor'])
         )
-        return

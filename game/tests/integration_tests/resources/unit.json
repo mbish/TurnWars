@@ -1,26 +1,26 @@
 {
     "footman": {
-        "transport": "foot",
-        "weapon": "sword",
-        "armor": "plate",
-        "cost": 100
+      "transport": "foot",
+      "weapon": "sword",
+      "armor": "plate",
+      "cost": 100
     },
     "dragon": {
-        "transport": "wing",
-        "weapon": "fire_breath",
-        "armor": "scale",
-        "cost": 1000
+      "transport": "wing",
+      "weapon": "fire_breath",
+      "armor": "scale",
+      "cost": 1000
     },
     "catapult": {
-        "transport": "wheel",
-        "weapon": "boulder",
-        "armor": "wood",
-        "cost": 1000
+      "transport": "wheel",
+      "weapon": "boulder",
+      "armor": "wood",
+      "cost": 1000
     },
     "horseman": {
-        "transport": "horse",
-        "weapon": "lance",
-        "armor": "plate",
-        "cost": 600
+      "transport": "horse",
+      "weapon": "lance",
+      "armor": "plate",
+      "cost": 600
     }
 }

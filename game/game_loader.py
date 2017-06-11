@@ -25,7 +25,13 @@ def load_scenario(scenario_metadata, loader):
     building_factory = BuildingFactory(building_data)
 
     unit_factory_factory = UnitFactoryFactory({
-        'basic': {
+        'dragon': {
+            'units': unit_data,
+            'transports': transport_data,
+            'weapons': weapon_data,
+            'armor': armor_data
+        },
+        'salamander': {
             'units': unit_data,
             'transports': transport_data,
             'weapons': weapon_data,

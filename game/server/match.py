@@ -25,6 +25,7 @@ class Match(basic.Int32StringReceiver):
         self.join(player)
 
 
+    # TODO: send state to new players joinning if the match has started
     def join(self, player, data={}):
         self.players[player.id_string] = player 
         if(self.number_of_players() == self.players_needed):
@@ -32,6 +33,7 @@ class Match(basic.Int32StringReceiver):
             self.broadcast_game()
         else:
             self.broadcast({
+                'type': 'matchLobby',
                 'state': self.state,
                 'playersJoined': self.number_of_players(),
                 'playersNeeded': self.players_needed,
@@ -49,7 +51,10 @@ class Match(basic.Int32StringReceiver):
         })
 
     def broadcast_game(self):
-        self.broadcast(self.game.flat())
+        self.broadcast({
+            'type': 'gameState',
+            'state': self.game.flat()
+        })
 
     def broadcast(self, message):
         for player_id in self.players:
