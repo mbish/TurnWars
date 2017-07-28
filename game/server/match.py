@@ -7,7 +7,7 @@ from game.game_loader import *
 class Match(basic.Int32StringReceiver):
     def __init__(self, player, scenario_name):
         self.players = {}
-        self.id_string = uuid.uuid4().hex
+        self.id_string = "00000000000000000000000000000000"#uuid.uuid4().hex
         self.state = 'waiting'
         self.scenario_name = scenario_name
         self.game = load_scenario({
@@ -29,31 +29,43 @@ class Match(basic.Int32StringReceiver):
     def join(self, player, data={}):
         self.players[player.id_string] = player 
         if(self.number_of_players() == self.players_needed):
-            self.change_state('inProgress')
+            self.state = 'inProgress'
             self.broadcast_game()
         else:
+            if(self.number_of_players() > self.players_needed):
+                player.setSpectator(True)
+                player.send({
+                    'type': 'matchInProgress',
+                    'gameState': self.game.flat(),
+                    'matchState': self.state
+                })
             self.broadcast({
                 'type': 'matchLobby',
-                'state': self.state,
+                'matchState': self.state,
                 'playersJoined': self.number_of_players(),
                 'playersNeeded': self.players_needed,
                 'scenario': self.scenario_name
             })
 
     def action(self, client, data):
-        self.game.do(data)
+        if(self.players[data['playerId']].spectating):
+            client.send({
+                'type': 'invalidMessage',
+                'message': 'spectators can\'t take actions',
+                'matchState': self.state
+            })
+            return
+        new_game_state = self.game.do(data)
+        self.change_game_state() #new_game_state)
 
-    def change_state(self, new_state):
-        self.state = new_state
-        self.broadcast({
-            'type': 'stateChange',
-            'newState': new_state
-        })
+    def change_game_state(self):
+        self.broadcast_game()
 
     def broadcast_game(self):
         self.broadcast({
-            'type': 'gameState',
-            'state': self.game.flat()
+            'type': 'gameStateChange',
+            'gameState': self.game.flat(),
+            'matchState': self.state
         })
 
     def broadcast(self, message):

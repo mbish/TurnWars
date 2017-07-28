@@ -16,13 +16,13 @@ class TWCli(basic.LineReceiver):
         [matchId] = message
         return {
             'type': 'join',
-            'id': self.web_client.getId(),
+            'playerId': self.web_client.getId(),
             'matchId': matchId
         }
 
     def create(self, message):
         response = {
-            'id': self.web_client.getId(),
+            'playerId': self.web_client.getId(),
             'type': 'create'
         }
         if(len(message)):
@@ -92,7 +92,7 @@ class WebClient(basic.Int32StringReceiver):
                     'type': 'register'
                 })
             if(data['type'] == 'accept'):
-                self.id = data['id']
+                self.id = data['playerId']
                 self.state = 'registered'
 
     def getId(self):

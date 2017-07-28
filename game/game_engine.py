@@ -32,6 +32,7 @@ class Game(Serializable):
     # this does need to be a full unit any uid lookup
     # should be done outside of this function
     def move(self, unit, coordinate):
+        print(coordinate.flat())
         if(self.scenario.space_occupied(coordinate)):
             return
         army = self.scenario._find_army(unit.army)

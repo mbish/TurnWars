@@ -50,6 +50,7 @@ class Transport(Serializable):
             'name': self.name,
             'spaces_left': self.spaces_left,
             'fuel': self.fuel,
+            'hasMoved': self.moved_this_turn
         }
 
     def has_moved(self):

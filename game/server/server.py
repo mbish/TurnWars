@@ -51,8 +51,9 @@ class ClientConnection:
         self.manager = manager
 
     def handleMessage(self, data, messanger):
-        if 'id' in data:
-            client = self.manager.clients[data['id']]
+        print(data)
+        if 'playerId' in data:
+            client = self.manager.clients[data['playerId']]
 
         if data['type'] == "listMatches":
             return {
@@ -76,7 +77,7 @@ class ClientConnection:
                 self.manager.clients[new_client.id_string] = new_client
                 self.state = 'registered'
                 return {
-                    'type': 'accept', 'id': str(new_client.id_string)
+                    'type': 'accept', 'playerId': str(new_client.id_string)
                 }
 
         if 'matchId' in data:
@@ -170,3 +171,4 @@ class MatchManager:
     def pass_to_match(self, match_id, connection, data):
         if(data['type'] in ['join', 'action']):
             getattr(self.get_match(match_id), data['type'])(connection, data)
+
