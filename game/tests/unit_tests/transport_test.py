@@ -43,5 +43,6 @@ def non_fuel_test():
 
 def serialize_test():
     transport = Transport('pogo-stick', 2, {})
-    json_string = ('{"fuel": -1, "name": "pogo-stick", "spaces_left": 2}')
+    json_string = ('{"fuel": -1, "hasMoved": false, "name": "pogo-stick", "spaces_left": 2}')
+    print(transport.as_json())
     assert transport.as_json() == json_string
