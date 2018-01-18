@@ -7,9 +7,14 @@ from game.server.server import \
 from autobahn.twisted.websocket import WebSocketServerFactory
 from game.server.match import Match
 
-manager = MatchManager(Match)
-endpoints.serverFromString(reactor, "tcp:1025").listen(Server(manager))
+tcpPort = 1025
+websocketPort = 1026
+serverAddress = "192.168.2.20"
 
-webSocketServer = WebSocketServer(u"ws://192.168.2.21:1026", manager)
+manager = MatchManager(Match)
+endpoints.serverFromString(reactor, "tcp:{0}".format(tcpPort)).listen(Server(manager))
+
+webSocketServer = WebSocketServer(u"ws://{0}:{1}".format(serverAddress, websocketPort), manager)
 reactor.listenTCP(1026, webSocketServer)
+print("Server listening on address {0} for websocket on port {1} and tcp on port {2}".format(serverAddress, tcpPort, websocketPort))
 reactor.run()

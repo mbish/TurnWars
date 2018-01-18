@@ -7,7 +7,7 @@ from game.game_loader import *
 class Match(basic.Int32StringReceiver):
     def __init__(self, player, scenario_name):
         self.players = {}
-        self.id_string = "00000000000000000000000000000000"#uuid.uuid4().hex
+        self.id_string = uuid.uuid4().hex
         self.state = 'waiting'
         self.scenario_name = scenario_name
         self.game = load_scenario({
@@ -39,13 +39,7 @@ class Match(basic.Int32StringReceiver):
                     'gameState': self.game.flat(),
                     'matchState': self.state
                 })
-            self.broadcast({
-                'type': 'matchLobby',
-                'matchState': self.state,
-                'playersJoined': self.number_of_players(),
-                'playersNeeded': self.players_needed,
-                'scenario': self.scenario_name
-            })
+            self.broadcast(self.metadata())
 
     def action(self, client, data):
         if(self.players[data['playerId']].spectating):
@@ -78,3 +72,13 @@ class Match(basic.Int32StringReceiver):
     def stringReceived(self, msg):
         # needs to be fleshed out
         print(msg)
+
+    def metadata(self):
+        return {
+            'type': 'matchLobby',
+            'matchState': self.state,
+            'playersJoined': self.number_of_players(),
+            'playersNeeded': self.players_needed,
+            'scenario': self.scenario_name,
+            'id': self.id_string
+        }

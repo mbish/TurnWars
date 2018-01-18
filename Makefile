@@ -17,3 +17,9 @@ style_watcher:
 
 lint_check:
 	python -m pylint --report=n $(shell find . -name "*.py")
+
+client:
+	python game/client/client.py
+
+server:
+	python app.py

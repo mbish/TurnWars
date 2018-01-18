@@ -166,7 +166,8 @@ class MatchManager:
         return new_match.id_string
 
     def list_matches(self):
-        return list(self.matches.keys())
+        print(self.matches)
+        return list(map(lambda x: x.metadata(), self.matches.values()))
 
     def pass_to_match(self, match_id, connection, data):
         if(data['type'] in ['join', 'action']):
