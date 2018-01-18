@@ -25,7 +25,6 @@ class Match(basic.Int32StringReceiver):
         self.join(player)
 
 
-    # TODO: send state to new players joinning if the match has started
     def join(self, player, data={}):
         self.players[player.id_string] = player 
         if(self.number_of_players() == self.players_needed):
@@ -42,6 +41,17 @@ class Match(basic.Int32StringReceiver):
             self.broadcast(self.metadata())
 
     def action(self, client, data):
+        if(data['name'] == 'refresh'):
+            if(self.state == 'inProgress'):
+                client.send({
+                    'type': 'matchInProgress',
+                    'gameState': self.game.flat(),
+                    'matchState': self.state,
+                    'matchId': self.id_string
+                })
+            else:
+                client.send(self.metadata())
+            return
         if(self.players[data['playerId']].spectating):
             client.send({
                 'type': 'invalidMessage',
@@ -49,6 +59,7 @@ class Match(basic.Int32StringReceiver):
                 'matchState': self.state
             })
             return
+
         new_game_state = self.game.do(data)
         self.change_game_state() #new_game_state)
 
@@ -80,5 +91,5 @@ class Match(basic.Int32StringReceiver):
             'playersJoined': self.number_of_players(),
             'playersNeeded': self.players_needed,
             'scenario': self.scenario_name,
-            'id': self.id_string
+            'matchId': self.id_string
         }

@@ -20,7 +20,7 @@ class PublicProtocol(basic.Int32StringReceiver):
         self.sendString(json.dumps(data).encode('utf-8'))
 
     def connectionMade(self):
-        self.send({
+       self.send({
             'type': 'welcome'
         })
 
@@ -49,11 +49,9 @@ class ClientConnection:
     def __init__(self, manager):
         self.state = 'unregistered'
         self.manager = manager
+        self.id = 'unknown';
 
     def handleMessage(self, data, messanger):
-        print(data)
-        if 'playerId' in data:
-            client = self.manager.clients[data['playerId']]
 
         if data['type'] == "listMatches":
             return {
@@ -67,18 +65,25 @@ class ClientConnection:
                 'type': 'mapList',
                 'maps': onlyfiles
             }
-            
 
         if data['type'] == "register":
             if self.state == 'registered':
                 raise Exception('error, repeated registration')
             else:
-                new_client = Client(messanger)
-                self.manager.clients[new_client.id_string] = new_client
-                self.state = 'registered'
+                if 'playerId' in data and data['playerId'] in self.manager.clients:
+                    self.manager.clients[str(data['playerId'])].socket = messanger
+                    self.id = data['playerId']
+                else:
+                    new_client = Client(messanger)
+                    self.id = new_client.id_string
+                    self.manager.clients[new_client.id_string] = new_client
+                    self.state = 'registered'
                 return {
-                    'type': 'accept', 'playerId': str(new_client.id_string)
+                    'type': 'accept', 'playerId': str(self.id)
                 }
+
+        if 'playerId' in data:
+            client = self.manager.clients[data['playerId']]
 
         if 'matchId' in data:
             self.manager.pass_to_match(data['matchId'], client, data)

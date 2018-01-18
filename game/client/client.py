@@ -1,8 +1,13 @@
 import json
+import sys
 from twisted.internet import reactor
 from twisted.internet.protocol import Protocol, ClientFactory
 from twisted.internet import stdio
 from twisted.protocols import basic
+
+playerId = None
+if len(sys.argv) > 0:
+    playerId = sys.argv[1]
 
 class TWCli(basic.LineReceiver):
     from os import linesep as delimiter
@@ -11,9 +16,11 @@ class TWCli(basic.LineReceiver):
         self.web_client = web_client
         self.web_client.postStringReceived = self._prompt
         self.web_client.postStringSent = self._prompt
+        self.web_client.match_id = None
 
     def join(self, message):
         [matchId] = message
+        self.web_client.match_id = matchId
         return {
             'type': 'join',
             'playerId': self.web_client.getId(),
@@ -29,6 +36,18 @@ class TWCli(basic.LineReceiver):
             response['scenario'] = message.pop()
 
         return response
+
+    def refresh(self, message):
+        if(message):
+            [match] = message
+        else:
+            match = self.web_client.match_id
+        return {
+            'playerId': self.web_client.getId(),
+            'type': 'action',
+            'name': 'refresh',
+            'matchId': match
+        }
 
     def listMatches(self, message):
         response = {
@@ -83,14 +102,22 @@ class WebClient(basic.Int32StringReceiver):
         self.postStringSent(data)
 
     def registered(self, data):
+        if 'type' in data and data['type'] == 'matchLobby':
+            self.match_id = data['matchId']
         return
 
     def unregistered(self, data):
         if('type'in data):
             if(data['type'] == 'welcome'):
-                self.send({
-                    'type': 'register'
-                })
+                if(playerId):
+                    self.send({
+                        'type': 'register',
+                        'playerId': playerId
+                    })
+                else:
+                    self.send({
+                        'type': 'register',
+                    })
             if(data['type'] == 'accept'):
                 self.id = data['playerId']
                 self.state = 'registered'
