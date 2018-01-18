@@ -3,7 +3,7 @@ default: tests
 clean:
 	rm -f $(shell find . -name "*.pyc")
 
-tests:
+tests: 
 	python -m nose --with-coverage --cover-package game
 
 test_watcher:
@@ -18,8 +18,11 @@ style_watcher:
 lint_check:
 	python -m pylint --report=n $(shell find . -name "*.py")
 
-client:
+client: 
 	python game/client/client.py
 
-server:
+server: 
 	python app.py
+
+deps:
+	pip install -r requirements.txt
