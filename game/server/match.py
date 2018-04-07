@@ -27,6 +27,7 @@ class Match(basic.Int32StringReceiver):
 
     def join(self, player, data={}):
         self.players[player.id_string] = player 
+        self.game.assignArmy(player.id_string)
         if(self.number_of_players() == self.players_needed):
             self.state = 'inProgress'
             self.broadcast_game()
@@ -41,6 +42,7 @@ class Match(basic.Int32StringReceiver):
             self.broadcast(self.metadata())
 
     def action(self, client, data):
+        print(data)
         if(data['name'] == 'refresh'):
             if(self.state == 'inProgress'):
                 client.send({
@@ -70,7 +72,8 @@ class Match(basic.Int32StringReceiver):
         self.broadcast({
             'type': 'gameStateChange',
             'gameState': self.game.flat(),
-            'matchState': self.state
+            'matchState': self.state,
+            'matchId': self.id_string
         })
 
     def broadcast(self, message):

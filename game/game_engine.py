@@ -10,6 +10,7 @@ class Game(Serializable):
         self.scenario = scenario
         self.path_finder = path_finder
         self.timer = timer
+        self.players = []
 
     def _get_board(self):
         return self.scenario.get_board()
@@ -28,6 +29,11 @@ class Game(Serializable):
             return self.scenario.unit_at(coordinate)
         except StopIteration:
             return None
+
+    def assignArmy(self, playerId):
+        self.players.append(playerId)
+
+
 
     # this does need to be a full unit any uid lookup
     # should be done outside of this function
@@ -63,6 +69,8 @@ class Game(Serializable):
 
     def do(self, message):
         try:
+            if('playerId' not in message):
+                raise Exception("No player ID in message")
             self.canonicalize(message)
             if(message['name'] == 'move'):
                 unit = message['unit']
@@ -88,6 +96,10 @@ class Game(Serializable):
             return self.flat()
 
         return self.flat()
+
+    def playerNumber(self, playerId):
+        print(self.players)
+        return self.players.index(playerId)
 
     # This is really a utility function and may get split out from the
     # truely model-modifying functions above
@@ -115,6 +127,8 @@ class Game(Serializable):
                         message[unit_key] = self.unit_at(location)
                     elif('id' in message[unit_key]):
                         message[unit_key] = self._find_unit(message[unit_key]['id'])
+                if(message[unit_key].army != self.scenario.armies[self.playerNumber(message['playerId'])].name):
+                    raise Exception("Player not in control of army")
 
     def flat(self):
         return {

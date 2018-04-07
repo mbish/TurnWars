@@ -55,6 +55,8 @@ class ClientConnection:
 
     def handleMessage(self, data, messanger):
 
+        print(messanger)
+        print(data)
         if data['type'] == "listMatches":
             return {
                 'type': 'matchList',
@@ -112,6 +114,7 @@ class WSP(WebSocketServerProtocol):
         self.transport.loseConnection()
 
     def onConnect(self, request):
+        self.ip = request.peer.split(':')[1]
         print("some request connected {}".format(request))
 
     def onOpen(self):
