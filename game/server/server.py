@@ -54,6 +54,21 @@ class ClientConnection:
         self.manager = manager
         self.id = 'unknown';
 
+    def assign_client(self, client, name):
+        self.id = client.id_string
+        self.client = client
+        self.manager.clients[client.id_string] = client
+        self.state = 'registered'
+        if name:
+            self.client.name = data['name']
+        else:
+            self.client.name = random_name()
+
+    def reassign_client(self, clientId, messanger):
+        self.id = clientId
+        self.client = self.manager.clients[clientId]
+        self.client.socket = messanger
+
     def handleMessage(self, data, messanger):
 
         print(messanger)
@@ -75,22 +90,16 @@ class ClientConnection:
             if self.state == 'registered':
                 raise Exception('error, repeated registration')
             else:
+                new_client = Client(messanger)
                 if 'playerId' in data and data['playerId'] in self.manager.clients:
-                    self.manager.clients[str(data['playerId'])].socket = messanger
-                    self.id = data['playerId']
+                    self.reassign_client(str(data['playerId']), messanger)
+                elif new_client.id_string in self.manager.clients:
+                    self.reassign_client(new_client.id_string, messanger)
                 else:
-                    new_client = Client(messanger)
-                    self.id = new_client.id_string
-                    self.client = new_client
-                    self.manager.clients[new_client.id_string] = new_client
-                    self.state = 'registered'
-                    if 'name' in data:
-                        new_client.name = data['name']
-                    else:
-                        new_client.name = random_name()
+                    self.assign_client(new_client, data['name'] if 'name' in data else '')
 
                 return {
-                    'type': 'accept', 'playerId': str(self.id), 'name': new_client.name
+                    'type': 'accept', 'playerId': str(self.id), 'name': self.client.name
                 }
 
         if 'playerId' in data:
