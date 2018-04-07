@@ -6,6 +6,7 @@ from twisted.internet import protocol
 import json
 import uuid
 import traceback
+from game.server.names import random_name
 from pprint import pprint
 from game.server.client import Client
 from autobahn.twisted.websocket import WebSocketServerFactory, \
@@ -80,10 +81,16 @@ class ClientConnection:
                 else:
                     new_client = Client(messanger)
                     self.id = new_client.id_string
+                    self.client = new_client
                     self.manager.clients[new_client.id_string] = new_client
                     self.state = 'registered'
+                    if 'name' in data:
+                        new_client.name = data['name']
+                    else:
+                        new_client.name = random_name()
+
                 return {
-                    'type': 'accept', 'playerId': str(self.id)
+                    'type': 'accept', 'playerId': str(self.id), 'name': new_client.name
                 }
 
         if 'playerId' in data:
