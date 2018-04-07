@@ -6,6 +6,7 @@ from twisted.internet import protocol
 import json
 import uuid
 import traceback
+from pprint import pprint
 from game.server.client import Client
 from autobahn.twisted.websocket import WebSocketServerFactory, \
     WebSocketServerProtocol
@@ -20,6 +21,7 @@ class PublicProtocol(basic.Int32StringReceiver):
         self.sendString(json.dumps(data).encode('utf-8'))
 
     def connectionMade(self):
+       self.ip = self.transport.getPeer().host
        self.send({
             'type': 'welcome'
         })
@@ -60,10 +62,10 @@ class ClientConnection:
             }
 
         if data['type'] == "listMaps":
-            onlyfiles = [f for f in listdir("./data/basic/scenarios".format(dataDir))]
+            onlyFiles = [f for f in listdir("./data/basic/scenarios".format(dataDir))]
             return {
                 'type': 'mapList',
-                'maps': onlyfiles
+                'maps': list(map(lambda x: {'name': x}, onlyFiles))
             }
 
         if data['type'] == "register":
@@ -94,9 +96,7 @@ class ClientConnection:
             else:
                 scenario = 'default.json'
             match_id = self.manager.create_match(client, scenario)
-            return {
-                'type': 'matchCreated', 'matchId': match_id
-            }
+            return self.manager.matches[match_id].metadata('matchCreated')
 
 
 class WSP(WebSocketServerProtocol):

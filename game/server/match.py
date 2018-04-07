@@ -84,9 +84,9 @@ class Match(basic.Int32StringReceiver):
         # needs to be fleshed out
         print(msg)
 
-    def metadata(self):
+    def metadata(self, metatype='matchLobby'):
         return {
-            'type': 'matchLobby',
+            'type': metatype,
             'matchState': self.state,
             'playersJoined': self.number_of_players(),
             'playersNeeded': self.players_needed,

@@ -6,7 +6,7 @@ from twisted.internet import stdio
 from twisted.protocols import basic
 
 playerId = None
-if len(sys.argv) > 0:
+if len(sys.argv) > 1:
     playerId = sys.argv[1]
 
 class TWCli(basic.LineReceiver):
