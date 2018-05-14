@@ -1,10 +1,9 @@
-from twisted.internet import reactor, endpoints, protocol
+from twisted.internet import reactor, endpoints
+from autobahn.twisted.websocket import WebSocketServerFactory
 from game.server.server import \
     Server, \
     MatchManager, \
-    PublicProtocol, \
     WebSocketServer
-from autobahn.twisted.websocket import WebSocketServerFactory
 from game.server.match import Match
 
 tcpPort = 1025

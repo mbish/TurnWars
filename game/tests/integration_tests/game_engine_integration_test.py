@@ -1,6 +1,7 @@
 from game.game_engine import Game
 from game.loader import Loader
-from game.game_loader import *
+from game.game_loader import load_scenario
+from game.coordinate import Coordinate
 
 def test_game():
     return load_scenario({
@@ -27,7 +28,7 @@ def out_of_bounds_test():
         'to': {
             'x': 1,
             'y': -1
-       }
+        }
     })
     assert game.unit_at(Coordinate(1, 0)).name == 'footman'
 
@@ -72,7 +73,7 @@ def double_move_test():
         }
     })
     assert game.unit_at(Coordinate(2, 1)).name == 'footman'
-    assert game.unit_at(Coordinate(3, 1)) == None
+    assert game.unit_at(Coordinate(3, 1)) is None
 
 def out_of_turn_test():
     game = test_game()
@@ -87,7 +88,7 @@ def out_of_turn_test():
             'y': 10
         }
     })
-    assert game.unit_at(Coordinate(10, 10)) == None
+    assert game.unit_at(Coordinate(10, 10)) is None
 
 
 def unit_collision_test():

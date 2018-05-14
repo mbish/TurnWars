@@ -1,3 +1,5 @@
+LINTER=pylint
+
 default: tests
 
 clean:
@@ -10,13 +12,13 @@ test_watcher:
 	watch python -m nose
 
 style_check:
-	python -m pep8 $(shell find . -name "*.py")
+	python -m ${LINTER} $(shell find . -name "*.py")
 
 style_watcher:
-	watch python -m pep8 $(shell find . -name "*.py")
+	watch -c make lint_check
 
 lint_check:
-	python -m pylint --report=n $(shell find . -name "*.py")
+	@python -m pylint -f json $(shell find . -name "*.py") | pylint-parser
 
 client: 
 	python game/client/client.py

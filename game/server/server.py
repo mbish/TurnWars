@@ -1,18 +1,17 @@
+#!/usr/bin/python
 from os import listdir
-from os.path import isfile, join
+import json
+import traceback
 
 from twisted.protocols import basic
 from twisted.internet import protocol
-import json
-import uuid
-import traceback
-from game.server.names import random_name
-from pprint import pprint
-from game.server.client import Client
 from autobahn.twisted.websocket import WebSocketServerFactory, \
     WebSocketServerProtocol
+from game.server.names import random_name
+from game.server.client import Client
 
-dataDir = './data/basic'
+DataDir = './data/basic'
+
 
 class PublicProtocol(basic.Int32StringReceiver):
     def __init__(self, connection):
@@ -22,8 +21,8 @@ class PublicProtocol(basic.Int32StringReceiver):
         self.sendString(json.dumps(data).encode('utf-8'))
 
     def connectionMade(self):
-       self.ip = self.transport.getPeer().host
-       self.send({
+        self.ip = self.transport.getPeer().host
+        self.send({
             'type': 'welcome'
         })
 
@@ -36,23 +35,24 @@ class PublicProtocol(basic.Int32StringReceiver):
         try:
             data = json.loads(message)
             response = self.clientConnection.handleMessage(data, self)
-            if(response):
+            if response:
                 self.send(response)
 
         except Exception as e:
-            try: 
+            try:
                 self.terminate(e.message)
-            except:
+            except e:
                 pass
             traceback.print_exception(Exception, e, None)
-            #self.transport.loseConnection()
+            # self.transport.loseConnection()
 
 
 class ClientConnection:
     def __init__(self, manager):
         self.state = 'unregistered'
         self.manager = manager
-        self.id = 'unknown';
+        self.id = 'unknown'
+        self.client = None
 
     def assign_client(self, client, name):
         self.id = client.id_string
@@ -70,7 +70,6 @@ class ClientConnection:
         self.client.socket = messanger
 
     def handleMessage(self, data, messanger):
-
         print(messanger)
         print(data)
         if data['type'] == "listMatches":
@@ -80,7 +79,7 @@ class ClientConnection:
             }
 
         if data['type'] == "listMaps":
-            onlyFiles = [f for f in listdir("./data/basic/scenarios".format(dataDir))]
+            onlyFiles = [f for f in listdir("./data/basic/scenarios".format(DataDir))]
             return {
                 'type': 'mapList',
                 'maps': list(map(lambda x: {'name': x}, onlyFiles))
