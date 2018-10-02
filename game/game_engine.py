@@ -127,8 +127,9 @@ class Game(Serializable):
                         message[unit_key] = self.unit_at(location)
                     elif('id' in message[unit_key]):
                         message[unit_key] = self._find_unit(message[unit_key]['id'])
-                if(message[unit_key].army != self.scenario.armies[self.playerNumber(message['playerId'])].name):
-                    raise Exception("Player not in control of army")
+                if unit_key in ['attacker', 'unit']:
+                    if(message[unit_key].army != self.scenario.armies[self.playerNumber(message['playerId'])].name):
+                        raise Exception("Player not in control of army")
 
     def flat(self):
         return {

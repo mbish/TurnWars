@@ -3,7 +3,7 @@ from game.loader import Loader
 from game.game_loader import *
 
 def test_game():
-    return load_scenario({
+    game = load_scenario({
         "armor_data": "armor.json",
         "weapon_data": "weapon.json",
         "transport_data": "transport.json",
@@ -14,6 +14,9 @@ def test_game():
         "board_data": "board.json",
         "layout_data": "scenarios/basic_integration.json"
     }, Loader("./game/tests/integration_tests/resources"))
+    game.assignArmy('test-player')
+    game.assignArmy('test-player2')
+    return game
 
 
 def out_of_bounds_test():
@@ -34,6 +37,7 @@ def out_of_bounds_test():
 def onto_buildings_test():
     game = test_game()
     game.do({
+        'playerId': 'test-player',
         'name': 'move',
         'unit': {
             'x': 1,
@@ -49,6 +53,7 @@ def onto_buildings_test():
 def double_move_test():
     game = test_game()
     game.do({
+        'playerId': 'test-player',
         'name': 'move',
         'unit': {
             'x': 1,
@@ -61,6 +66,7 @@ def double_move_test():
     })
     assert game.unit_at(Coordinate(2, 1)).name == 'footman'
     game.do({
+        'playerId': 'test-player',
         'name': 'move',
         'unit': {
             'x': 2,
@@ -110,7 +116,9 @@ def unit_collision_test():
 def unit_attack_test():
     game = test_game()
     game.do({
+        'playerId': 'test-player',
         'name': 'attack',
+        'army': 'dragon',
         'attacker': {
             'x': 5,
             'y': 5

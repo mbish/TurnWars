@@ -3,6 +3,7 @@ default: tests
 clean:
 	rm -f $(shell find . -name "*.pyc")
 
+test: tests
 tests: 
 	python -m nose --with-coverage --cover-package game
 
