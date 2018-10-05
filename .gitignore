@@ -1,1 +1,14 @@
+# Editor files
+*.swp
+*.swo
+
+# Build Tooling
 .coverage
+tags
+
+# Virtualenv
+venv/
+env/
+
+# OS Generated Files
+.DS_Store
