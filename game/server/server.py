@@ -31,20 +31,24 @@ class PublicProtocol(basic.Int32StringReceiver):
         self.transport.loseConnection()
 
     def stringReceived(self, message):
-        print(message)
         try:
             data = json.loads(message)
-            response = self.clientConnection.handleMessage(data, self)
+            try:
+                response = self.clientConnection.handleMessage(data, self)
+            except Exception as e:
+                response = {
+                    'type': 'exception',
+                    'message': 'Unknown exception thrown: {0}'.format(e)
+                }
             if(response):
                 self.send(response)
 
         except Exception as e:
-            try: 
-                self.terminate(e.message)
-            except:
-                pass
             traceback.print_exception(Exception, e, None)
             #self.transport.loseConnection()
+
+        finally:
+            self.terminate(e.message)
 
 
 class ClientConnection:
@@ -53,10 +57,23 @@ class ClientConnection:
         self.manager = manager
         self.id = 'unknown';
 
-    def handleMessage(self, data, messanger):
+    def validateMessage(self, data):
+        if 'type' not in data:
+            raise ValidationError("All messages must specify a type")
 
-        print(messanger)
-        print(data)
+        if data['type'] not in ('listMatches', 'listMaps', 'register', 'create'):
+            if 'matchId' not in data:
+                raise ValidationError("{0} is not a valid message type".format(data['type']))
+
+    def handleMessage(self, data, messanger):
+        try:
+            self.validateMessage(data)
+        except ValidationError as e:
+            return {
+                'type': 'exception',
+                'message': str(e),
+            }
+
         if data['type'] == "listMatches":
             return {
                 'type': 'matchList',
@@ -64,7 +81,7 @@ class ClientConnection:
             }
 
         if data['type'] == "listMaps":
-            onlyFiles = [f for f in listdir("./data/basic/scenarios".format(dataDir))]
+            onlyFiles = [f for f in listdir("./{0}/scenarios".format(dataDir))]
             return {
                 'type': 'mapList',
                 'maps': list(map(lambda x: {'name': x}, onlyFiles))
@@ -72,9 +89,12 @@ class ClientConnection:
 
         if data['type'] == "register":
             if self.state == 'registered':
-                raise Exception('error, repeated registration')
+                return {
+                    'type': 'exception',
+                    'message': 'error, repeated registration'
+                }
             else:
-                if 'playerId' in data and data['playerId'] in self.manager.clients:
+                if 'playerId' in data and str(data['playerId']) in self.manager.clients:
                     self.manager.clients[str(data['playerId'])].socket = messanger
                     self.id = data['playerId']
                 else:
@@ -130,11 +150,10 @@ class WSP(WebSocketServerProtocol):
                 self.send(response)
 
         except Exception as e:
-            try: 
-                self.terminate(e.message)
-            except:
-                pass
             traceback.print_exception(Exception, e, None)
+
+        finally:
+            self.terminate(e.message)
 
 
 class WebSocketServer(WebSocketServerFactory):
@@ -181,3 +200,6 @@ class MatchManager:
         if(data['type'] in ['join', 'action']):
             getattr(self.get_match(match_id), data['type'])(connection, data)
 
+
+class ValidationError(Exception):
+    pass
