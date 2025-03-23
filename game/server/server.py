@@ -33,13 +33,7 @@ class PublicProtocol(basic.Int32StringReceiver):
     def stringReceived(self, message):
         try:
             data = json.loads(message)
-            try:
-                response = self.clientConnection.handleMessage(data, self)
-            except Exception as e:
-                response = {
-                    'type': 'exception',
-                    'message': 'Unknown exception thrown: {0}'.format(e)
-                }
+            response = self.clientConnection.handleMessage(data, self)
             if(response):
                 self.send(response)
 
@@ -74,51 +68,57 @@ class ClientConnection:
                 'message': str(e),
             }
 
-        if data['type'] == "listMatches":
-            return {
-                'type': 'matchList',
-                'matches': self.manager.list_matches()
-            }
-
-        if data['type'] == "listMaps":
-            onlyFiles = [f for f in listdir("./{0}/scenarios".format(dataDir))]
-            return {
-                'type': 'mapList',
-                'maps': list(map(lambda x: {'name': x}, onlyFiles))
-            }
-
-        if data['type'] == "register":
-            if self.state == 'registered':
+        try:
+            if data['type'] == "listMatches":
                 return {
-                    'type': 'exception',
-                    'message': 'error, repeated registration'
+                    'type': 'matchList',
+                    'matches': self.manager.list_matches()
                 }
-            else:
-                if 'playerId' in data and str(data['playerId']) in self.manager.clients:
-                    self.manager.clients[str(data['playerId'])].socket = messanger
-                    self.id = data['playerId']
+
+            if data['type'] == "listMaps":
+                onlyFiles = [f for f in listdir("./{0}/scenarios".format(dataDir))]
+                return {
+                    'type': 'mapList',
+                    'maps': list(map(lambda x: {'name': x}, onlyFiles))
+                }
+
+            if data['type'] == "register":
+                if self.state == 'registered':
+                    return {
+                        'type': 'exception',
+                        'message': 'error, repeated registration'
+                    }
                 else:
-                    new_client = Client(messanger)
-                    self.id = new_client.id_string
-                    self.manager.clients[new_client.id_string] = new_client
-                    self.state = 'registered'
-                return {
-                    'type': 'accept', 'playerId': str(self.id)
-                }
+                    if 'playerId' in data and str(data['playerId']) in self.manager.clients:
+                        self.manager.clients[str(data['playerId'])].socket = messanger
+                        self.id = data['playerId']
+                    else:
+                        new_client = Client(messanger)
+                        self.id = new_client.id_string
+                        self.manager.clients[new_client.id_string] = new_client
+                        self.state = 'registered'
+                    return {
+                        'type': 'accept', 'playerId': str(self.id)
+                    }
 
-        if 'playerId' in data:
-            client = self.manager.clients[data['playerId']]
+            if 'playerId' in data:
+                client = self.manager.clients[data['playerId']]
 
-        if 'matchId' in data:
-            self.manager.pass_to_match(data['matchId'], client, data)
+            if 'matchId' in data:
+                self.manager.pass_to_match(data['matchId'], client, data)
 
-        if data['type'] == "create":
-            if 'scenario' in data:
-                scenario = data['scenario']
-            else:
-                scenario = 'default.json'
-            match_id = self.manager.create_match(client, scenario)
-            return self.manager.matches[match_id].metadata('matchCreated')
+            if data['type'] == "create":
+                if 'scenario' in data:
+                    scenario = data['scenario']
+                else:
+                    scenario = 'default.json'
+                match_id = self.manager.create_match(client, scenario)
+                return self.manager.matches[match_id].metadata('matchCreated')
+        except Exception as e:
+            return {
+                'type': 'exception',
+                'message': str(e),
+            }
 
 
 class WSP(WebSocketServerProtocol):

@@ -7,7 +7,7 @@ test: tests
 tests: 
 	python -m nose --with-coverage --cover-package game
 
-test_watcher:
+test-watcher test_watcher:
 	watch python -m nose
 
 style_check:

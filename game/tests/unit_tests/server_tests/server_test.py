@@ -65,18 +65,18 @@ def returning_player_test():
         'playerId': playerId
     }
     result = client.handleMessage(data, 'new socket!')
-    print result
+    print(result)
     assert manager.clients[playerId].socket == 'new socket!'
 
-# def unknown_exception_test():
-#     playerId = '1'
-#     manager = MockManager()
-#     manager.clients[playerId] = {}
-#     client = server.ClientConnection(manager)
-#     data = {
-#         'type': 'register',
-#         'playerId': playerId
-#     }
-#     result = client.handleMessage(data, 'new socket!')
-#     print result
-#     assert result['type'] == 'exception'
+def unknown_exception_test():
+    playerId = '1'
+    manager = MockManager()
+    manager.clients[playerId] = {}
+    client = server.ClientConnection(manager)
+    data = {
+        'type': 'register',
+        'playerId': playerId
+    }
+    result = client.handleMessage(data, 'new socket!')
+    print result
+    assert result['type'] == 'exception'
